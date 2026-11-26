@@ -1,0 +1,100 @@
+<VI _name="AI_Score_Candidates.vi" description="ÈÄº¸ Ä­¸¶´Ù °ø°Ý Á¡¼ö + Defense Weight*¼öºñ Á¡¼ö + Áß¾Ó º¸³Ê½º + Noise*³­¼ö¸¦ °è»êÇØ ³»¸²Â÷¼ø Á¤·Ä.\0A·»ÁÖ·ê¿¡¼­ AI°¡ ÈæÀÌ¸é ±Ý¼ö Ä­Àº -1e9·Î ¹Ð¾î³½´Ù.">
+  <Control _name="Grid" conIdx="0" connection="required" outputs="value:5010.value" type="array.2{uint8{Empty,Black,White}}" uid="5010" uid_parent="root" value="[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]"/>
+  <Control _name="AI Stone" conIdx="5" connection="required" outputs="value:5020.value" type="uint8{Empty,Black,White}" uid="5020" uid_parent="root" value="2"/>
+  <Control _name="Defense Weight" conIdx="7" connection="recommended" outputs="value:5030.value" type="double" uid="5030" uid_parent="root" value="0.9"/>
+  <Control _name="Noise" conIdx="9" connection="recommended" outputs="value:5040.value" type="double" uid="5040" uid_parent="root" value="0"/>
+  <Control _name="Renju" conIdx="12" connection="recommended" outputs="value:5050.value" type="bool" uid="5050" uid_parent="root" value="true"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5060.value" type="cluster{bool.status,int32.code,string.source}" uid="5060" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5060.value" outputs="status:5070.status" uid="5070" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5070.status" uid="5080" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5090" uid_parent="5080"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5100" uid_parent="5080"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5110" uid_parent="5080"/>
+    <Tunnel _id="In4" inputs="value:5040.value" uid="5120" uid_parent="5080"/>
+    <Tunnel _id="In5" inputs="value:5050.value" uid="5130" uid_parent="5080"/>
+    <Tunnel _id="In6" inputs="value:5060.value" uid="5140" uid_parent="5080"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5150" uid_parent="5080">
+      <Tunnel _id="In1" outputs="value:5160.value" uid="5160" uid_parent="5150"/>
+      <Tunnel _id="In2" outputs="value:5170.value" uid="5170" uid_parent="5150"/>
+      <Tunnel _id="In3" outputs="value:5180.value" uid="5180" uid_parent="5150"/>
+      <Tunnel _id="In4" outputs="value:5190.value" uid="5190" uid_parent="5150"/>
+      <Tunnel _id="In5" outputs="value:5200.value" uid="5200" uid_parent="5150"/>
+      <Tunnel _id="In6" outputs="value:5210.value" uid="5210" uid_parent="5150"/>
+      <Constant outputs="value:5220.value" type="cluster{bool.status,int32.code,string.source}" uid="5220" uid_parent="5150" value="[false,0,]"/>
+      <Call target="AI_Get_Candidates.vi" inputs="Grid:5160.value,error in:5220.value" outputs="Rows:5230.Rows,Cols:5230.Cols,Count:5230.Count,error out:5230.error out" uid="5230" uid_parent="5150"/>
+      <Constant outputs="value:5240.value" type="uint8{Empty,Black,White}" uid="5240" uid_parent="5150" value="1"/>
+      <Node _name="Equal?" inputs="x:5170.value,y:5240.value" outputs="x = y?:5250.x = y?" uid="5250" uid_parent="5150"/>
+      <Constant outputs="value:5260.value" type="uint8{Empty,Black,White}" uid="5260" uid_parent="5150" value="2"/>
+      <Constant outputs="value:5270.value" type="uint8{Empty,Black,White}" uid="5270" uid_parent="5150" value="1"/>
+      <Node _name="Select" inputs="t:5260.value,s:5250.x = y?,f:5270.value" outputs="s? t\3Af:5280.s? t\3Af" uid="5280" uid_parent="5150"/>
+      <FreeLabel comment="°ø°Ý + °¡ÁßÄ¡*¼öºñ + Áß¾Ó º¸³Ê½º + ÀâÀ½" uid="5290" uid_parent="5150"/>
+      <Structure _name="For Loop" count="5300.value" maxin="" maxout="" uid="5300" uid_parent="5150">
+        <Tunnel _id="In1" inputs="value:5160.value" outputs="value:5310.value" uid="5310" uid_parent="5300"/>
+        <Tunnel _id="In2" inputs="value:5170.value" outputs="value:5320.value" uid="5320" uid_parent="5300"/>
+        <Tunnel _id="In3" inputs="value:5280.s? t\3Af" outputs="value:5330.value" uid="5330" uid_parent="5300"/>
+        <Tunnel _id="In4" inputs="value:5180.value" outputs="value:5340.value" uid="5340" uid_parent="5300"/>
+        <Tunnel _id="In5" inputs="value:5190.value" outputs="value:5350.value" uid="5350" uid_parent="5300"/>
+        <Tunnel _id="In6" inputs="value:5200.value" outputs="value:5360.value" uid="5360" uid_parent="5300"/>
+        <Tunnel _id="In7" inputs="value:5230.Rows" mode="index" outputs="value:5370.value" uid="5370" uid_parent="5300"/>
+        <Tunnel _id="In8" inputs="value:5230.Cols" mode="index" outputs="value:5380.value" uid="5380" uid_parent="5300"/>
+        <Constant outputs="value:5390.value" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5390" uid_parent="5300" value="[0,0,0]"/>
+        <Node _name="Bundle By Name" fields="Row,Col,Stone" inputs="Row:5370.value,Col:5380.value,Stone:5320.value,input cluster:5390.value" outputs="output cluster:5400.output cluster" uid="5400" uid_parent="5300"/>
+        <Node _name="Bundle By Name" fields="Row,Col,Stone" inputs="Row:5370.value,Col:5380.value,Stone:5330.value,input cluster:5390.value" outputs="output cluster:5410.output cluster" uid="5410" uid_parent="5300"/>
+        <Constant outputs="value:5420.value" type="cluster{bool.status,int32.code,string.source}" uid="5420" uid_parent="5300" value="[false,0,]"/>
+        <Call target="AI_Evaluate_Point.vi" inputs="Grid:5310.value,Move:5400.output cluster,error in:5420.value" outputs="Score:5430.Score,error out:5430.error out" uid="5430" uid_parent="5300"/>
+        <Constant outputs="value:5440.value" type="cluster{bool.status,int32.code,string.source}" uid="5440" uid_parent="5300" value="[false,0,]"/>
+        <Call target="AI_Evaluate_Point.vi" inputs="Grid:5310.value,Move:5410.output cluster,error in:5440.value" outputs="Score:5450.Score,error out:5450.error out" uid="5450" uid_parent="5300"/>
+        <Constant outputs="value:5460.value" type="int32" uid="5460" uid_parent="5300" value="7"/>
+        <Node _name="Subtract" inputs="x:5370.value,y:5460.value" outputs="x-y:5470.x-y" uid="5470" uid_parent="5300"/>
+        <Node _name="Absolute Value" inputs="x:5470.x-y" outputs="abs(x):5480.abs(x)" uid="5480" uid_parent="5300"/>
+        <Node _name="Subtract" inputs="x:5380.value,y:5460.value" outputs="x-y:5490.x-y" uid="5490" uid_parent="5300"/>
+        <Node _name="Absolute Value" inputs="x:5490.x-y" outputs="abs(x):5500.abs(x)" uid="5500" uid_parent="5300"/>
+        <Constant outputs="value:5510.value" type="int32" uid="5510" uid_parent="5300" value="14"/>
+        <Node _name="Add" inputs="x:5480.abs(x),y:5500.abs(x)" outputs="x+y:5520.x+y" uid="5520" uid_parent="5300"/>
+        <Node _name="Subtract" inputs="x:5510.value,y:5520.x+y" outputs="x-y:5530.x-y" uid="5530" uid_parent="5300"/>
+        <Constant outputs="value:5540.value" type="double" uid="5540" uid_parent="5300" value="0.5"/>
+        <Node _name="Multiply" inputs="x:5530.x-y,y:5540.value" outputs="x*y:5550.x*y" uid="5550" uid_parent="5300"/>
+        <Node _name="Random Number (0-1)" inputs="" outputs="number\3A 0 to 1:5560.number\3A 0 to 1" uid="5560" uid_parent="5300"/>
+        <Node _name="Multiply" inputs="x:5340.value,y:5450.Score" outputs="x*y:5570.x*y" uid="5570" uid_parent="5300"/>
+        <Node _name="Add" inputs="x:5430.Score,y:5570.x*y" outputs="x+y:5580.x+y" uid="5580" uid_parent="5300"/>
+        <Node _name="Multiply" inputs="x:5350.value,y:5560.number\3A 0 to 1" outputs="x*y:5590.x*y" uid="5590" uid_parent="5300"/>
+        <Node _name="Add" inputs="x:5550.x*y,y:5590.x*y" outputs="x+y:5600.x+y" uid="5600" uid_parent="5300"/>
+        <Node _name="Add" inputs="x:5580.x+y,y:5600.x+y" outputs="x+y:5610.x+y" uid="5610" uid_parent="5300"/>
+        <Constant outputs="value:5620.value" type="cluster{bool.status,int32.code,string.source}" uid="5620" uid_parent="5300" value="[false,0,]"/>
+        <Call target="Rule_Check_Forbidden.vi" inputs="Grid:5310.value,Move:5400.output cluster,Renju:5360.value,error in:5620.value" outputs="Forbidden?:5630.Forbidden?,Reason:5630.Reason,error out:5630.error out" uid="5630" uid_parent="5300"/>
+        <Constant outputs="value:5640.value" type="double" uid="5640" uid_parent="5300" value="-1000000000.0"/>
+        <Node _name="Select" inputs="t:5640.value,s:5630.Forbidden?,f:5610.x+y" outputs="s? t\3Af:5650.s? t\3Af" uid="5650" uid_parent="5300"/>
+        <FreeLabel comment="·»ÁÖ ±Ý¼ö Ä­Àº -1e9" uid="5660" uid_parent="5300"/>
+        <Constant outputs="value:5670.value" type="cluster{double.Score,int32.Row,int32.Col}" uid="5670" uid_parent="5300" value="[0,0,0]"/>
+        <Node _name="Bundle By Name" fields="Score,Row,Col" inputs="Score:5650.s? t\3Af,Row:5370.value,Col:5380.value,input cluster:5670.value" outputs="output cluster:5680.output cluster" uid="5680" uid_parent="5300"/>
+        <Tunnel _id="Out1" inputs="value:5680.output cluster" mode="index" outputs="value:5690.value" uid="5690" uid_parent="5300"/>
+      </Structure>
+      <Node _name="Sort 1D Array" inputs="array:5690.value" outputs="sorted array:5700.sorted array" uid="5700" uid_parent="5150"/>
+      <Node _name="Reverse 1D Array" inputs="array:5700.sorted array" outputs="reversed array:5710.reversed array" uid="5710" uid_parent="5150"/>
+      <FreeLabel comment="Á¡¼ö ³»¸²Â÷¼ø" uid="5720" uid_parent="5150"/>
+      <Node _name="Array Size" inputs="array:5710.reversed array" outputs="size(s):5730.size(s)" uid="5730" uid_parent="5150"/>
+      <Tunnel _id="Out1" inputs="value:5710.reversed array" uid="5740" uid_parent="5150"/>
+      <Tunnel _id="Out2" inputs="value:5730.size(s)" uid="5750" uid_parent="5150"/>
+      <Tunnel _id="Out3" inputs="value:5210.value" uid="5760" uid_parent="5150"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5770" uid_parent="5080">
+      <Tunnel _id="In1" outputs="value:5780.value" uid="5780" uid_parent="5770"/>
+      <Tunnel _id="In2" outputs="value:5790.value" uid="5790" uid_parent="5770"/>
+      <Tunnel _id="In3" outputs="value:5800.value" uid="5800" uid_parent="5770"/>
+      <Tunnel _id="In4" outputs="value:5810.value" uid="5810" uid_parent="5770"/>
+      <Tunnel _id="In5" outputs="value:5820.value" uid="5820" uid_parent="5770"/>
+      <Tunnel _id="In6" outputs="value:5830.value" uid="5830" uid_parent="5770"/>
+      <Constant outputs="value:5840.value" type="array{cluster{double.Score,int32.Row,int32.Col}}" uid="5840" uid_parent="5770" value="[]"/>
+      <Constant outputs="value:5850.value" type="int32" uid="5850" uid_parent="5770" value="0"/>
+      <Tunnel _id="Out1" inputs="value:5840.value" uid="5860" uid_parent="5770"/>
+      <Tunnel _id="Out2" inputs="value:5850.value" uid="5870" uid_parent="5770"/>
+      <Tunnel _id="Out3" inputs="value:5830.value" uid="5880" uid_parent="5770"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5890.value" uid="5890" uid_parent="5080"/>
+    <Tunnel _id="Out2" outputs="value:5900.value" uid="5900" uid_parent="5080"/>
+    <Tunnel _id="Out3" outputs="value:5910.value" uid="5910" uid_parent="5080"/>
+  </Structure>
+  <Indicator _name="Ranked" conIdx="4" connection="recommended" inputs="value:5890.value" type="array{cluster{double.Score,int32.Row,int32.Col}}" uid="5920" uid_parent="root" value="[]"/>
+  <Indicator _name="Count" conIdx="6" connection="recommended" inputs="value:5900.value" type="int32" uid="5930" uid_parent="root" value="0"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5910.value" type="cluster{bool.status,int32.code,string.source}" uid="5940" uid_parent="root" value="[false,0,]"/>
+</VI>

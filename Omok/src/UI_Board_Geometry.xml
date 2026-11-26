@@ -1,0 +1,36 @@
+<VI _name="UI_Board_Geometry.vi" description="¹ÙµÏÆÇ ±×¸®±â¿Í ÁÂÇ¥ º¯È¯ÀÌ °°ÀÌ ¾²´Â »ó¼ö. X = Origin + Col*Cell, Y = Origin + Row*Cell.">
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5010.value" type="cluster{bool.status,int32.code,string.source}" uid="5010" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5010.value" outputs="status:5020.status" uid="5020" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5020.status" uid="5030" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5040" uid_parent="5030"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5050" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5060.value" uid="5060" uid_parent="5050"/>
+      <FreeLabel comment="¹ÙµÏÆÇ ±âÇÏ\3A ¿øÁ¡ 30 px\2C Ä­ 38 px\2C ÀüÃ¼ 592 px" uid="5070" uid_parent="5050"/>
+      <Constant outputs="value:5080.value" type="int32" uid="5080" uid_parent="5050" value="30"/>
+      <Constant outputs="value:5090.value" type="int32" uid="5090" uid_parent="5050" value="38"/>
+      <Constant outputs="value:5100.value" type="int32" uid="5100" uid_parent="5050" value="592"/>
+      <Tunnel _id="Out1" inputs="value:5080.value" uid="5110" uid_parent="5050"/>
+      <Tunnel _id="Out2" inputs="value:5090.value" uid="5120" uid_parent="5050"/>
+      <Tunnel _id="Out3" inputs="value:5100.value" uid="5130" uid_parent="5050"/>
+      <Tunnel _id="Out4" inputs="value:5060.value" uid="5140" uid_parent="5050"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5150" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5160.value" uid="5160" uid_parent="5150"/>
+      <Constant outputs="value:5170.value" type="int32" uid="5170" uid_parent="5150" value="30"/>
+      <Constant outputs="value:5180.value" type="int32" uid="5180" uid_parent="5150" value="38"/>
+      <Constant outputs="value:5190.value" type="int32" uid="5190" uid_parent="5150" value="592"/>
+      <Tunnel _id="Out1" inputs="value:5170.value" uid="5200" uid_parent="5150"/>
+      <Tunnel _id="Out2" inputs="value:5180.value" uid="5210" uid_parent="5150"/>
+      <Tunnel _id="Out3" inputs="value:5190.value" uid="5220" uid_parent="5150"/>
+      <Tunnel _id="Out4" inputs="value:5160.value" uid="5230" uid_parent="5150"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5240.value" uid="5240" uid_parent="5030"/>
+    <Tunnel _id="Out2" outputs="value:5250.value" uid="5250" uid_parent="5030"/>
+    <Tunnel _id="Out3" outputs="value:5260.value" uid="5260" uid_parent="5030"/>
+    <Tunnel _id="Out4" outputs="value:5270.value" uid="5270" uid_parent="5030"/>
+  </Structure>
+  <Indicator _name="Origin" conIdx="4" connection="recommended" inputs="value:5240.value" type="int32" uid="5280" uid_parent="root" value="30"/>
+  <Indicator _name="Cell" conIdx="6" connection="recommended" inputs="value:5250.value" type="int32" uid="5290" uid_parent="root" value="38"/>
+  <Indicator _name="Size" conIdx="8" connection="recommended" inputs="value:5260.value" type="int32" uid="5300" uid_parent="root" value="592"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5270.value" type="cluster{bool.status,int32.code,string.source}" uid="5310" uid_parent="root" value="[false,0,]"/>
+</VI>

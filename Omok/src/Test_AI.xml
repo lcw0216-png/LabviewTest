@@ -1,0 +1,46 @@
+<VI _name="Test_AI.vi" description="AI_Calculate_Move Å×½ºÆ®.">
+  <Control _name="Rows" outputs="value:5010.value" type="array{int32}" uid="5010" uid_parent="root" value="[7,7,7,7]"/>
+  <Control _name="Cols" outputs="value:5020.value" type="array{int32}" uid="5020" uid_parent="root" value="[3,4,5,6]"/>
+  <Control _name="Stones" outputs="value:5030.value" type="array{int32}" uid="5030" uid_parent="root" value="[1,1,1,1]"/>
+  <Control _name="AI Stone" outputs="value:5040.value" type="int32" uid="5040" uid_parent="root" value="2"/>
+  <Control _name="Difficulty" outputs="value:5050.value" type="uint8{Easy,Normal,Hard}" uid="5050" uid_parent="root" value="1"/>
+  <Control _name="Renju" outputs="value:5060.value" type="bool" uid="5060" uid_parent="root" value="true"/>
+  <FreeLabel comment="Å×½ºÆ®\3A Á¤¼ö ¹è¿­·Î Grid¸¦ ¸¸µé°í AI Âø¼ö °è»ê" uid="5070" uid_parent="root"/>
+  <Constant outputs="value:5080.value" type="array.2{uint8{Empty,Black,White}}" uid="5080" uid_parent="root" value="[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]"/>
+  <Structure _name="For Loop" count="5090.value" maxin="" maxout="" uid="5090" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" mode="index" outputs="value:5100.value" uid="5100" uid_parent="5090"/>
+    <Tunnel _id="In2" inputs="value:5020.value" mode="index" outputs="value:5110.value" uid="5110" uid_parent="5090"/>
+    <Tunnel _id="In3" inputs="value:5030.value" mode="index" outputs="value:5120.value" uid="5120" uid_parent="5090"/>
+    <Constant outputs="value:5140.value" type="uint8{Empty,Black,White}" uid="5140" uid_parent="5090" value="0"/>
+    <Constant outputs="value:5150.value" type="uint8{Empty,Black,White}" uid="5150" uid_parent="5090" value="1"/>
+    <Constant outputs="value:5160.value" type="uint8{Empty,Black,White}" uid="5160" uid_parent="5090" value="2"/>
+    <Constant outputs="value:5170.value" type="int32" uid="5170" uid_parent="5090" value="1"/>
+    <Node _name="Equal?" inputs="x:5120.value,y:5170.value" outputs="x = y?:5180.x = y?" uid="5180" uid_parent="5090"/>
+    <Constant outputs="value:5190.value" type="int32" uid="5190" uid_parent="5090" value="2"/>
+    <Node _name="Equal?" inputs="x:5120.value,y:5190.value" outputs="x = y?:5200.x = y?" uid="5200" uid_parent="5090"/>
+    <Node _name="Select" inputs="t:5160.value,s:5200.x = y?,f:5140.value" outputs="s? t\3Af:5210.s? t\3Af" uid="5210" uid_parent="5090"/>
+    <Node _name="Select" inputs="t:5150.value,s:5180.x = y?,f:5210.s? t\3Af" outputs="s? t\3Af:5220.s? t\3Af" uid="5220" uid_parent="5090"/>
+    <Node _name="Replace Array Subset" dimensions="2" inputs="array:5130.value,index (row):5100.value,index (col):5110.value,new element/subarray:5220.s? t\3Af" outputs="output array:5230.output array" uid="5230" uid_parent="5090"/>
+    <ShiftReg uid="5240" uid_parent="5090">
+      <Left inputs="value:5080.value" outputs="value:5130.value" uid="5130" uid_parent="5240"/>
+      <Right inputs="value:5230.output array" outputs="value:5250.value" uid="5250" uid_parent="5240"/>
+    </ShiftReg>
+  </Structure>
+  <Constant outputs="value:5260.value" type="uint8{Empty,Black,White}" uid="5260" uid_parent="root" value="0"/>
+  <Constant outputs="value:5270.value" type="uint8{Empty,Black,White}" uid="5270" uid_parent="root" value="1"/>
+  <Constant outputs="value:5280.value" type="uint8{Empty,Black,White}" uid="5280" uid_parent="root" value="2"/>
+  <Constant outputs="value:5290.value" type="int32" uid="5290" uid_parent="root" value="1"/>
+  <Node _name="Equal?" inputs="x:5040.value,y:5290.value" outputs="x = y?:5300.x = y?" uid="5300" uid_parent="root"/>
+  <Constant outputs="value:5310.value" type="int32" uid="5310" uid_parent="root" value="2"/>
+  <Node _name="Equal?" inputs="x:5040.value,y:5310.value" outputs="x = y?:5320.x = y?" uid="5320" uid_parent="root"/>
+  <Node _name="Select" inputs="t:5280.value,s:5320.x = y?,f:5260.value" outputs="s? t\3Af:5330.s? t\3Af" uid="5330" uid_parent="root"/>
+  <Node _name="Select" inputs="t:5270.value,s:5300.x = y?,f:5330.s? t\3Af" outputs="s? t\3Af:5340.s? t\3Af" uid="5340" uid_parent="root"/>
+  <Constant outputs="value:5350.value" type="cluster{bool.status,int32.code,string.source}" uid="5350" uid_parent="root" value="[false,0,]"/>
+  <Call target="AI_Calculate_Move.vi" inputs="Grid:5250.value,AI Stone:5340.s? t\3Af,Difficulty:5050.value,Renju:5060.value,error in:5350.value" outputs="Move:5360.Move,Score:5360.Score,Valid:5360.Valid,error out:5360.error out" uid="5360" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="Row,Col" inputs="input cluster:5360.Move" outputs="Row:5370.Row,Col:5370.Col" uid="5370" uid_parent="root"/>
+  <Indicator _name="Row" inputs="value:5370.Row" type="int32" uid="5380" uid_parent="root" value="0"/>
+  <Indicator _name="Col" inputs="value:5370.Col" type="int32" uid="5390" uid_parent="root" value="0"/>
+  <Indicator _name="Score" inputs="value:5360.Score" type="double" uid="5400" uid_parent="root" value="0"/>
+  <Indicator _name="Valid" inputs="value:5360.Valid" type="bool" uid="5410" uid_parent="root" value="false"/>
+  <Indicator _name="error out" inputs="value:5360.error out" type="cluster{bool.status,int32.code,string.source}" uid="5420" uid_parent="root" value="[false,0,]"/>
+</VI>

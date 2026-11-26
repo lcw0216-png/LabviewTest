@@ -1,0 +1,84 @@
+<VI _name="Rule_Count_Direction.vi" description="Move À§Ä¡¿¡¼­ Direction(dR,dC) ¹æÇâÀ¸·Î °°Àº »ö µ¹ÀÌ ¸î °³ ¿¬¼ÓµÇ´ÂÁö ¼¾´Ù(½ÃÀÛ Ä­ Á¦¿Ü).\0AOpen End = ¿¬¼ÓÀÌ ³¡³­ ´ÙÀ½ Ä­ÀÌ º¸µå ¾ÈÀÇ ºó Ä­ÀÌ¸é True.">
+  <Control _name="Grid" conIdx="11" connection="required" outputs="value:5010.value" type="array.2{uint8{Empty,Black,White}}" uid="5010" uid_parent="root" value="[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]"/>
+  <Control _name="Move" conIdx="10" connection="required" outputs="value:5020.value" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5020" uid_parent="root" value="[7,7,1]"/>
+  <Control _name="Direction" conIdx="9" connection="required" outputs="value:5030.value" type="cluster{int32.dR,int32.dC}" uid="5030" uid_parent="root" value="[0,1]"/>
+  <Control _name="error in" conIdx="8" connection="required" outputs="value:5040.value" type="cluster{bool.status,int32.code,string.source}" uid="5040" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5040.value" outputs="status:5050.status" uid="5050" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5050.status" uid="5060" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5070" uid_parent="5060"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5080" uid_parent="5060"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5090" uid_parent="5060"/>
+    <Tunnel _id="In4" inputs="value:5040.value" uid="5100" uid_parent="5060"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5110" uid_parent="5060">
+      <Tunnel _id="In1" outputs="value:5120.value" uid="5120" uid_parent="5110"/>
+      <Tunnel _id="In2" outputs="value:5130.value" uid="5130" uid_parent="5110"/>
+      <Tunnel _id="In3" outputs="value:5140.value" uid="5140" uid_parent="5110"/>
+      <Tunnel _id="In4" outputs="value:5150.value" uid="5150" uid_parent="5110"/>
+      <Node _name="Unbundle By Name" fields="Row,Col,Stone" inputs="input cluster:5130.value" outputs="Row:5160.Row,Col:5160.Col,Stone:5160.Stone" uid="5160" uid_parent="5110"/>
+      <Node _name="Unbundle By Name" fields="dR,dC" inputs="input cluster:5140.value" outputs="dR:5170.dR,dC:5170.dC" uid="5170" uid_parent="5110"/>
+      <Node _name="Add" inputs="x:5160.Row,y:5170.dR" outputs="x+y:5180.x+y" uid="5180" uid_parent="5110"/>
+      <Node _name="Add" inputs="x:5160.Col,y:5170.dC" outputs="x+y:5190.x+y" uid="5190" uid_parent="5110"/>
+      <Constant outputs="value:5200.value" type="int32" uid="5200" uid_parent="5110" value="0"/>
+      <FreeLabel comment="(Row\2CCol) ´ÙÀ½ Ä­ºÎÅÍ °°Àº µ¹ÀÌ ³¡³¯ ¶§±îÁö ÀüÁø" uid="5210" uid_parent="5110"/>
+      <Structure _name="While Loop" count="5220.value" uid="5220" uid_parent="5110">
+        <Tunnel _id="In1" inputs="value:5120.value" outputs="value:5230.value" uid="5230" uid_parent="5220"/>
+        <Tunnel _id="In2" inputs="value:5170.dR" outputs="value:5240.value" uid="5240" uid_parent="5220"/>
+        <Tunnel _id="In3" inputs="value:5170.dC" outputs="value:5250.value" uid="5250" uid_parent="5220"/>
+        <Tunnel _id="In4" inputs="value:5160.Stone" outputs="value:5260.value" uid="5260" uid_parent="5220"/>
+        <Constant outputs="value:5300.value" type="int32" uid="5300" uid_parent="5220" value="0"/>
+        <Constant outputs="value:5310.value" type="int32" uid="5310" uid_parent="5220" value="14"/>
+        <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5310.value,x:5270.value,lower limit:5300.value" outputs="coerced(x):5320.coerced(x),In Range?:5320.In Range?" uid="5320" uid_parent="5220"/>
+        <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5310.value,x:5280.value,lower limit:5300.value" outputs="coerced(x):5330.coerced(x),In Range?:5330.In Range?" uid="5330" uid_parent="5220"/>
+        <Node _name="And" inputs="x:5320.In Range?,y:5330.In Range?" outputs="x .and. y?:5340.x .and. y?" uid="5340" uid_parent="5220"/>
+        <Node _name="Index Array" dimensions="2" inputs="array:5230.value,index (row):5270.value,index (col):5280.value" outputs="element:5350.element" uid="5350" uid_parent="5220"/>
+        <Node _name="Equal?" inputs="x:5350.element,y:5260.value" outputs="x = y?:5360.x = y?" uid="5360" uid_parent="5220"/>
+        <Node _name="And" inputs="x:5340.x .and. y?,y:5360.x = y?" outputs="x .and. y?:5370.x .and. y?" uid="5370" uid_parent="5220"/>
+        <Constant outputs="value:5380.value" type="uint8{Empty,Black,White}" uid="5380" uid_parent="5220" value="0"/>
+        <Node _name="Equal?" inputs="x:5350.element,y:5380.value" outputs="x = y?:5390.x = y?" uid="5390" uid_parent="5220"/>
+        <Node _name="And" inputs="x:5340.x .and. y?,y:5390.x = y?" outputs="x .and. y?:5400.x .and. y?" uid="5400" uid_parent="5220"/>
+        <Constant outputs="value:5410.value" type="int32" uid="5410" uid_parent="5220" value="1"/>
+        <Node _name="Add" inputs="x:5270.value,y:5240.value" outputs="x+y:5420.x+y" uid="5420" uid_parent="5220"/>
+        <Node _name="Select" inputs="t:5420.x+y,s:5370.x .and. y?,f:5270.value" outputs="s? t\3Af:5430.s? t\3Af" uid="5430" uid_parent="5220"/>
+        <Node _name="Add" inputs="x:5280.value,y:5250.value" outputs="x+y:5440.x+y" uid="5440" uid_parent="5220"/>
+        <Node _name="Select" inputs="t:5440.x+y,s:5370.x .and. y?,f:5280.value" outputs="s? t\3Af:5450.s? t\3Af" uid="5450" uid_parent="5220"/>
+        <Node _name="Add" inputs="x:5290.value,y:5410.value" outputs="x+y:5460.x+y" uid="5460" uid_parent="5220"/>
+        <Node _name="Select" inputs="t:5460.x+y,s:5370.x .and. y?,f:5290.value" outputs="s? t\3Af:5470.s? t\3Af" uid="5470" uid_parent="5220"/>
+        <Node _name="Not" inputs="x:5370.x .and. y?" outputs=".not. x?:5480..not. x?" uid="5480" uid_parent="5220"/>
+        <Tunnel _id="Out1" inputs="value:5400.x .and. y?" outputs="value:5490.value" uid="5490" uid_parent="5220"/>
+        <ShiftReg uid="5500" uid_parent="5220">
+          <Left inputs="value:5180.x+y" outputs="value:5270.value" uid="5270" uid_parent="5500"/>
+          <Right inputs="value:5430.s? t\3Af" outputs="value:5510.value" uid="5510" uid_parent="5500"/>
+        </ShiftReg>
+        <ShiftReg uid="5520" uid_parent="5220">
+          <Left inputs="value:5190.x+y" outputs="value:5280.value" uid="5280" uid_parent="5520"/>
+          <Right inputs="value:5450.s? t\3Af" outputs="value:5530.value" uid="5530" uid_parent="5520"/>
+        </ShiftReg>
+        <ShiftReg uid="5540" uid_parent="5220">
+          <Left inputs="value:5200.value" outputs="value:5290.value" uid="5290" uid_parent="5540"/>
+          <Right inputs="value:5470.s? t\3Af" outputs="value:5550.value" uid="5550" uid_parent="5540"/>
+        </ShiftReg>
+        <Condition inputs="value:5480..not. x?" uid="5560" uid_parent="5220" value="stop"/>
+      </Structure>
+      <Tunnel _id="Out1" inputs="value:5550.value" uid="5570" uid_parent="5110"/>
+      <Tunnel _id="Out2" inputs="value:5490.value" uid="5580" uid_parent="5110"/>
+      <Tunnel _id="Out3" inputs="value:5150.value" uid="5590" uid_parent="5110"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5600" uid_parent="5060">
+      <Tunnel _id="In1" outputs="value:5610.value" uid="5610" uid_parent="5600"/>
+      <Tunnel _id="In2" outputs="value:5620.value" uid="5620" uid_parent="5600"/>
+      <Tunnel _id="In3" outputs="value:5630.value" uid="5630" uid_parent="5600"/>
+      <Tunnel _id="In4" outputs="value:5640.value" uid="5640" uid_parent="5600"/>
+      <Constant outputs="value:5650.value" type="int32" uid="5650" uid_parent="5600" value="0"/>
+      <Constant outputs="value:5660.value" type="bool" uid="5660" uid_parent="5600" value="false"/>
+      <Tunnel _id="Out1" inputs="value:5650.value" uid="5670" uid_parent="5600"/>
+      <Tunnel _id="Out2" inputs="value:5660.value" uid="5680" uid_parent="5600"/>
+      <Tunnel _id="Out3" inputs="value:5640.value" uid="5690" uid_parent="5600"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5700.value" uid="5700" uid_parent="5060"/>
+    <Tunnel _id="Out2" outputs="value:5710.value" uid="5710" uid_parent="5060"/>
+    <Tunnel _id="Out3" outputs="value:5720.value" uid="5720" uid_parent="5060"/>
+  </Structure>
+  <Indicator _name="Count" conIdx="3" connection="recommended" inputs="value:5700.value" type="int32" uid="5730" uid_parent="root" value="0"/>
+  <Indicator _name="Open End" conIdx="2" connection="recommended" inputs="value:5710.value" type="bool" uid="5740" uid_parent="root" value="false"/>
+  <Indicator _name="error out" conIdx="0" connection="recommended" inputs="value:5720.value" type="cluster{bool.status,int32.code,string.source}" uid="5750" uid_parent="root" value="[false,0,]"/>
+</VI>

@@ -1,0 +1,74 @@
+<VI _name="UI_Pixel_To_Grid.vi" description="PictureÀÇ ¸¶¿ì½º ÁÂÇ¥(X,Y)¸¦ ¹ÙµÏÆÇ Ä­(Row,Col)À¸·Î ¹Ù²Û´Ù. ±³Â÷Á¡¿¡¼­ 0.45Ä­ ÀÌ³»ÀÌ°í 0~14 ¹üÀ§ÀÏ ¶§¸¸ Valid.">
+  <Control _name="Coords" conIdx="0" connection="required" outputs="value:5010.value" type="cluster{int32.X,int32.Y}" uid="5010" uid_parent="root" value="[0,0]"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5020.value" type="cluster{bool.status,int32.code,string.source}" uid="5020" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5020.value" outputs="status:5030.status" uid="5030" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5030.status" uid="5040" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5050" uid_parent="5040"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5060" uid_parent="5040"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5070" uid_parent="5040">
+      <Tunnel _id="In1" outputs="value:5080.value" uid="5080" uid_parent="5070"/>
+      <Tunnel _id="In2" outputs="value:5090.value" uid="5090" uid_parent="5070"/>
+      <Node _name="Unbundle By Name" fields="X,Y" inputs="input cluster:5080.value" outputs="X:5100.X,Y:5100.Y" uid="5100" uid_parent="5070"/>
+      <Constant outputs="value:5110.value" type="cluster{bool.status,int32.code,string.source}" uid="5110" uid_parent="5070" value="[false,0,]"/>
+      <Call target="UI_Board_Geometry.vi" inputs="error in:5110.value" outputs="Origin:5120.Origin,Cell:5120.Cell,Size:5120.Size,error out:5120.error out" uid="5120" uid_parent="5070"/>
+      <Node _name="Subtract" inputs="x:5100.X,y:5120.Origin" outputs="x-y:5130.x-y" uid="5130" uid_parent="5070"/>
+      <Node _name="Divide" inputs="x:5130.x-y,y:5120.Cell" outputs="x/y:5140.x/y" uid="5140" uid_parent="5070"/>
+      <Node _name="Round To Nearest" inputs="number:5140.x/y" outputs="nearest integer value:5150.nearest integer value" uid="5150" uid_parent="5070"/>
+      <Node _name="To Long Integer" inputs="number:5150.nearest integer value" outputs="32bit integer:5160.32bit integer" uid="5160" uid_parent="5070"/>
+      <Node _name="Multiply" inputs="x:5160.32bit integer,y:5120.Cell" outputs="x*y:5170.x*y" uid="5170" uid_parent="5070"/>
+      <Node _name="Add" inputs="x:5120.Origin,y:5170.x*y" outputs="x+y:5180.x+y" uid="5180" uid_parent="5070"/>
+      <Node _name="Subtract" inputs="x:5100.X,y:5180.x+y" outputs="x-y:5190.x-y" uid="5190" uid_parent="5070"/>
+      <Node _name="Absolute Value" inputs="x:5190.x-y" outputs="abs(x):5200.abs(x)" uid="5200" uid_parent="5070"/>
+      <Constant outputs="value:5210.value" type="double" uid="5210" uid_parent="5070" value="0.45"/>
+      <Node _name="Multiply" inputs="x:5120.Cell,y:5210.value" outputs="x*y:5220.x*y" uid="5220" uid_parent="5070"/>
+      <Node _name="Less Or Equal?" inputs="x:5200.abs(x),y:5220.x*y" outputs="x &lt;= y?:5230.x &lt;= y?" uid="5230" uid_parent="5070"/>
+      <Constant outputs="value:5240.value" type="int32" uid="5240" uid_parent="5070" value="0"/>
+      <Constant outputs="value:5250.value" type="int32" uid="5250" uid_parent="5070" value="14"/>
+      <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5250.value,x:5160.32bit integer,lower limit:5240.value" outputs="coerced(x):5260.coerced(x),In Range?:5260.In Range?" uid="5260" uid_parent="5070"/>
+      <Node _name="And" inputs="x:5230.x &lt;= y?,y:5260.In Range?" outputs="x .and. y?:5270.x .and. y?" uid="5270" uid_parent="5070"/>
+      <Node _name="Subtract" inputs="x:5100.Y,y:5120.Origin" outputs="x-y:5280.x-y" uid="5280" uid_parent="5070"/>
+      <Node _name="Divide" inputs="x:5280.x-y,y:5120.Cell" outputs="x/y:5290.x/y" uid="5290" uid_parent="5070"/>
+      <Node _name="Round To Nearest" inputs="number:5290.x/y" outputs="nearest integer value:5300.nearest integer value" uid="5300" uid_parent="5070"/>
+      <Node _name="To Long Integer" inputs="number:5300.nearest integer value" outputs="32bit integer:5310.32bit integer" uid="5310" uid_parent="5070"/>
+      <Node _name="Multiply" inputs="x:5310.32bit integer,y:5120.Cell" outputs="x*y:5320.x*y" uid="5320" uid_parent="5070"/>
+      <Node _name="Add" inputs="x:5120.Origin,y:5320.x*y" outputs="x+y:5330.x+y" uid="5330" uid_parent="5070"/>
+      <Node _name="Subtract" inputs="x:5100.Y,y:5330.x+y" outputs="x-y:5340.x-y" uid="5340" uid_parent="5070"/>
+      <Node _name="Absolute Value" inputs="x:5340.x-y" outputs="abs(x):5350.abs(x)" uid="5350" uid_parent="5070"/>
+      <Constant outputs="value:5360.value" type="double" uid="5360" uid_parent="5070" value="0.45"/>
+      <Node _name="Multiply" inputs="x:5120.Cell,y:5360.value" outputs="x*y:5370.x*y" uid="5370" uid_parent="5070"/>
+      <Node _name="Less Or Equal?" inputs="x:5350.abs(x),y:5370.x*y" outputs="x &lt;= y?:5380.x &lt;= y?" uid="5380" uid_parent="5070"/>
+      <Constant outputs="value:5390.value" type="int32" uid="5390" uid_parent="5070" value="0"/>
+      <Constant outputs="value:5400.value" type="int32" uid="5400" uid_parent="5070" value="14"/>
+      <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5400.value,x:5310.32bit integer,lower limit:5390.value" outputs="coerced(x):5410.coerced(x),In Range?:5410.In Range?" uid="5410" uid_parent="5070"/>
+      <Node _name="And" inputs="x:5380.x &lt;= y?,y:5410.In Range?" outputs="x .and. y?:5420.x .and. y?" uid="5420" uid_parent="5070"/>
+      <FreeLabel comment="°¡Àå °¡±î¿î ±³Â÷Á¡\2C 0.45Ä­ ÀÌ³»¸¸ À¯È¿" uid="5430" uid_parent="5070"/>
+      <Node _name="And" inputs="x:5270.x .and. y?,y:5420.x .and. y?" outputs="x .and. y?:5440.x .and. y?" uid="5440" uid_parent="5070"/>
+      <Constant outputs="value:5450.value" type="int32" uid="5450" uid_parent="5070" value="-1"/>
+      <Node _name="Select" inputs="t:5310.32bit integer,s:5440.x .and. y?,f:5450.value" outputs="s? t\3Af:5460.s? t\3Af" uid="5460" uid_parent="5070"/>
+      <Node _name="Select" inputs="t:5160.32bit integer,s:5440.x .and. y?,f:5450.value" outputs="s? t\3Af:5470.s? t\3Af" uid="5470" uid_parent="5070"/>
+      <Tunnel _id="Out1" inputs="value:5460.s? t\3Af" uid="5480" uid_parent="5070"/>
+      <Tunnel _id="Out2" inputs="value:5470.s? t\3Af" uid="5490" uid_parent="5070"/>
+      <Tunnel _id="Out3" inputs="value:5440.x .and. y?" uid="5500" uid_parent="5070"/>
+      <Tunnel _id="Out4" inputs="value:5090.value" uid="5510" uid_parent="5070"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5520" uid_parent="5040">
+      <Tunnel _id="In1" outputs="value:5530.value" uid="5530" uid_parent="5520"/>
+      <Tunnel _id="In2" outputs="value:5540.value" uid="5540" uid_parent="5520"/>
+      <Constant outputs="value:5550.value" type="int32" uid="5550" uid_parent="5520" value="-1"/>
+      <Constant outputs="value:5560.value" type="int32" uid="5560" uid_parent="5520" value="-1"/>
+      <Constant outputs="value:5570.value" type="bool" uid="5570" uid_parent="5520" value="false"/>
+      <Tunnel _id="Out1" inputs="value:5550.value" uid="5580" uid_parent="5520"/>
+      <Tunnel _id="Out2" inputs="value:5560.value" uid="5590" uid_parent="5520"/>
+      <Tunnel _id="Out3" inputs="value:5570.value" uid="5600" uid_parent="5520"/>
+      <Tunnel _id="Out4" inputs="value:5540.value" uid="5610" uid_parent="5520"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5620.value" uid="5620" uid_parent="5040"/>
+    <Tunnel _id="Out2" outputs="value:5630.value" uid="5630" uid_parent="5040"/>
+    <Tunnel _id="Out3" outputs="value:5640.value" uid="5640" uid_parent="5040"/>
+    <Tunnel _id="Out4" outputs="value:5650.value" uid="5650" uid_parent="5040"/>
+  </Structure>
+  <Indicator _name="Row" conIdx="4" connection="recommended" inputs="value:5620.value" type="int32" uid="5660" uid_parent="root" value="-1"/>
+  <Indicator _name="Col" conIdx="6" connection="recommended" inputs="value:5630.value" type="int32" uid="5670" uid_parent="root" value="-1"/>
+  <Indicator _name="Valid" conIdx="8" connection="recommended" inputs="value:5640.value" type="bool" uid="5680" uid_parent="root" value="false"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5650.value" type="cluster{bool.status,int32.code,string.source}" uid="5690" uid_parent="root" value="[false,0,]"/>
+</VI>

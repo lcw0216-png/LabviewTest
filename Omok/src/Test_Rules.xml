@@ -1,0 +1,61 @@
+<VI _name="Test_Rules.vi" description="Rule_Check_Win / Rule_Check_Forbidden Å×½ºÆ®. Rows/Cols/Stones(1=Èæ,2=¹é)·Î º¸µå¸¦ ¸¸µé°í Move¸¦ ³õ¾ÒÀ» ¶§ÀÇ ½Â¸®¿Í ±Ý¼ö¸¦ Ãâ·ÂÇÑ´Ù.">
+  <Control _name="Rows" conIdx="11" connection="required" outputs="value:5010.value" type="array{int32}" uid="5010" uid_parent="root" value="[]"/>
+  <Control _name="Cols" outputs="value:5020.value" type="array{int32}" uid="5020" uid_parent="root" value="[]"/>
+  <Control _name="Stones" outputs="value:5030.value" type="array{int32}" uid="5030" uid_parent="root" value="[]"/>
+  <Control _name="Move Row" outputs="value:5040.value" type="int32" uid="5040" uid_parent="root" value="7"/>
+  <Control _name="Move Col" outputs="value:5050.value" type="int32" uid="5050" uid_parent="root" value="7"/>
+  <Control _name="Move Stone" outputs="value:5060.value" type="int32" uid="5060" uid_parent="root" value="1"/>
+  <Control _name="Exact Five" outputs="value:5070.value" type="bool" uid="5070" uid_parent="root" value="false"/>
+  <Control _name="Renju" outputs="value:5080.value" type="bool" uid="5080" uid_parent="root" value="true"/>
+  <FreeLabel comment="Å×½ºÆ®\3A Á¤¼ö ¹è¿­·Î º¸µå¸¦ ¸¸µé°í Rule VI È£Ãâ" uid="5090" uid_parent="root"/>
+  <Constant outputs="value:5100.value" type="array.2{uint8{Empty,Black,White}}" uid="5100" uid_parent="root" value="[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]"/>
+  <Structure _name="For Loop" count="5110.value" maxin="" maxout="" uid="5110" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" mode="index" outputs="value:5120.value" uid="5120" uid_parent="5110"/>
+    <Tunnel _id="In2" inputs="value:5020.value" mode="index" outputs="value:5130.value" uid="5130" uid_parent="5110"/>
+    <Tunnel _id="In3" inputs="value:5030.value" mode="index" outputs="value:5140.value" uid="5140" uid_parent="5110"/>
+    <Constant outputs="value:5160.value" type="uint8{Empty,Black,White}" uid="5160" uid_parent="5110" value="0"/>
+    <Constant outputs="value:5170.value" type="uint8{Empty,Black,White}" uid="5170" uid_parent="5110" value="1"/>
+    <Constant outputs="value:5180.value" type="uint8{Empty,Black,White}" uid="5180" uid_parent="5110" value="2"/>
+    <Constant outputs="value:5190.value" type="int32" uid="5190" uid_parent="5110" value="1"/>
+    <Node _name="Equal?" inputs="x:5140.value,y:5190.value" outputs="x = y?:5200.x = y?" uid="5200" uid_parent="5110"/>
+    <Constant outputs="value:5210.value" type="int32" uid="5210" uid_parent="5110" value="2"/>
+    <Node _name="Equal?" inputs="x:5140.value,y:5210.value" outputs="x = y?:5220.x = y?" uid="5220" uid_parent="5110"/>
+    <Node _name="Select" inputs="t:5180.value,s:5220.x = y?,f:5160.value" outputs="s? t\3Af:5230.s? t\3Af" uid="5230" uid_parent="5110"/>
+    <Node _name="Select" inputs="t:5170.value,s:5200.x = y?,f:5230.s? t\3Af" outputs="s? t\3Af:5240.s? t\3Af" uid="5240" uid_parent="5110"/>
+    <Node _name="Replace Array Subset" dimensions="2" inputs="array:5150.value,index (row):5120.value,index (col):5130.value,new element/subarray:5240.s? t\3Af" outputs="output array:5250.output array" uid="5250" uid_parent="5110"/>
+    <ShiftReg uid="5260" uid_parent="5110">
+      <Left inputs="value:5100.value" outputs="value:5150.value" uid="5150" uid_parent="5260"/>
+      <Right inputs="value:5250.output array" outputs="value:5270.value" uid="5270" uid_parent="5260"/>
+    </ShiftReg>
+  </Structure>
+  <Constant outputs="value:5280.value" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5280" uid_parent="root" value="[0,0,0]"/>
+  <Constant outputs="value:5290.value" type="uint8{Empty,Black,White}" uid="5290" uid_parent="root" value="0"/>
+  <Constant outputs="value:5300.value" type="uint8{Empty,Black,White}" uid="5300" uid_parent="root" value="1"/>
+  <Constant outputs="value:5310.value" type="uint8{Empty,Black,White}" uid="5310" uid_parent="root" value="2"/>
+  <Constant outputs="value:5320.value" type="int32" uid="5320" uid_parent="root" value="1"/>
+  <Node _name="Equal?" inputs="x:5060.value,y:5320.value" outputs="x = y?:5330.x = y?" uid="5330" uid_parent="root"/>
+  <Constant outputs="value:5340.value" type="int32" uid="5340" uid_parent="root" value="2"/>
+  <Node _name="Equal?" inputs="x:5060.value,y:5340.value" outputs="x = y?:5350.x = y?" uid="5350" uid_parent="root"/>
+  <Node _name="Select" inputs="t:5310.value,s:5350.x = y?,f:5290.value" outputs="s? t\3Af:5360.s? t\3Af" uid="5360" uid_parent="root"/>
+  <Node _name="Select" inputs="t:5300.value,s:5330.x = y?,f:5360.s? t\3Af" outputs="s? t\3Af:5370.s? t\3Af" uid="5370" uid_parent="root"/>
+  <Node _name="Bundle By Name" fields="Row,Col,Stone" inputs="Row:5040.value,Col:5050.value,Stone:5370.s? t\3Af,input cluster:5280.value" outputs="output cluster:5380.output cluster" uid="5380" uid_parent="root"/>
+  <Constant outputs="value:5390.value" type="uint8{Empty,Black,White}" uid="5390" uid_parent="root" value="0"/>
+  <Constant outputs="value:5400.value" type="uint8{Empty,Black,White}" uid="5400" uid_parent="root" value="1"/>
+  <Constant outputs="value:5410.value" type="uint8{Empty,Black,White}" uid="5410" uid_parent="root" value="2"/>
+  <Constant outputs="value:5420.value" type="int32" uid="5420" uid_parent="root" value="1"/>
+  <Node _name="Equal?" inputs="x:5060.value,y:5420.value" outputs="x = y?:5430.x = y?" uid="5430" uid_parent="root"/>
+  <Constant outputs="value:5440.value" type="int32" uid="5440" uid_parent="root" value="2"/>
+  <Node _name="Equal?" inputs="x:5060.value,y:5440.value" outputs="x = y?:5450.x = y?" uid="5450" uid_parent="root"/>
+  <Node _name="Select" inputs="t:5410.value,s:5450.x = y?,f:5390.value" outputs="s? t\3Af:5460.s? t\3Af" uid="5460" uid_parent="root"/>
+  <Node _name="Select" inputs="t:5400.value,s:5430.x = y?,f:5460.s? t\3Af" outputs="s? t\3Af:5470.s? t\3Af" uid="5470" uid_parent="root"/>
+  <Node _name="Replace Array Subset" dimensions="2" inputs="array:5270.value,index (row):5040.value,index (col):5050.value,new element/subarray:5470.s? t\3Af" outputs="output array:5480.output array" uid="5480" uid_parent="root"/>
+  <Constant outputs="value:5490.value" type="cluster{bool.status,int32.code,string.source}" uid="5490" uid_parent="root" value="[false,0,]"/>
+  <Call target="Rule_Check_Win.vi" inputs="Grid:5480.output array,Last Move:5380.output cluster,Exact Five:5070.value,error in:5490.value" outputs="Win?:5500.Win?,Win Line:5500.Win Line,Run Length:5500.Run Length,error out:5500.error out" uid="5500" uid_parent="root"/>
+  <Call target="Rule_Check_Forbidden.vi" inputs="Grid:5270.value,Move:5380.output cluster,Renju:5080.value,error in:5500.error out" outputs="Forbidden?:5510.Forbidden?,Reason:5510.Reason,error out:5510.error out" uid="5510" uid_parent="root"/>
+  <Indicator _name="Win?" inputs="value:5500.Win?" type="bool" uid="5520" uid_parent="root" value="false"/>
+  <Indicator _name="Win Line" inputs="value:5500.Win Line" type="array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}" uid="5530" uid_parent="root" value="[]"/>
+  <Indicator _name="Run Length" inputs="value:5500.Run Length" type="int32" uid="5540" uid_parent="root" value="0"/>
+  <Indicator _name="Forbidden?" inputs="value:5510.Forbidden?" type="bool" uid="5550" uid_parent="root" value="false"/>
+  <Indicator _name="Reason" inputs="value:5510.Reason" type="uint8{None,Double Three,Double Four,Overline}" uid="5560" uid_parent="root" value="0"/>
+  <Indicator _name="error out" inputs="value:5510.error out" type="cluster{bool.status,int32.code,string.source}" uid="5570" uid_parent="root" value="[false,0,]"/>
+</VI>

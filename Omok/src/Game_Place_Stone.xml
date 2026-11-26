@@ -1,0 +1,141 @@
+<VI _name="Game_Place_Stone.vi" description="Âø¼ö Ã³¸®: ¹üÀ§/ºó Ä­/·»ÁÖ ±Ý¼ö °Ë»ç ÈÄ Grid, Move History, Last Move °»½Å, ½Â¸®/¹«½ÂºÎ ÆÇÁ¤.\0APlaced?=False¸é Board State´Â ±×´ë·Î, Forbidden Reason¿¡ ±Ý¼ö »çÀ¯.">
+  <Control _name="Board State" conIdx="0" connection="required" outputs="value:5010.value" type="cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}" uid="5010" uid_parent="root" value="[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]]"/>
+  <Control _name="Move" conIdx="5" connection="required" outputs="value:5020.value" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5020" uid_parent="root" value="[7,7,1]"/>
+  <Control _name="Renju" conIdx="7" connection="recommended" outputs="value:5030.value" type="bool" uid="5030" uid_parent="root" value="true"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5040.value" type="cluster{bool.status,int32.code,string.source}" uid="5040" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5040.value" outputs="status:5050.status" uid="5050" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5050.status" uid="5060" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5070" uid_parent="5060"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5080" uid_parent="5060"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5090" uid_parent="5060"/>
+    <Tunnel _id="In4" inputs="value:5040.value" uid="5100" uid_parent="5060"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5110" uid_parent="5060">
+      <Tunnel _id="In1" outputs="value:5120.value" uid="5120" uid_parent="5110"/>
+      <Tunnel _id="In2" outputs="value:5130.value" uid="5130" uid_parent="5110"/>
+      <Tunnel _id="In3" outputs="value:5140.value" uid="5140" uid_parent="5110"/>
+      <Tunnel _id="In4" outputs="value:5150.value" uid="5150" uid_parent="5110"/>
+      <Node _name="Unbundle By Name" fields="Grid,Move History" inputs="input cluster:5120.value" outputs="Grid:5160.Grid,Move History:5160.Move History" uid="5160" uid_parent="5110"/>
+      <Node _name="Unbundle By Name" fields="Row,Col,Stone" inputs="input cluster:5130.value" outputs="Row:5170.Row,Col:5170.Col,Stone:5170.Stone" uid="5170" uid_parent="5110"/>
+      <Constant outputs="value:5180.value" type="int32" uid="5180" uid_parent="5110" value="0"/>
+      <Constant outputs="value:5190.value" type="int32" uid="5190" uid_parent="5110" value="14"/>
+      <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5190.value,x:5170.Row,lower limit:5180.value" outputs="coerced(x):5200.coerced(x),In Range?:5200.In Range?" uid="5200" uid_parent="5110"/>
+      <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5190.value,x:5170.Col,lower limit:5180.value" outputs="coerced(x):5210.coerced(x),In Range?:5210.In Range?" uid="5210" uid_parent="5110"/>
+      <Node _name="And" inputs="x:5200.In Range?,y:5210.In Range?" outputs="x .and. y?:5220.x .and. y?" uid="5220" uid_parent="5110"/>
+      <Node _name="Index Array" dimensions="2" inputs="array:5160.Grid,index (row):5170.Row,index (col):5170.Col" outputs="element:5230.element" uid="5230" uid_parent="5110"/>
+      <Constant outputs="value:5240.value" type="uint8{Empty,Black,White}" uid="5240" uid_parent="5110" value="0"/>
+      <Node _name="Equal?" inputs="x:5230.element,y:5240.value" outputs="x = y?:5250.x = y?" uid="5250" uid_parent="5110"/>
+      <Node _name="And" inputs="x:5220.x .and. y?,y:5250.x = y?" outputs="x .and. y?:5260.x .and. y?" uid="5260" uid_parent="5110"/>
+      <Constant outputs="value:5270.value" type="cluster{bool.status,int32.code,string.source}" uid="5270" uid_parent="5110" value="[false,0,]"/>
+      <Call target="Rule_Check_Forbidden.vi" inputs="Grid:5160.Grid,Move:5130.value,Renju:5140.value,error in:5270.value" outputs="Forbidden?:5280.Forbidden?,Reason:5280.Reason,error out:5280.error out" uid="5280" uid_parent="5110"/>
+      <Node _name="Not" inputs="x:5280.Forbidden?" outputs=".not. x?:5290..not. x?" uid="5290" uid_parent="5110"/>
+      <Node _name="And" inputs="x:5260.x .and. y?,y:5290..not. x?" outputs="x .and. y?:5300.x .and. y?" uid="5300" uid_parent="5110"/>
+      <FreeLabel comment="º¸µå ¾È ºó Ä­ÀÌ°í ±Ý¼ö°¡ ¾Æ´Ï¸é Âø¼ö" uid="5310" uid_parent="5110"/>
+      <Structure _name="Case Structure" selectin="5300.x .and. y?" uid="5320" uid_parent="5110">
+        <Tunnel _id="In1" inputs="value:5120.value" uid="5330" uid_parent="5320"/>
+        <Tunnel _id="In2" inputs="value:5160.Grid" uid="5340" uid_parent="5320"/>
+        <Tunnel _id="In3" inputs="value:5160.Move History" uid="5350" uid_parent="5320"/>
+        <Tunnel _id="In4" inputs="value:5130.value" uid="5360" uid_parent="5320"/>
+        <Tunnel _id="In5" inputs="value:5170.Row" uid="5370" uid_parent="5320"/>
+        <Tunnel _id="In6" inputs="value:5170.Col" uid="5380" uid_parent="5320"/>
+        <Tunnel _id="In7" inputs="value:5170.Stone" uid="5390" uid_parent="5320"/>
+        <Tunnel _id="In8" inputs="value:5140.value" uid="5400" uid_parent="5320"/>
+        <CaseFrame selector="True" selectout="" label="Âø¼ö" uid="5410" uid_parent="5320">
+          <Tunnel _id="In1" outputs="value:5420.value" uid="5420" uid_parent="5410"/>
+          <Tunnel _id="In2" outputs="value:5430.value" uid="5430" uid_parent="5410"/>
+          <Tunnel _id="In3" outputs="value:5440.value" uid="5440" uid_parent="5410"/>
+          <Tunnel _id="In4" outputs="value:5450.value" uid="5450" uid_parent="5410"/>
+          <Tunnel _id="In5" outputs="value:5460.value" uid="5460" uid_parent="5410"/>
+          <Tunnel _id="In6" outputs="value:5470.value" uid="5470" uid_parent="5410"/>
+          <Tunnel _id="In7" outputs="value:5480.value" uid="5480" uid_parent="5410"/>
+          <Tunnel _id="In8" outputs="value:5490.value" uid="5490" uid_parent="5410"/>
+          <Node _name="Replace Array Subset" dimensions="2" inputs="array:5430.value,index (row):5460.value,index (col):5470.value,new element/subarray:5480.value" outputs="output array:5500.output array" uid="5500" uid_parent="5410"/>
+          <Node _name="Build Array" concat="true" inputs="array:5440.value,element:5450.value" outputs="appended array:5510.appended array" uid="5510" uid_parent="5410"/>
+          <Node _name="Bundle By Name" fields="Grid,Move History,Last Move" inputs="Grid:5500.output array,Move History:5510.appended array,Last Move:5450.value,input cluster:5420.value" outputs="output cluster:5520.output cluster" uid="5520" uid_parent="5410"/>
+          <Constant outputs="value:5530.value" type="uint8{Empty,Black,White}" uid="5530" uid_parent="5410" value="1"/>
+          <Node _name="Equal?" inputs="x:5480.value,y:5530.value" outputs="x = y?:5540.x = y?" uid="5540" uid_parent="5410"/>
+          <Node _name="And" inputs="x:5490.value,y:5540.x = y?" outputs="x .and. y?:5550.x .and. y?" uid="5550" uid_parent="5410"/>
+          <Constant outputs="value:5560.value" type="cluster{bool.status,int32.code,string.source}" uid="5560" uid_parent="5410" value="[false,0,]"/>
+          <Call target="Rule_Check_Win.vi" inputs="Grid:5500.output array,Last Move:5450.value,Exact Five:5550.x .and. y?,error in:5560.value" outputs="Win?:5570.Win?,Win Line:5570.Win Line,Run Length:5570.Run Length,error out:5570.error out" uid="5570" uid_parent="5410"/>
+          <Node _name="Array Size" inputs="array:5510.appended array" outputs="size(s):5580.size(s)" uid="5580" uid_parent="5410"/>
+          <Constant outputs="value:5590.value" type="int32" uid="5590" uid_parent="5410" value="225"/>
+          <Node _name="Greater Or Equal?" inputs="x:5580.size(s),y:5590.value" outputs="x &gt;= y?:5600.x &gt;= y?" uid="5600" uid_parent="5410"/>
+          <Node _name="Not" inputs="x:5570.Win?" outputs=".not. x?:5610..not. x?" uid="5610" uid_parent="5410"/>
+          <Node _name="And" inputs="x:5600.x &gt;= y?,y:5610..not. x?" outputs="x .and. y?:5620.x .and. y?" uid="5620" uid_parent="5410"/>
+          <FreeLabel comment="·»ÁÖ·ê ÈæÀº Á¤È®È÷ 5¸ñ¸¸ ½Â¸®" uid="5630" uid_parent="5410"/>
+          <Constant outputs="value:5640.value" type="bool" uid="5640" uid_parent="5410" value="true"/>
+          <Tunnel _id="Out1" inputs="value:5520.output cluster" uid="5650" uid_parent="5410"/>
+          <Tunnel _id="Out2" inputs="value:5640.value" uid="5660" uid_parent="5410"/>
+          <Tunnel _id="Out3" inputs="value:5570.Win?" uid="5670" uid_parent="5410"/>
+          <Tunnel _id="Out4" inputs="value:5570.Win Line" uid="5680" uid_parent="5410"/>
+          <Tunnel _id="Out5" inputs="value:5620.x .and. y?" uid="5690" uid_parent="5410"/>
+        </CaseFrame>
+        <CaseFrame selector="False" selectout="" label="Âø¼ö ºÒ°¡" uid="5700" uid_parent="5320">
+          <Tunnel _id="In1" outputs="value:5710.value" uid="5710" uid_parent="5700"/>
+          <Tunnel _id="In2" outputs="value:5720.value" uid="5720" uid_parent="5700"/>
+          <Tunnel _id="In3" outputs="value:5730.value" uid="5730" uid_parent="5700"/>
+          <Tunnel _id="In4" outputs="value:5740.value" uid="5740" uid_parent="5700"/>
+          <Tunnel _id="In5" outputs="value:5750.value" uid="5750" uid_parent="5700"/>
+          <Tunnel _id="In6" outputs="value:5760.value" uid="5760" uid_parent="5700"/>
+          <Tunnel _id="In7" outputs="value:5770.value" uid="5770" uid_parent="5700"/>
+          <Tunnel _id="In8" outputs="value:5780.value" uid="5780" uid_parent="5700"/>
+          <Constant outputs="value:5790.value" type="bool" uid="5790" uid_parent="5700" value="false"/>
+          <Constant outputs="value:5800.value" type="bool" uid="5800" uid_parent="5700" value="false"/>
+          <Constant outputs="value:5810.value" type="array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}" uid="5810" uid_parent="5700" value="[]"/>
+          <Constant outputs="value:5820.value" type="bool" uid="5820" uid_parent="5700" value="false"/>
+          <Tunnel _id="Out1" inputs="value:5710.value" uid="5830" uid_parent="5700"/>
+          <Tunnel _id="Out2" inputs="value:5790.value" uid="5840" uid_parent="5700"/>
+          <Tunnel _id="Out3" inputs="value:5800.value" uid="5850" uid_parent="5700"/>
+          <Tunnel _id="Out4" inputs="value:5810.value" uid="5860" uid_parent="5700"/>
+          <Tunnel _id="Out5" inputs="value:5820.value" uid="5870" uid_parent="5700"/>
+        </CaseFrame>
+        <Tunnel _id="Out1" outputs="value:5880.value" uid="5880" uid_parent="5320"/>
+        <Tunnel _id="Out2" outputs="value:5890.value" uid="5890" uid_parent="5320"/>
+        <Tunnel _id="Out3" outputs="value:5900.value" uid="5900" uid_parent="5320"/>
+        <Tunnel _id="Out4" outputs="value:5910.value" uid="5910" uid_parent="5320"/>
+        <Tunnel _id="Out5" outputs="value:5920.value" uid="5920" uid_parent="5320"/>
+      </Structure>
+      <Constant outputs="value:5930.value" type="uint8{None,Double Three,Double Four,Overline}" uid="5930" uid_parent="5110" value="0"/>
+      <Node _name="Select" inputs="t:5280.Reason,s:5260.x .and. y?,f:5930.value" outputs="s? t\3Af:5940.s? t\3Af" uid="5940" uid_parent="5110"/>
+      <Tunnel _id="Out1" inputs="value:5880.value" uid="5950" uid_parent="5110"/>
+      <Tunnel _id="Out2" inputs="value:5890.value" uid="5960" uid_parent="5110"/>
+      <Tunnel _id="Out3" inputs="value:5900.value" uid="5970" uid_parent="5110"/>
+      <Tunnel _id="Out4" inputs="value:5910.value" uid="5980" uid_parent="5110"/>
+      <Tunnel _id="Out5" inputs="value:5940.s? t\3Af" uid="5990" uid_parent="5110"/>
+      <Tunnel _id="Out6" inputs="value:5920.value" uid="6000" uid_parent="5110"/>
+      <Tunnel _id="Out7" inputs="value:5150.value" uid="6010" uid_parent="5110"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="6020" uid_parent="5060">
+      <Tunnel _id="In1" outputs="value:6030.value" uid="6030" uid_parent="6020"/>
+      <Tunnel _id="In2" outputs="value:6040.value" uid="6040" uid_parent="6020"/>
+      <Tunnel _id="In3" outputs="value:6050.value" uid="6050" uid_parent="6020"/>
+      <Tunnel _id="In4" outputs="value:6060.value" uid="6060" uid_parent="6020"/>
+      <Constant outputs="value:6070.value" type="cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}" uid="6070" uid_parent="6020" value="[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]]"/>
+      <Constant outputs="value:6080.value" type="bool" uid="6080" uid_parent="6020" value="false"/>
+      <Constant outputs="value:6090.value" type="bool" uid="6090" uid_parent="6020" value="false"/>
+      <Constant outputs="value:6100.value" type="array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}" uid="6100" uid_parent="6020" value="[]"/>
+      <Constant outputs="value:6110.value" type="uint8{None,Double Three,Double Four,Overline}" uid="6110" uid_parent="6020" value="0"/>
+      <Constant outputs="value:6120.value" type="bool" uid="6120" uid_parent="6020" value="false"/>
+      <Tunnel _id="Out1" inputs="value:6070.value" uid="6130" uid_parent="6020"/>
+      <Tunnel _id="Out2" inputs="value:6080.value" uid="6140" uid_parent="6020"/>
+      <Tunnel _id="Out3" inputs="value:6090.value" uid="6150" uid_parent="6020"/>
+      <Tunnel _id="Out4" inputs="value:6100.value" uid="6160" uid_parent="6020"/>
+      <Tunnel _id="Out5" inputs="value:6110.value" uid="6170" uid_parent="6020"/>
+      <Tunnel _id="Out6" inputs="value:6120.value" uid="6180" uid_parent="6020"/>
+      <Tunnel _id="Out7" inputs="value:6060.value" uid="6190" uid_parent="6020"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:6200.value" uid="6200" uid_parent="5060"/>
+    <Tunnel _id="Out2" outputs="value:6210.value" uid="6210" uid_parent="5060"/>
+    <Tunnel _id="Out3" outputs="value:6220.value" uid="6220" uid_parent="5060"/>
+    <Tunnel _id="Out4" outputs="value:6230.value" uid="6230" uid_parent="5060"/>
+    <Tunnel _id="Out5" outputs="value:6240.value" uid="6240" uid_parent="5060"/>
+    <Tunnel _id="Out6" outputs="value:6250.value" uid="6250" uid_parent="5060"/>
+    <Tunnel _id="Out7" outputs="value:6260.value" uid="6260" uid_parent="5060"/>
+  </Structure>
+  <Indicator _name="Board State out" conIdx="4" connection="recommended" inputs="value:6200.value" type="cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}" uid="6270" uid_parent="root" value="[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]]"/>
+  <Indicator _name="Placed?" conIdx="6" connection="recommended" inputs="value:6210.value" type="bool" uid="6280" uid_parent="root" value="false"/>
+  <Indicator _name="Win?" conIdx="8" connection="recommended" inputs="value:6220.value" type="bool" uid="6290" uid_parent="root" value="false"/>
+  <Indicator _name="Win Line" conIdx="10" connection="recommended" inputs="value:6230.value" type="array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}" uid="6300" uid_parent="root" value="[]"/>
+  <Indicator _name="Forbidden Reason" conIdx="14" connection="recommended" inputs="value:6240.value" type="uint8{None,Double Three,Double Four,Overline}" uid="6310" uid_parent="root" value="0"/>
+  <Indicator _name="Draw?" conIdx="3" connection="recommended" inputs="value:6250.value" type="bool" uid="6320" uid_parent="root" value="false"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:6260.value" type="cluster{bool.status,int32.code,string.source}" uid="6330" uid_parent="root" value="[false,0,]"/>
+</VI>

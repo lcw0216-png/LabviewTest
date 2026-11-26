@@ -13,6 +13,7 @@ LabVIEW MCP(AIXML)로 생성한 LabVIEW 2026 VI 모음입니다.
 | `AI_Data_Tdms/` | `AI_Data_Tdms.vi` | NI 9203 8ch 전류 측정(DAQmx), 채널별 스케일 변환, 차트 표시, TDMS 저장 |
 | `DO_Test/` | `DO seq.vi` | 시퀀스 테이블 기반 64ch DO 출력 시험 (상태머신 구조) |
 | `DO_Test/` | `DO seq_event.vi` | 위와 같은 기능의 이벤트 구조 버전 (백업) |
+| `Omok/` | `Omok_Main.vi` 외 19개 | 오목 Player vs AI (이벤트 + 큐 3루프 QMH, 렌주룰, 난이도 3단계) — [상세](Omok/README.md) |
 | `tools/` | — | AIXML 생성 스크립트 |
 
 ### Scale_4to20mA.vi

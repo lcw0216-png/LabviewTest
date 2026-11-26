@@ -1,0 +1,50 @@
+<VI _name="Test_Game.vi" description="Game_Place_Stone / Game_Undo Å×½ºÆ®.">
+  <Control _name="Rows" outputs="value:5010.value" type="array{int32}" uid="5010" uid_parent="root" value="[7,7]"/>
+  <Control _name="Cols" outputs="value:5020.value" type="array{int32}" uid="5020" uid_parent="root" value="[3,4]"/>
+  <Control _name="Stones" outputs="value:5030.value" type="array{int32}" uid="5030" uid_parent="root" value="[1,2]"/>
+  <Control _name="Renju" outputs="value:5040.value" type="bool" uid="5040" uid_parent="root" value="true"/>
+  <Control _name="Undo Count" outputs="value:5050.value" type="int32" uid="5050" uid_parent="root" value="0"/>
+  <FreeLabel comment="Å×½ºÆ®\3A ¼ø¼­´ë·Î Âø¼ö ÈÄ ¹«¸£±â" uid="5060" uid_parent="root"/>
+  <Constant outputs="value:5070.value" type="cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}" uid="5070" uid_parent="root" value="[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]]"/>
+  <Structure _name="For Loop" count="5080.value" maxin="" maxout="" uid="5080" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" mode="index" outputs="value:5090.value" uid="5090" uid_parent="5080"/>
+    <Tunnel _id="In2" inputs="value:5020.value" mode="index" outputs="value:5100.value" uid="5100" uid_parent="5080"/>
+    <Tunnel _id="In3" inputs="value:5030.value" mode="index" outputs="value:5110.value" uid="5110" uid_parent="5080"/>
+    <Tunnel _id="In4" inputs="value:5040.value" outputs="value:5120.value" uid="5120" uid_parent="5080"/>
+    <Constant outputs="value:5140.value" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5140" uid_parent="5080" value="[0,0,0]"/>
+    <Constant outputs="value:5150.value" type="uint8{Empty,Black,White}" uid="5150" uid_parent="5080" value="0"/>
+    <Constant outputs="value:5160.value" type="uint8{Empty,Black,White}" uid="5160" uid_parent="5080" value="1"/>
+    <Constant outputs="value:5170.value" type="uint8{Empty,Black,White}" uid="5170" uid_parent="5080" value="2"/>
+    <Constant outputs="value:5180.value" type="int32" uid="5180" uid_parent="5080" value="1"/>
+    <Node _name="Equal?" inputs="x:5110.value,y:5180.value" outputs="x = y?:5190.x = y?" uid="5190" uid_parent="5080"/>
+    <Constant outputs="value:5200.value" type="int32" uid="5200" uid_parent="5080" value="2"/>
+    <Node _name="Equal?" inputs="x:5110.value,y:5200.value" outputs="x = y?:5210.x = y?" uid="5210" uid_parent="5080"/>
+    <Node _name="Select" inputs="t:5170.value,s:5210.x = y?,f:5150.value" outputs="s? t\3Af:5220.s? t\3Af" uid="5220" uid_parent="5080"/>
+    <Node _name="Select" inputs="t:5160.value,s:5190.x = y?,f:5220.s? t\3Af" outputs="s? t\3Af:5230.s? t\3Af" uid="5230" uid_parent="5080"/>
+    <Node _name="Bundle By Name" fields="Row,Col,Stone" inputs="Row:5090.value,Col:5100.value,Stone:5230.s? t\3Af,input cluster:5140.value" outputs="output cluster:5240.output cluster" uid="5240" uid_parent="5080"/>
+    <Constant outputs="value:5250.value" type="cluster{bool.status,int32.code,string.source}" uid="5250" uid_parent="5080" value="[false,0,]"/>
+    <Call target="Game_Place_Stone.vi" inputs="Board State:5130.value,Move:5240.output cluster,Renju:5120.value,error in:5250.value" outputs="Board State out:5260.Board State out,Placed?:5260.Placed?,Win?:5260.Win?,Win Line:5260.Win Line,Forbidden Reason:5260.Forbidden Reason,Draw?:5260.Draw?,error out:5260.error out" uid="5260" uid_parent="5080"/>
+    <Tunnel _id="Out1" inputs="value:5260.Placed?" mode="index" outputs="value:5270.value" uid="5270" uid_parent="5080"/>
+    <Tunnel _id="Out2" inputs="value:5260.Win?" mode="index" outputs="value:5280.value" uid="5280" uid_parent="5080"/>
+    <Tunnel _id="Out3" inputs="value:5260.Forbidden Reason" mode="index" outputs="value:5290.value" uid="5290" uid_parent="5080"/>
+    <ShiftReg uid="5300" uid_parent="5080">
+      <Left inputs="value:5070.value" outputs="value:5130.value" uid="5130" uid_parent="5300"/>
+      <Right inputs="value:5260.Board State out" outputs="value:5310.value" uid="5310" uid_parent="5300"/>
+    </ShiftReg>
+  </Structure>
+  <Constant outputs="value:5320.value" type="cluster{bool.status,int32.code,string.source}" uid="5320" uid_parent="root" value="[false,0,]"/>
+  <Call target="Game_Undo.vi" inputs="Board State:5310.value,Count:5050.value,error in:5320.value" outputs="Board State out:5330.Board State out,Undone:5330.Undone,error out:5330.error out" uid="5330" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="Grid,Move History,Last Move" inputs="input cluster:5330.Board State out" outputs="Grid:5340.Grid,Move History:5340.Move History,Last Move:5340.Last Move" uid="5340" uid_parent="root"/>
+  <Indicator _name="Placed" inputs="value:5270.value" type="array{bool}" uid="5350" uid_parent="root" value="[]"/>
+  <Indicator _name="Win" inputs="value:5280.value" type="array{bool}" uid="5360" uid_parent="root" value="[]"/>
+  <Indicator _name="Reason" inputs="value:5290.value" type="array{uint8{None,Double Three,Double Four,Overline}}" uid="5370" uid_parent="root" value="[]"/>
+  <Node _name="Array Size" inputs="array:5340.Move History" outputs="size(s):5380.size(s)" uid="5380" uid_parent="root"/>
+  <Indicator _name="History Size" inputs="value:5380.size(s)" type="int32" uid="5390" uid_parent="root" value="0"/>
+  <Indicator _name="Last Move" inputs="value:5340.Last Move" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5400" uid_parent="root" value="[0,0,0]"/>
+  <Indicator _name="Undone" inputs="value:5330.Undone" type="int32" uid="5410" uid_parent="root" value="0"/>
+  <Constant outputs="value:5420.value" type="int32" uid="5420" uid_parent="root" value="7"/>
+  <Constant outputs="value:5430.value" type="int32" uid="5430" uid_parent="root" value="3"/>
+  <Node _name="Index Array" dimensions="2" inputs="array:5340.Grid,index (row):5420.value,index (col):5430.value" outputs="element:5440.element" uid="5440" uid_parent="root"/>
+  <Indicator _name="Cell 7,3" inputs="value:5440.element" type="uint8{Empty,Black,White}" uid="5450" uid_parent="root" value="0"/>
+  <Indicator _name="error out" inputs="value:5330.error out" type="cluster{bool.status,int32.code,string.source}" uid="5460" uid_parent="root" value="[false,0,]"/>
+</VI>
