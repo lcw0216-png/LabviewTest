@@ -1,0 +1,246 @@
+<VI _name="DO seq.vi" description="½ÃÄö½º Å×ÀÌºí ±â¹Ý DO Ãâ·Â ½ÃÇè VI.\0A[½ÃÇè ½ÃÀÛ] ½ÃÄö½º Å×ÀÌºí 1¿­ÀÇ Ã¤³Î ÀÌ¸§À» Channel Names ¹è¿­¿¡¼­ °Ë»öÇØ ÀÎµ¦½º¸¦ ±¸ÇÏ°í(0ºÎÅÍ ½ÃÀÛ, DO01=1), 2¿­ On Time / 3¿­ Off Time(ÃÊ)À» ¼ýÀÚ·Î º¯È¯ÇÑ´Ù. DO OutputÀ» ¸ðµÎ OFF·Î, TimeÀ» 0À¸·Î ÃÊ±âÈ­ÇÏ°í Ä«¿îÆ®¸¦ ½ÃÀÛÇÑ´Ù.\0A[½ÇÇà Áß] 50 ms¸¶´Ù °æ°ú ½Ã°£ Time(s)À» °»½ÅÇÏ°í, °¢ ÇàÀÇ Ã¤³ÎÀ» On Time &lt;= Time &lt; Off Time µ¿¾È ON, ±× ¹Û¿¡´Â OFF·Î Ãâ·ÂÇÑ´Ù.\0A[ÀÚµ¿ Á¤Áö] TimeÀÌ ½ÃÄö½º Å×ÀÌºíÀÇ °¡Àå Å« Off Time¿¡ µµ´ÞÇÏ¸é(&gt;=) ½ÃÇèÀ» Á¤ÁöÇÑ´Ù.\0A[½ÃÇè Á¤Áö] ¹öÆ°À» ´©¸£¸é Áß°£¿¡ Á¤ÁöÇÑ´Ù(Ãâ·Â »óÅÂ´Â À¯Áö). ´Ù½Ã ½ÃÀÛÇÏ¸é Ãâ·Â°ú ½Ã°£ÀÌ ÃÊ±âÈ­µÈ´Ù.\0AÃ¢À» ´ÝÀ¸¸é VI°¡ Á¾·áµÈ´Ù. °°Àº Ã¤³ÎÀÌ ¿©·¯ Çà¿¡ ÀÖÀ¸¸é ¾Æ·¡ÂÊ ÇàÀÇ ÆÇÁ¤ÀÌ ¿ì¼±ÇÑ´Ù.">
+  <FreeLabel comment="DO ½ÃÄö½º ½ÃÇè\3A ½ÃÀÛ/Á¤Áö/50 ms Å¸ÀÌ¸Ó/Á¾·á" uid="5010" uid_parent="root"/>
+  <Constant outputs="value:5020.value" type="bool" uid="5020" uid_parent="root" value="false"/>
+  <Constant outputs="value:5030.value" type="uint32" uid="5030" uid_parent="root" value="0"/>
+  <Constant outputs="value:5040.value" type="array{int32}" uid="5040" uid_parent="root" value="[]"/>
+  <Constant outputs="value:5050.value" type="array{double}" uid="5050" uid_parent="root" value="[]"/>
+  <Constant outputs="value:5060.value" type="array{double}" uid="5060" uid_parent="root" value="[]"/>
+  <Constant outputs="value:5070.value" type="double" uid="5070" uid_parent="root" value="0"/>
+  <Constant outputs="value:5080.value" type="array{bool}" uid="5080" uid_parent="root" value="[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"/>
+  <Constant outputs="value:5090.value" type="double" uid="5090" uid_parent="root" value="0"/>
+  <Structure _name="While Loop" count="" uid="5100" uid_parent="root">
+    <FreeLabel comment="Shift Register\3A ½ÃÇè »óÅÂ/¼³Á¤/Ãâ·Â/½Ã°£ À¯Áö" uid="5190" uid_parent="5100"/>
+    <Constant outputs="value:5200.value" type="int32" uid="5200" uid_parent="5100" value="50"/>
+    <Constant outputs="value:5210.value" type="int32" uid="5210" uid_parent="5100" value="-1"/>
+    <Node _name="Select" inputs="t:5200.value,s:5110.value,f:5210.value" outputs="s? t\3Af:5220.s? t\3Af" uid="5220" uid_parent="5100"/>
+    <FreeLabel comment="½ÇÇà Áß 50 ms Timeout\2C ´ë±â Áß ¹«ÇÑ ´ë±â" uid="5230" uid_parent="5100"/>
+    <Structure _name="Event Structure" timeoutin="5220.s? t\3Af" uid="5240" uid_parent="5100">
+      <Tunnel _id="In1" inputs="value:5110.value" uid="5250" uid_parent="5240"/>
+      <Tunnel _id="In2" inputs="value:5120.value" uid="5260" uid_parent="5240"/>
+      <Tunnel _id="In3" inputs="value:5130.value" uid="5270" uid_parent="5240"/>
+      <Tunnel _id="In4" inputs="value:5140.value" uid="5280" uid_parent="5240"/>
+      <Tunnel _id="In5" inputs="value:5150.value" uid="5290" uid_parent="5240"/>
+      <Tunnel _id="In6" inputs="value:5160.value" uid="5300" uid_parent="5240"/>
+      <Tunnel _id="In7" inputs="value:5170.value" uid="5310" uid_parent="5240"/>
+      <Tunnel _id="In8" inputs="value:5180.value" uid="5320" uid_parent="5240"/>
+      <CaseFrame selector=' "Start"\3A Value Change ' selectout="" uid="5330" uid_parent="5240">
+        <Tunnel _id="In1" outputs="value:5340.value" uid="5340" uid_parent="5330"/>
+        <Tunnel _id="In2" outputs="value:5350.value" uid="5350" uid_parent="5330"/>
+        <Tunnel _id="In3" outputs="value:5360.value" uid="5360" uid_parent="5330"/>
+        <Tunnel _id="In4" outputs="value:5370.value" uid="5370" uid_parent="5330"/>
+        <Tunnel _id="In5" outputs="value:5380.value" uid="5380" uid_parent="5330"/>
+        <Tunnel _id="In6" outputs="value:5390.value" uid="5390" uid_parent="5330"/>
+        <Tunnel _id="In7" outputs="value:5400.value" uid="5400" uid_parent="5330"/>
+        <Tunnel _id="In8" outputs="value:5410.value" uid="5410" uid_parent="5330"/>
+        <Control _name="Start" outputs="value:" style="latched" type="bool" uid="5420" uid_parent="5330" value="false"/>
+        <Control _name="Channel Names" conIdx="0" connection="required" outputs="value:5430.value" type="array{string}" uid="5430" uid_parent="5330" value="[DO00,DO01,DO02,DO03,DO04,DO05,DO06,DO07,DO08,DO09,DO10,DO11,DO12,DO13,DO14,DO15,DO16,DO17,DO18,DO19,DO20,DO21,DO22,DO23,DO24,DO25,DO26,DO27,DO28,DO29,DO30,DO31,DO32,DO33,DO34,DO35,DO36,DO37,DO38,DO39,DO40,DO41,DO42,DO43,DO44,DO45,DO46,DO47,DO48,DO49,DO50,DO51,DO52,DO53,DO54,DO55,DO56,DO57,DO58,DO59,DO60,DO61,DO62,DO63]"/>
+        <Control _name="Sequence Table" conIdx="5" connection="recommended" outputs="value:5440.value" type="array.2{string}" uid="5440" uid_parent="5330" value="[[DO01,1,5],[DO63,3,8]]"/>
+        <FreeLabel comment="Å×ÀÌºí Çà\3A 1¿­ Ã¤³Î-&gt;ÀÎµ¦½º\2C 2¿­ On\2C 3¿­ Off" uid="5450" uid_parent="5330"/>
+        <Structure _name="For Loop" count="" maxin="" maxout="" uid="5460" uid_parent="5330">
+          <Tunnel _id="In1" inputs="value:5440.value" mode="index" outputs="value:5470.value" uid="5470" uid_parent="5460"/>
+          <Tunnel _id="In2" inputs="value:5430.value" outputs="value:5480.value" uid="5480" uid_parent="5460"/>
+          <Constant outputs="value:5490.value" type="int32" uid="5490" uid_parent="5460" value="0"/>
+          <Constant outputs="value:5500.value" type="int32" uid="5500" uid_parent="5460" value="1"/>
+          <Constant outputs="value:5510.value" type="int32" uid="5510" uid_parent="5460" value="2"/>
+          <Node _name="Index Array" inputs="array:5470.value,index:5490.value" outputs="element:5520.element" uid="5520" uid_parent="5460"/>
+          <Node _name="Index Array" inputs="array:5470.value,index:5500.value" outputs="element:5530.element" uid="5530" uid_parent="5460"/>
+          <Node _name="Index Array" inputs="array:5470.value,index:5510.value" outputs="element:5540.element" uid="5540" uid_parent="5460"/>
+          <Node _name="Search 1D Array" inputs="1D array:5480.value,element:5520.element,start index (0):" outputs="index of element:5550.index of element" uid="5550" uid_parent="5460"/>
+          <Node _name="Fract/Exp String To Number" inputs="string:5530.element" outputs="offset past number:5560.offset past number,number:5560.number" uid="5560" uid_parent="5460"/>
+          <Node _name="Fract/Exp String To Number" inputs="string:5540.element" outputs="offset past number:5570.offset past number,number:5570.number" uid="5570" uid_parent="5460"/>
+          <FreeLabel comment="Ã¤³Î °Ë»ö(¾øÀ¸¸é -1)\2C On/Off ¹®ÀÚ-&gt;¼ýÀÚ" uid="5580" uid_parent="5460"/>
+          <Tunnel _id="Out1" inputs="value:5550.index of element" mode="index" outputs="value:5590.value" uid="5590" uid_parent="5460"/>
+          <Tunnel _id="Out2" inputs="value:5560.number" mode="index" outputs="value:5600.value" uid="5600" uid_parent="5460"/>
+          <Tunnel _id="Out3" inputs="value:5570.number" mode="index" outputs="value:5610.value" uid="5610" uid_parent="5460"/>
+        </Structure>
+        <Node _name="Array Max &amp; Min" inputs="array:5610.value" outputs="max value:5620.max value,max index (indices):5620.max index (indices),min value:5620.min value,min index (indices):5620.min index (indices)" uid="5620" uid_parent="5330"/>
+        <Node _name="Array Size" inputs="array:5430.value" outputs="size(s):5630.size(s)" uid="5630" uid_parent="5330"/>
+        <Constant outputs="value:5640.value" type="bool" uid="5640" uid_parent="5330" value="false"/>
+        <Node _name="Initialize Array" inputs="element:5640.value,dimension size:5630.size(s)" outputs="initialized array:5650.initialized array" uid="5650" uid_parent="5330"/>
+        <Node _name="Tick Count (ms)" inputs="" outputs="millisecond timer value:5660.millisecond timer value" uid="5660" uid_parent="5330"/>
+        <Constant outputs="value:5670.value" type="bool" uid="5670" uid_parent="5330" value="true"/>
+        <Constant outputs="value:5680.value" type="double" uid="5680" uid_parent="5330" value="0"/>
+        <Constant outputs="value:5690.value" type="bool" uid="5690" uid_parent="5330" value="false"/>
+        <FreeLabel comment="ÃÊ±âÈ­\3A Ãâ·Â OFF\2C Time=0\2C ½ÃÀÛ Tick ±â·Ï" uid="5700" uid_parent="5330"/>
+        <Tunnel _id="Out1" inputs="value:5670.value" uid="5710" uid_parent="5330"/>
+        <Tunnel _id="Out2" inputs="value:5660.millisecond timer value" uid="5720" uid_parent="5330"/>
+        <Tunnel _id="Out3" inputs="value:5590.value" uid="5730" uid_parent="5330"/>
+        <Tunnel _id="Out4" inputs="value:5600.value" uid="5740" uid_parent="5330"/>
+        <Tunnel _id="Out5" inputs="value:5610.value" uid="5750" uid_parent="5330"/>
+        <Tunnel _id="Out6" inputs="value:5620.max value" uid="5760" uid_parent="5330"/>
+        <Tunnel _id="Out7" inputs="value:5650.initialized array" uid="5770" uid_parent="5330"/>
+        <Tunnel _id="Out8" inputs="value:5680.value" uid="5780" uid_parent="5330"/>
+        <Tunnel _id="Out9" inputs="value:5690.value" uid="5790" uid_parent="5330"/>
+      </CaseFrame>
+      <CaseFrame selector=' "Stop"\3A Value Change ' selectout="" uid="5800" uid_parent="5240">
+        <Tunnel _id="In1" outputs="value:5810.value" uid="5810" uid_parent="5800"/>
+        <Tunnel _id="In2" outputs="value:5820.value" uid="5820" uid_parent="5800"/>
+        <Tunnel _id="In3" outputs="value:5830.value" uid="5830" uid_parent="5800"/>
+        <Tunnel _id="In4" outputs="value:5840.value" uid="5840" uid_parent="5800"/>
+        <Tunnel _id="In5" outputs="value:5850.value" uid="5850" uid_parent="5800"/>
+        <Tunnel _id="In6" outputs="value:5860.value" uid="5860" uid_parent="5800"/>
+        <Tunnel _id="In7" outputs="value:5870.value" uid="5870" uid_parent="5800"/>
+        <Tunnel _id="In8" outputs="value:5880.value" uid="5880" uid_parent="5800"/>
+        <Control _name="Stop" outputs="value:" style="latched" type="bool" uid="5890" uid_parent="5800" value="false"/>
+        <Constant outputs="value:5900.value" type="bool" uid="5900" uid_parent="5800" value="false"/>
+        <Constant outputs="value:5910.value" type="bool" uid="5910" uid_parent="5800" value="false"/>
+        <FreeLabel comment="Áß°£ Á¤Áö\3A ½ÇÇà »óÅÂ OFF (Ãâ·Â À¯Áö)" uid="5920" uid_parent="5800"/>
+        <Tunnel _id="Out1" inputs="value:5900.value" uid="5930" uid_parent="5800"/>
+        <Tunnel _id="Out2" inputs="value:5820.value" uid="5940" uid_parent="5800"/>
+        <Tunnel _id="Out3" inputs="value:5830.value" uid="5950" uid_parent="5800"/>
+        <Tunnel _id="Out4" inputs="value:5840.value" uid="5960" uid_parent="5800"/>
+        <Tunnel _id="Out5" inputs="value:5850.value" uid="5970" uid_parent="5800"/>
+        <Tunnel _id="Out6" inputs="value:5860.value" uid="5980" uid_parent="5800"/>
+        <Tunnel _id="Out7" inputs="value:5870.value" uid="5990" uid_parent="5800"/>
+        <Tunnel _id="Out8" inputs="value:5880.value" uid="6000" uid_parent="5800"/>
+        <Tunnel _id="Out9" inputs="value:5910.value" uid="6010" uid_parent="5800"/>
+      </CaseFrame>
+      <CaseFrame selector=" Timeout " selectout="" uid="6020" uid_parent="5240">
+        <Tunnel _id="In1" outputs="value:6030.value" uid="6030" uid_parent="6020"/>
+        <Tunnel _id="In2" outputs="value:6040.value" uid="6040" uid_parent="6020"/>
+        <Tunnel _id="In3" outputs="value:6050.value" uid="6050" uid_parent="6020"/>
+        <Tunnel _id="In4" outputs="value:6060.value" uid="6060" uid_parent="6020"/>
+        <Tunnel _id="In5" outputs="value:6070.value" uid="6070" uid_parent="6020"/>
+        <Tunnel _id="In6" outputs="value:6080.value" uid="6080" uid_parent="6020"/>
+        <Tunnel _id="In7" outputs="value:6090.value" uid="6090" uid_parent="6020"/>
+        <Tunnel _id="In8" outputs="value:6100.value" uid="6100" uid_parent="6020"/>
+        <Structure _name="Case Structure" selectin="6030.value" uid="6110" uid_parent="6020">
+          <Tunnel _id="In1" inputs="value:6040.value" uid="6120" uid_parent="6110"/>
+          <Tunnel _id="In2" inputs="value:6050.value" uid="6130" uid_parent="6110"/>
+          <Tunnel _id="In3" inputs="value:6060.value" uid="6140" uid_parent="6110"/>
+          <Tunnel _id="In4" inputs="value:6070.value" uid="6150" uid_parent="6110"/>
+          <Tunnel _id="In5" inputs="value:6080.value" uid="6160" uid_parent="6110"/>
+          <Tunnel _id="In6" inputs="value:6090.value" uid="6170" uid_parent="6110"/>
+          <Tunnel _id="In7" inputs="value:6100.value" uid="6180" uid_parent="6110"/>
+          <CaseFrame selector="True" label="½ÇÇà Áß\3A ½Ã°£ °»½Å ¹× Ã¤³Î On/Off" selectout="" uid="6190" uid_parent="6110">
+            <Tunnel _id="In1" outputs="value:6200.value" uid="6200" uid_parent="6190"/>
+            <Tunnel _id="In2" outputs="value:6210.value" uid="6210" uid_parent="6190"/>
+            <Tunnel _id="In3" outputs="value:6220.value" uid="6220" uid_parent="6190"/>
+            <Tunnel _id="In4" outputs="value:6230.value" uid="6230" uid_parent="6190"/>
+            <Tunnel _id="In5" outputs="value:6240.value" uid="6240" uid_parent="6190"/>
+            <Tunnel _id="In6" outputs="value:6250.value" uid="6250" uid_parent="6190"/>
+            <Tunnel _id="In7" outputs="value:6260.value" uid="6260" uid_parent="6190"/>
+            <Node _name="Tick Count (ms)" inputs="" outputs="millisecond timer value:6270.millisecond timer value" uid="6270" uid_parent="6190"/>
+            <Node _name="Subtract" inputs="x:6270.millisecond timer value,y:6200.value" outputs="x-y:6280.x-y" uid="6280" uid_parent="6190"/>
+            <Node _name="To Double Precision Float" inputs="number:6280.x-y" outputs="double precision float:6290.double precision float" uid="6290" uid_parent="6190"/>
+            <Constant outputs="value:6300.value" type="double" uid="6300" uid_parent="6190" value="1000"/>
+            <Node _name="Divide" inputs="x:6290.double precision float,y:6300.value" outputs="x/y:6310.x/y" uid="6310" uid_parent="6190"/>
+            <FreeLabel comment="°æ°ú ½Ã°£(s) = (ÇöÀç Tick - ½ÃÀÛ Tick) / 1000" uid="6320" uid_parent="6190"/>
+            <Structure _name="For Loop" count="" maxin="" maxout="" uid="6330" uid_parent="6190">
+              <Tunnel _id="In1" inputs="value:6210.value" mode="index" outputs="value:6340.value" uid="6340" uid_parent="6330"/>
+              <Tunnel _id="In2" inputs="value:6220.value" mode="index" outputs="value:6350.value" uid="6350" uid_parent="6330"/>
+              <Tunnel _id="In3" inputs="value:6230.value" mode="index" outputs="value:6360.value" uid="6360" uid_parent="6330"/>
+              <Tunnel _id="In4" inputs="value:6310.x/y" outputs="value:6370.value" uid="6370" uid_parent="6330"/>
+              <Node _name="Greater Or Equal?" inputs="x:6370.value,y:6350.value" outputs="x &gt;= y?:6410.x &gt;= y?" uid="6410" uid_parent="6330"/>
+              <Node _name="Less?" inputs="x:6370.value,y:6360.value" outputs="x &lt; y?:6420.x &lt; y?" uid="6420" uid_parent="6330"/>
+              <Node _name="And" inputs="x:6410.x &gt;= y?,y:6420.x &lt; y?" outputs="x .and. y?:6430.x .and. y?" uid="6430" uid_parent="6330"/>
+              <Node _name="Replace Array Subset" inputs="array:6390.value,index:6340.value,new element/subarray:6430.x .and. y?" outputs="output array:6440.output array" uid="6440" uid_parent="6330"/>
+              <FreeLabel comment="On &lt;= Time &lt; Off ÀÌ¸é ON (ÀÎµ¦½º -1 ¹«½Ã)" uid="6450" uid_parent="6330"/>
+              <ShiftReg uid="6380" uid_parent="6330">
+                <Left inputs="value:6250.value" outputs="value:6390.value" uid="6390" uid_parent="6380"/>
+                <Right inputs="value:6440.output array" outputs="value:6400.value" uid="6400" uid_parent="6380"/>
+              </ShiftReg>
+            </Structure>
+            <Node _name="Greater Or Equal?" inputs="x:6310.x/y,y:6240.value" outputs="x &gt;= y?:6460.x &gt;= y?" uid="6460" uid_parent="6190"/>
+            <Node _name="Not" inputs="x:6460.x &gt;= y?" outputs=".not. x?:6470..not. x?" uid="6470" uid_parent="6190"/>
+            <FreeLabel comment="Time &gt;= ÃÖ´ë Off Time ÀÌ¸é ½ÃÇè ÀÚµ¿ Á¤Áö" uid="6480" uid_parent="6190"/>
+            <Tunnel _id="Out1" inputs="value:6470..not. x?" uid="6490" uid_parent="6190"/>
+            <Tunnel _id="Out2" inputs="value:6400.value" uid="6500" uid_parent="6190"/>
+            <Tunnel _id="Out3" inputs="value:6310.x/y" uid="6510" uid_parent="6190"/>
+          </CaseFrame>
+          <CaseFrame selector="False" label="´ë±â" selectout="" uid="6520" uid_parent="6110">
+            <Tunnel _id="In1" outputs="value:6530.value" uid="6530" uid_parent="6520"/>
+            <Tunnel _id="In2" outputs="value:6540.value" uid="6540" uid_parent="6520"/>
+            <Tunnel _id="In3" outputs="value:6550.value" uid="6550" uid_parent="6520"/>
+            <Tunnel _id="In4" outputs="value:6560.value" uid="6560" uid_parent="6520"/>
+            <Tunnel _id="In5" outputs="value:6570.value" uid="6570" uid_parent="6520"/>
+            <Tunnel _id="In6" outputs="value:6580.value" uid="6580" uid_parent="6520"/>
+            <Tunnel _id="In7" outputs="value:6590.value" uid="6590" uid_parent="6520"/>
+            <Constant outputs="value:6600.value" type="bool" uid="6600" uid_parent="6520" value="false"/>
+            <Tunnel _id="Out1" inputs="value:6600.value" uid="6610" uid_parent="6520"/>
+            <Tunnel _id="Out2" inputs="value:6580.value" uid="6620" uid_parent="6520"/>
+            <Tunnel _id="Out3" inputs="value:6590.value" uid="6630" uid_parent="6520"/>
+          </CaseFrame>
+          <Tunnel _id="Out1" outputs="value:6640.value" uid="6640" uid_parent="6110"/>
+          <Tunnel _id="Out2" outputs="value:6650.value" uid="6650" uid_parent="6110"/>
+          <Tunnel _id="Out3" outputs="value:6660.value" uid="6660" uid_parent="6110"/>
+        </Structure>
+        <Constant outputs="value:6670.value" type="bool" uid="6670" uid_parent="6020" value="false"/>
+        <Tunnel _id="Out1" inputs="value:6640.value" uid="6680" uid_parent="6020"/>
+        <Tunnel _id="Out2" inputs="value:6040.value" uid="6690" uid_parent="6020"/>
+        <Tunnel _id="Out3" inputs="value:6050.value" uid="6700" uid_parent="6020"/>
+        <Tunnel _id="Out4" inputs="value:6060.value" uid="6710" uid_parent="6020"/>
+        <Tunnel _id="Out5" inputs="value:6070.value" uid="6720" uid_parent="6020"/>
+        <Tunnel _id="Out6" inputs="value:6080.value" uid="6730" uid_parent="6020"/>
+        <Tunnel _id="Out7" inputs="value:6650.value" uid="6740" uid_parent="6020"/>
+        <Tunnel _id="Out8" inputs="value:6660.value" uid="6750" uid_parent="6020"/>
+        <Tunnel _id="Out9" inputs="value:6670.value" uid="6760" uid_parent="6020"/>
+      </CaseFrame>
+      <CaseFrame selector=" Panel Close? " selectout="" uid="6770" uid_parent="5240">
+        <Tunnel _id="In1" outputs="value:6780.value" uid="6780" uid_parent="6770"/>
+        <Tunnel _id="In2" outputs="value:6790.value" uid="6790" uid_parent="6770"/>
+        <Tunnel _id="In3" outputs="value:6800.value" uid="6800" uid_parent="6770"/>
+        <Tunnel _id="In4" outputs="value:6810.value" uid="6810" uid_parent="6770"/>
+        <Tunnel _id="In5" outputs="value:6820.value" uid="6820" uid_parent="6770"/>
+        <Tunnel _id="In6" outputs="value:6830.value" uid="6830" uid_parent="6770"/>
+        <Tunnel _id="In7" outputs="value:6840.value" uid="6840" uid_parent="6770"/>
+        <Tunnel _id="In8" outputs="value:6850.value" uid="6850" uid_parent="6770"/>
+        <Constant outputs="value:6860.value" type="bool" uid="6860" uid_parent="6770" value="true"/>
+        <FreeLabel comment="Ã¢ ´Ý±â\3A ·çÇÁ Á¾·á" uid="6870" uid_parent="6770"/>
+        <Tunnel _id="Out1" inputs="value:6780.value" uid="6880" uid_parent="6770"/>
+        <Tunnel _id="Out2" inputs="value:6790.value" uid="6890" uid_parent="6770"/>
+        <Tunnel _id="Out3" inputs="value:6800.value" uid="6900" uid_parent="6770"/>
+        <Tunnel _id="Out4" inputs="value:6810.value" uid="6910" uid_parent="6770"/>
+        <Tunnel _id="Out5" inputs="value:6820.value" uid="6920" uid_parent="6770"/>
+        <Tunnel _id="Out6" inputs="value:6830.value" uid="6930" uid_parent="6770"/>
+        <Tunnel _id="Out7" inputs="value:6840.value" uid="6940" uid_parent="6770"/>
+        <Tunnel _id="Out8" inputs="value:6850.value" uid="6950" uid_parent="6770"/>
+        <Tunnel _id="Out9" inputs="value:6860.value" uid="6960" uid_parent="6770"/>
+      </CaseFrame>
+      <Tunnel _id="Out1" outputs="value:6970.value" uid="6970" uid_parent="5240"/>
+      <Tunnel _id="Out2" outputs="value:6980.value" uid="6980" uid_parent="5240"/>
+      <Tunnel _id="Out3" outputs="value:6990.value" uid="6990" uid_parent="5240"/>
+      <Tunnel _id="Out4" outputs="value:7000.value" uid="7000" uid_parent="5240"/>
+      <Tunnel _id="Out5" outputs="value:7010.value" uid="7010" uid_parent="5240"/>
+      <Tunnel _id="Out6" outputs="value:7020.value" uid="7020" uid_parent="5240"/>
+      <Tunnel _id="Out7" outputs="value:7030.value" uid="7030" uid_parent="5240"/>
+      <Tunnel _id="Out8" outputs="value:7040.value" uid="7040" uid_parent="5240"/>
+      <Tunnel _id="Out9" outputs="value:7050.value" uid="7050" uid_parent="5240"/>
+    </Structure>
+    <Indicator _name="DO Output" conIdx="4" connection="recommended" inputs="value:7030.value" type="array{bool}" uid="7060" uid_parent="5100" value="[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]"/>
+    <Indicator _name="Time (s)" conIdx="6" connection="recommended" inputs="value:7040.value" type="double" uid="7070" uid_parent="5100" value="0"/>
+    <Condition inputs="value:7050.value" uid="7080" uid_parent="5100" value="stop"/>
+    <ShiftReg uid="7090" uid_parent="5100">
+      <Left inputs="value:5020.value" outputs="value:5110.value" uid="5110" uid_parent="7090"/>
+      <Right inputs="value:6970.value" outputs="value:" uid="7100" uid_parent="7090"/>
+    </ShiftReg>
+    <ShiftReg uid="7110" uid_parent="5100">
+      <Left inputs="value:5030.value" outputs="value:5120.value" uid="5120" uid_parent="7110"/>
+      <Right inputs="value:6980.value" outputs="value:" uid="7120" uid_parent="7110"/>
+    </ShiftReg>
+    <ShiftReg uid="7130" uid_parent="5100">
+      <Left inputs="value:5040.value" outputs="value:5130.value" uid="5130" uid_parent="7130"/>
+      <Right inputs="value:6990.value" outputs="value:" uid="7140" uid_parent="7130"/>
+    </ShiftReg>
+    <ShiftReg uid="7150" uid_parent="5100">
+      <Left inputs="value:5050.value" outputs="value:5140.value" uid="5140" uid_parent="7150"/>
+      <Right inputs="value:7000.value" outputs="value:" uid="7160" uid_parent="7150"/>
+    </ShiftReg>
+    <ShiftReg uid="7170" uid_parent="5100">
+      <Left inputs="value:5060.value" outputs="value:5150.value" uid="5150" uid_parent="7170"/>
+      <Right inputs="value:7010.value" outputs="value:" uid="7180" uid_parent="7170"/>
+    </ShiftReg>
+    <ShiftReg uid="7190" uid_parent="5100">
+      <Left inputs="value:5070.value" outputs="value:5160.value" uid="5160" uid_parent="7190"/>
+      <Right inputs="value:7020.value" outputs="value:" uid="7200" uid_parent="7190"/>
+    </ShiftReg>
+    <ShiftReg uid="7210" uid_parent="5100">
+      <Left inputs="value:5080.value" outputs="value:5170.value" uid="5170" uid_parent="7210"/>
+      <Right inputs="value:7030.value" outputs="value:" uid="7220" uid_parent="7210"/>
+    </ShiftReg>
+    <ShiftReg uid="7230" uid_parent="5100">
+      <Left inputs="value:5090.value" outputs="value:5180.value" uid="5180" uid_parent="7230"/>
+      <Right inputs="value:7040.value" outputs="value:" uid="7240" uid_parent="7230"/>
+    </ShiftReg>
+  </Structure>
+</VI>

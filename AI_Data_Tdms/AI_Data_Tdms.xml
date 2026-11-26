@@ -1,0 +1,380 @@
+<VI _name="AI_Data_Tdms.vi" description="NI 9203 (8ch, 4-20 mA) current acquisition with DAQmx, per-channel scaling and TDMS save.\0AStart: creates the AI current task (0-20 mA range), sample clock timing (finite or continuous) and starts it.\0ATimeout (while running): reads N samples/ch as 2D DBL [ch][sample] in A, scales each channel EU = min + (I[mA]-4)/16*(max-min) using row ch of Scale (Min/Max) [min,max], charts it and appends it to the buffer. Finite mode stops the task after one read.\0AStop: stops and clears the task.\0ASave Data: opens a file dialog (name and folder) and writes the buffered scaled data of every channel to TDMS (group AI Data, channels CH0..CHn).\0AClosing the panel ends the VI. Runs only when error in carries no error.">
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:4013.value" type="cluster{bool.status,int32.code,string.source}" uid="4013" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:4013.value" outputs="status:5010.status" uid="5010" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5010.status" uid="5020" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:4013.value" uid="5030" uid_parent="5020"/>
+    <CaseFrame selector="False" label="No Error" selectout="" uid="5040" uid_parent="5020">
+      <Tunnel _id="In1" outputs="value:5050.value" uid="5050" uid_parent="5040"/>
+      <Constant outputs="value:5060.value" type="bool" uid="5060" uid_parent="5040" value="false"/>
+      <Constant outputs="value:5070.value" type="array.2{double}" uid="5070" uid_parent="5040" value="[]"/>
+      <Constant outputs="value:5080.value" type="int32" uid="5080" uid_parent="5040" value="10123"/>
+      <Constant outputs="value:5090.value" type="double" uid="5090" uid_parent="5040" value="100"/>
+      <Constant outputs="value:5100.value" type="int32" uid="5100" uid_parent="5040" value="100"/>
+      <Constant outputs="value:5110.value" type="ref{GenClassTag.Task.NIDAQ}" uid="5110" uid_parent="5040" value=""/>
+      <Structure _name="While Loop" count="" uid="5120" uid_parent="5040">
+        <Constant outputs="value:5200.value" type="int32" uid="5200" uid_parent="5120" value="0"/>
+        <Constant outputs="value:5210.value" type="int32" uid="5210" uid_parent="5120" value="-1"/>
+        <Node _name="Select" inputs="t:5200.value,s:5140.value,f:5210.value" outputs="s? t\3Af:5220.s? t\3Af" uid="5220" uid_parent="5120"/>
+        <Structure _name="Event Structure" timeoutin="5220.s? t\3Af" uid="5230" uid_parent="5120">
+          <Tunnel _id="In1" inputs="value:5130.value" uid="5240" uid_parent="5230"/>
+          <Tunnel _id="In2" inputs="value:5140.value" uid="5250" uid_parent="5230"/>
+          <Tunnel _id="In3" inputs="value:5150.value" uid="5260" uid_parent="5230"/>
+          <Tunnel _id="In4" inputs="value:5160.value" uid="5270" uid_parent="5230"/>
+          <Tunnel _id="In5" inputs="value:5170.value" uid="5280" uid_parent="5230"/>
+          <Tunnel _id="In6" inputs="value:5180.value" uid="5290" uid_parent="5230"/>
+          <Tunnel _id="In7" inputs="value:5190.value" uid="5300" uid_parent="5230"/>
+          <CaseFrame selector=' "Start"\3A Value Change ' selectout="" uid="5310" uid_parent="5230">
+            <Tunnel _id="In1" outputs="value:5320.value" uid="5320" uid_parent="5310"/>
+            <Tunnel _id="In2" outputs="value:5330.value" uid="5330" uid_parent="5310"/>
+            <Tunnel _id="In3" outputs="value:5340.value" uid="5340" uid_parent="5310"/>
+            <Tunnel _id="In4" outputs="value:5350.value" uid="5350" uid_parent="5310"/>
+            <Tunnel _id="In5" outputs="value:5360.value" uid="5360" uid_parent="5310"/>
+            <Tunnel _id="In6" outputs="value:5370.value" uid="5370" uid_parent="5310"/>
+            <Tunnel _id="In7" outputs="value:5380.value" uid="5380" uid_parent="5310"/>
+            <Control _name="Start" outputs="value:" style="latched" type="bool" uid="5390" uid_parent="5310" value="false"/>
+            <Control _name="Physical Channels" outputs="value:5400.value" type="tag{14}" uid="5400" uid_parent="5310" value="cDAQ1Mod1/ai0:7"/>
+            <Control _name="Sample Mode" style="Ring" items="Finite Samples,Continuous Samples" values="[10178,10123]" outputs="value:5410.value" type="int32" uid="5410" uid_parent="5310" value="10123"/>
+            <Control _name="Sample Rate (Hz)" outputs="value:5420.value" type="double" uid="5420" uid_parent="5310" value="100"/>
+            <Control _name="Samples per Channel" outputs="value:5430.value" type="int32" uid="5430" uid_parent="5310" value="100"/>
+            <Structure _name="Case Structure" selectin="5330.value" uid="5440" uid_parent="5310">
+              <Tunnel _id="In1" inputs="value:5320.value" uid="5450" uid_parent="5440"/>
+              <Tunnel _id="In2" inputs="value:5350.value" uid="5460" uid_parent="5440"/>
+              <Tunnel _id="In3" inputs="value:5400.value" uid="5470" uid_parent="5440"/>
+              <Tunnel _id="In4" inputs="value:5410.value" uid="5480" uid_parent="5440"/>
+              <Tunnel _id="In5" inputs="value:5420.value" uid="5490" uid_parent="5440"/>
+              <Tunnel _id="In6" inputs="value:5430.value" uid="5500" uid_parent="5440"/>
+              <Tunnel _id="In7" inputs="value:5340.value" uid="5510" uid_parent="5440"/>
+              <CaseFrame selector="True" label="Already running" selectout="" uid="5520" uid_parent="5440">
+                <Tunnel _id="In1" outputs="value:5530.value" uid="5530" uid_parent="5520"/>
+                <Tunnel _id="In2" outputs="value:5540.value" uid="5540" uid_parent="5520"/>
+                <Tunnel _id="In3" outputs="value:5550.value" uid="5550" uid_parent="5520"/>
+                <Tunnel _id="In4" outputs="value:5560.value" uid="5560" uid_parent="5520"/>
+                <Tunnel _id="In5" outputs="value:5570.value" uid="5570" uid_parent="5520"/>
+                <Tunnel _id="In6" outputs="value:5580.value" uid="5580" uid_parent="5520"/>
+                <Tunnel _id="In7" outputs="value:5590.value" uid="5590" uid_parent="5520"/>
+                <Tunnel _id="Out1" inputs="value:5530.value" uid="5600" uid_parent="5520"/>
+                <Tunnel _id="Out2" inputs="value:5540.value" uid="5610" uid_parent="5520"/>
+                <Tunnel _id="Out3" inputs="value:5590.value" uid="5620" uid_parent="5520"/>
+              </CaseFrame>
+              <CaseFrame selector="False" label="Create task and start" selectout="" uid="5630" uid_parent="5440">
+                <Tunnel _id="In1" outputs="value:5640.value" uid="5640" uid_parent="5630"/>
+                <Tunnel _id="In2" outputs="value:5650.value" uid="5650" uid_parent="5630"/>
+                <Tunnel _id="In3" outputs="value:5660.value" uid="5660" uid_parent="5630"/>
+                <Tunnel _id="In4" outputs="value:5670.value" uid="5670" uid_parent="5630"/>
+                <Tunnel _id="In5" outputs="value:5680.value" uid="5680" uid_parent="5630"/>
+                <Tunnel _id="In6" outputs="value:5690.value" uid="5690" uid_parent="5630"/>
+                <Tunnel _id="In7" outputs="value:5700.value" uid="5700" uid_parent="5630"/>
+                <Constant outputs="value:5710.value" type="double" uid="5710" uid_parent="5630" value="0"/>
+                <Constant outputs="value:5720.value" type="double" uid="5720" uid_parent="5630" value="0.02"/>
+                <Call adapt="true" instance="DAQmx Create Channel (AI-Current-Basic).vi" target="DAQmx Create Virtual Channel.vi" inputs="task in:,physical channels:5660.value,minimum value:5710.value,maximum value:5720.value,error in:5650.value" outputs="task out:5730.task out,error out:5730.error out" uid="5730" uid_parent="5630"/>
+                <Call adapt="true" instance="DAQmx Timing (Sample Clock).vi" target="DAQmx Timing.vi" inputs="task/channels in:5730.task out,sample mode:5670.value,samples per channel:5690.value,rate:5680.value,error in:5730.error out" outputs="task out:5740.task out,error out:5740.error out" uid="5740" uid_parent="5630"/>
+                <Call target="DAQmx Start Task.vi" inputs="task/channels in:5740.task out,error in:5740.error out" outputs="task out:5750.task out,error out:5750.error out" uid="5750" uid_parent="5630"/>
+                <Constant outputs="value:5760.value" type="array.2{double}" uid="5760" uid_parent="5630" value="[]"/>
+                <Tunnel _id="Out1" inputs="value:5750.task out" uid="5770" uid_parent="5630"/>
+                <Tunnel _id="Out2" inputs="value:5750.error out" uid="5780" uid_parent="5630"/>
+                <Tunnel _id="Out3" inputs="value:5760.value" uid="5790" uid_parent="5630"/>
+              </CaseFrame>
+              <Tunnel _id="Out1" outputs="value:5800.value" uid="5800" uid_parent="5440"/>
+              <Tunnel _id="Out2" outputs="value:5810.value" uid="5810" uid_parent="5440"/>
+              <Tunnel _id="Out3" outputs="value:5820.value" uid="5820" uid_parent="5440"/>
+            </Structure>
+            <Constant outputs="value:5830.value" type="bool" uid="5830" uid_parent="5310" value="true"/>
+            <Constant outputs="value:5840.value" type="bool" uid="5840" uid_parent="5310" value="false"/>
+            <Tunnel _id="Out1" inputs="value:5800.value" uid="5850" uid_parent="5310"/>
+            <Tunnel _id="Out2" inputs="value:5830.value" uid="5860" uid_parent="5310"/>
+            <Tunnel _id="Out3" inputs="value:5820.value" uid="5870" uid_parent="5310"/>
+            <Tunnel _id="Out4" inputs="value:5810.value" uid="5880" uid_parent="5310"/>
+            <Tunnel _id="Out5" inputs="value:5840.value" uid="5890" uid_parent="5310"/>
+            <Tunnel _id="Out6" inputs="value:5410.value" uid="5900" uid_parent="5310"/>
+            <Tunnel _id="Out7" inputs="value:5420.value" uid="5910" uid_parent="5310"/>
+            <Tunnel _id="Out8" inputs="value:5430.value" uid="5920" uid_parent="5310"/>
+          </CaseFrame>
+          <CaseFrame selector=' "Stop"\3A Value Change ' selectout="" uid="5930" uid_parent="5230">
+            <Tunnel _id="In1" outputs="value:5940.value" uid="5940" uid_parent="5930"/>
+            <Tunnel _id="In2" outputs="value:5950.value" uid="5950" uid_parent="5930"/>
+            <Tunnel _id="In3" outputs="value:5960.value" uid="5960" uid_parent="5930"/>
+            <Tunnel _id="In4" outputs="value:5970.value" uid="5970" uid_parent="5930"/>
+            <Tunnel _id="In5" outputs="value:5980.value" uid="5980" uid_parent="5930"/>
+            <Tunnel _id="In6" outputs="value:5990.value" uid="5990" uid_parent="5930"/>
+            <Tunnel _id="In7" outputs="value:6000.value" uid="6000" uid_parent="5930"/>
+            <Control _name="Stop" outputs="value:" style="latched" type="bool" uid="6010" uid_parent="5930" value="false"/>
+            <Structure _name="Case Structure" selectin="5950.value" uid="6020" uid_parent="5930">
+              <Tunnel _id="In1" inputs="value:5940.value" uid="6030" uid_parent="6020"/>
+              <Tunnel _id="In2" inputs="value:5970.value" uid="6040" uid_parent="6020"/>
+              <CaseFrame selector="True" label="Stop and clear task" selectout="" uid="6050" uid_parent="6020">
+                <Tunnel _id="In1" outputs="value:6060.value" uid="6060" uid_parent="6050"/>
+                <Tunnel _id="In2" outputs="value:6070.value" uid="6070" uid_parent="6050"/>
+                <Call target="DAQmx Stop Task.vi" inputs="task/channels in:6060.value,error in:6070.value" outputs="task out:6080.task out,error out:6080.error out" uid="6080" uid_parent="6050"/>
+                <Call target="DAQmx Clear Task.vi" inputs="task in:6080.task out,error in:6080.error out" outputs="error out:6090.error out" uid="6090" uid_parent="6050"/>
+                <Tunnel _id="Out1" inputs="value:6090.error out" uid="6100" uid_parent="6050"/>
+              </CaseFrame>
+              <CaseFrame selector="False" label="Not running" selectout="" uid="6110" uid_parent="6020">
+                <Tunnel _id="In1" outputs="value:6120.value" uid="6120" uid_parent="6110"/>
+                <Tunnel _id="In2" outputs="value:6130.value" uid="6130" uid_parent="6110"/>
+                <Tunnel _id="Out1" inputs="value:6130.value" uid="6140" uid_parent="6110"/>
+              </CaseFrame>
+              <Tunnel _id="Out1" outputs="value:6150.value" uid="6150" uid_parent="6020"/>
+            </Structure>
+            <Constant outputs="value:6160.value" type="bool" uid="6160" uid_parent="5930" value="false"/>
+            <Constant outputs="value:6170.value" type="bool" uid="6170" uid_parent="5930" value="false"/>
+            <Tunnel _id="Out1" inputs="value:5940.value" uid="6180" uid_parent="5930"/>
+            <Tunnel _id="Out2" inputs="value:6160.value" uid="6190" uid_parent="5930"/>
+            <Tunnel _id="Out3" inputs="value:5960.value" uid="6200" uid_parent="5930"/>
+            <Tunnel _id="Out4" inputs="value:6150.value" uid="6210" uid_parent="5930"/>
+            <Tunnel _id="Out5" inputs="value:6170.value" uid="6220" uid_parent="5930"/>
+            <Tunnel _id="Out6" inputs="value:5980.value" uid="6230" uid_parent="5930"/>
+            <Tunnel _id="Out7" inputs="value:5990.value" uid="6240" uid_parent="5930"/>
+            <Tunnel _id="Out8" inputs="value:6000.value" uid="6250" uid_parent="5930"/>
+          </CaseFrame>
+          <CaseFrame selector=' "Save Data"\3A Value Change ' selectout="" uid="6260" uid_parent="5230">
+            <Tunnel _id="In1" outputs="value:6270.value" uid="6270" uid_parent="6260"/>
+            <Tunnel _id="In2" outputs="value:6280.value" uid="6280" uid_parent="6260"/>
+            <Tunnel _id="In3" outputs="value:6290.value" uid="6290" uid_parent="6260"/>
+            <Tunnel _id="In4" outputs="value:6300.value" uid="6300" uid_parent="6260"/>
+            <Tunnel _id="In5" outputs="value:6310.value" uid="6310" uid_parent="6260"/>
+            <Tunnel _id="In6" outputs="value:6320.value" uid="6320" uid_parent="6260"/>
+            <Tunnel _id="In7" outputs="value:6330.value" uid="6330" uid_parent="6260"/>
+            <Control _name="Save Data" outputs="value:" style="latched" type="bool" uid="6340" uid_parent="6260" value="false"/>
+            <Constant outputs="value:6350.value" type="string" uid="6350" uid_parent="6260" value="Save TDMS file"/>
+            <Constant outputs="value:6360.value" type="string" uid="6360" uid_parent="6260" value="AI_Data.tdms"/>
+            <Constant outputs="value:6370.value" type="string" uid="6370" uid_parent="6260" value="*.tdms"/>
+            <Node _name="File Dialog" inputs="start path:,default name:6360.value,error in:6300.value,prompt:6350.value,pattern (all files):6370.value" outputs="selected path:6380.selected path,exists:6380.exists,cancelled:6380.cancelled,error out:6380.error out" uid="6380" uid_parent="6260"/>
+            <Structure _name="Case Structure" selectin="6380.cancelled" uid="6390" uid_parent="6260">
+              <Tunnel _id="In1" inputs="value:6380.selected path" uid="6400" uid_parent="6390"/>
+              <Tunnel _id="In2" inputs="value:6380.error out" uid="6410" uid_parent="6390"/>
+              <Tunnel _id="In3" inputs="value:6290.value" uid="6420" uid_parent="6390"/>
+              <CaseFrame selector="False" label="Write buffer to TDMS" selectout="" uid="6430" uid_parent="6390">
+                <Tunnel _id="In1" outputs="value:6440.value" uid="6440" uid_parent="6430"/>
+                <Tunnel _id="In2" outputs="value:6450.value" uid="6450" uid_parent="6430"/>
+                <Tunnel _id="In3" outputs="value:6460.value" uid="6460" uid_parent="6430"/>
+                <Node _name="Transpose 2D Array" inputs="2D array:6460.value" outputs="transposed array:6470.transposed array" uid="6470" uid_parent="6430"/>
+                <Structure _name="For Loop" count="6480.value" maxin="" maxout="" uid="6480" uid_parent="6430">
+                  <Constant outputs="value:6490.value" type="string" uid="6490" uid_parent="6480" value="CH"/>
+                  <Node _name="Number To Decimal String" inputs="number:6480.value" outputs="decimal integer string:6500.decimal integer string" uid="6500" uid_parent="6480"/>
+                  <Node _name="Concatenate Strings" inputs="string:6490.value,string:6500.decimal integer string" outputs="concatenated string:6510.concatenated string" uid="6510" uid_parent="6480"/>
+                  <Tunnel _id="In1" inputs="value:6470.transposed array" mode="index" outputs="value:" uid="6520" uid_parent="6480"/>
+                  <Tunnel _id="Out1" inputs="value:6510.concatenated string" mode="index" outputs="value:6530.value" uid="6530" uid_parent="6480"/>
+                </Structure>
+                <Constant _name="operation" outputs="value:6540.value" type="uint16{open,open or create,create or replace,create,open (read-only)}" uid="6540" uid_parent="6430" value="2"/>
+                <Constant outputs="value:6550.value" type="string" uid="6550" uid_parent="6430" value="AI Data"/>
+                <Node _name="TDMS Open" inputs="file path:6440.value,operation (0\3Aopen):6540.value,error in (no error):6450.value" outputs="tdms file out:6560.tdms file out,error out:6560.error out" uid="6560" uid_parent="6430"/>
+                <Node _name="TDMS Write" inputs="tdms file:6560.tdms file out,group name in (Untitled):6550.value,channel name(s) in (Untitled):6530.value,data:6470.transposed array,error in (no error):6560.error out" outputs="tdms file out:6570.tdms file out,error out:6570.error out" uid="6570" uid_parent="6430"/>
+                <Node _name="TDMS Close" inputs="tdms file:6570.tdms file out,error in (no error):6570.error out" outputs="error out:6580.error out" uid="6580" uid_parent="6430"/>
+                <Tunnel _id="Out1" inputs="value:6580.error out" uid="6590" uid_parent="6430"/>
+              </CaseFrame>
+              <CaseFrame selector="True" label="Dialog cancelled" selectout="" uid="6600" uid_parent="6390">
+                <Tunnel _id="In1" outputs="value:6610.value" uid="6610" uid_parent="6600"/>
+                <Tunnel _id="In2" outputs="value:6620.value" uid="6620" uid_parent="6600"/>
+                <Tunnel _id="In3" outputs="value:6630.value" uid="6630" uid_parent="6600"/>
+                <Tunnel _id="Out1" inputs="value:6620.value" uid="6640" uid_parent="6600"/>
+              </CaseFrame>
+              <Tunnel _id="Out1" outputs="value:6650.value" uid="6650" uid_parent="6390"/>
+            </Structure>
+            <Constant outputs="value:6660.value" type="bool" uid="6660" uid_parent="6260" value="false"/>
+            <Tunnel _id="Out1" inputs="value:6270.value" uid="6670" uid_parent="6260"/>
+            <Tunnel _id="Out2" inputs="value:6280.value" uid="6680" uid_parent="6260"/>
+            <Tunnel _id="Out3" inputs="value:6290.value" uid="6690" uid_parent="6260"/>
+            <Tunnel _id="Out4" inputs="value:6650.value" uid="6700" uid_parent="6260"/>
+            <Tunnel _id="Out5" inputs="value:6660.value" uid="6710" uid_parent="6260"/>
+            <Tunnel _id="Out6" inputs="value:6310.value" uid="6720" uid_parent="6260"/>
+            <Tunnel _id="Out7" inputs="value:6320.value" uid="6730" uid_parent="6260"/>
+            <Tunnel _id="Out8" inputs="value:6330.value" uid="6740" uid_parent="6260"/>
+          </CaseFrame>
+          <CaseFrame selector=" Timeout " selectout="" uid="6750" uid_parent="5230">
+            <Tunnel _id="In1" outputs="value:6760.value" uid="6760" uid_parent="6750"/>
+            <Tunnel _id="In2" outputs="value:6770.value" uid="6770" uid_parent="6750"/>
+            <Tunnel _id="In3" outputs="value:6780.value" uid="6780" uid_parent="6750"/>
+            <Tunnel _id="In4" outputs="value:6790.value" uid="6790" uid_parent="6750"/>
+            <Tunnel _id="In5" outputs="value:6800.value" uid="6800" uid_parent="6750"/>
+            <Tunnel _id="In6" outputs="value:6810.value" uid="6810" uid_parent="6750"/>
+            <Tunnel _id="In7" outputs="value:6820.value" uid="6820" uid_parent="6750"/>
+            <Control _name="Scale (Min/Max)" outputs="value:6830.value" type="array.2{double}" uid="6830" uid_parent="6750" value="[[0,100],[0,100],[0,100],[0,100],[0,100],[0,100],[0,100],[0,100]]"/>
+            <Structure _name="Case Structure" selectin="6770.value" uid="6840" uid_parent="6750">
+              <Tunnel _id="In1" inputs="value:6760.value" uid="6850" uid_parent="6840"/>
+              <Tunnel _id="In2" inputs="value:6790.value" uid="6860" uid_parent="6840"/>
+              <Tunnel _id="In3" inputs="value:6780.value" uid="6870" uid_parent="6840"/>
+              <Tunnel _id="In4" inputs="value:6830.value" uid="6880" uid_parent="6840"/>
+              <Tunnel _id="In5" inputs="value:6820.value" uid="6890" uid_parent="6840"/>
+              <Tunnel _id="In6" inputs="value:6810.value" uid="6900" uid_parent="6840"/>
+              <Tunnel _id="In7" inputs="value:6800.value" uid="6910" uid_parent="6840"/>
+              <CaseFrame selector="True" label="Read\2C scale\2C chart\2C buffer" selectout="" uid="6920" uid_parent="6840">
+                <Tunnel _id="In1" outputs="value:6930.value" uid="6930" uid_parent="6920"/>
+                <Tunnel _id="In2" outputs="value:6940.value" uid="6940" uid_parent="6920"/>
+                <Tunnel _id="In3" outputs="value:6950.value" uid="6950" uid_parent="6920"/>
+                <Tunnel _id="In4" outputs="value:6960.value" uid="6960" uid_parent="6920"/>
+                <Tunnel _id="In5" outputs="value:6970.value" uid="6970" uid_parent="6920"/>
+                <Tunnel _id="In6" outputs="value:6980.value" uid="6980" uid_parent="6920"/>
+                <Tunnel _id="In7" outputs="value:6990.value" uid="6990" uid_parent="6920"/>
+                <Call adapt="true" instance="DAQmx Read (Analog 2D DBL NChan NSamp).vi" target="DAQmx Read.vi" inputs="task/channels in:6930.value,number of samples per channel:6970.value,timeout:,error in:6940.value" outputs="task out:7000.task out,data:7000.data,error out:7000.error out" uid="7000" uid_parent="6920"/>
+                <Constant outputs="value:7010.value" type="double" uid="7010" uid_parent="6920" value="1"/>
+                <Node _name="Divide" inputs="x:7010.value,y:6980.value" outputs="x/y:7020.x/y" uid="7020" uid_parent="6920"/>
+                <Structure _name="For Loop" count="" maxin="" maxout="" uid="7030" uid_parent="6920">
+                  <Tunnel _id="In1" inputs="value:7000.data" mode="index" outputs="value:7040.value" uid="7040" uid_parent="7030"/>
+                  <Tunnel _id="In2" inputs="value:6960.value" mode="index" outputs="value:7050.value" uid="7050" uid_parent="7030"/>
+                  <Tunnel _id="In3" inputs="value:7020.x/y" outputs="value:7060.value" uid="7060" uid_parent="7030"/>
+                  <Constant outputs="value:7070.value" type="int32" uid="7070" uid_parent="7030" value="0"/>
+                  <Constant outputs="value:7080.value" type="int32" uid="7080" uid_parent="7030" value="1"/>
+                  <Node _name="Index Array" inputs="array:7050.value,index:7070.value" outputs="element:7090.element" uid="7090" uid_parent="7030"/>
+                  <Node _name="Index Array" inputs="array:7050.value,index:7080.value" outputs="element:7100.element" uid="7100" uid_parent="7030"/>
+                  <Constant outputs="value:7110.value" type="double" uid="7110" uid_parent="7030" value="1000"/>
+                  <Constant outputs="value:7120.value" type="double" uid="7120" uid_parent="7030" value="4"/>
+                  <Constant outputs="value:7130.value" type="double" uid="7130" uid_parent="7030" value="16"/>
+                  <Node _name="Multiply" inputs="x:7040.value,y:7110.value" outputs="x*y:7140.x*y" uid="7140" uid_parent="7030"/>
+                  <Node _name="Subtract" inputs="x:7140.x*y,y:7120.value" outputs="x-y:7150.x-y" uid="7150" uid_parent="7030"/>
+                  <Node _name="Divide" inputs="x:7150.x-y,y:7130.value" outputs="x/y:7160.x/y" uid="7160" uid_parent="7030"/>
+                  <Node _name="Subtract" inputs="x:7100.element,y:7090.element" outputs="x-y:7170.x-y" uid="7170" uid_parent="7030"/>
+                  <Node _name="Multiply" inputs="x:7160.x/y,y:7170.x-y" outputs="x*y:7180.x*y" uid="7180" uid_parent="7030"/>
+                  <Node _name="Add" inputs="x:7180.x*y,y:7090.element" outputs="x+y:7190.x+y" uid="7190" uid_parent="7030"/>
+                  <Node _name="Build Waveform" fields="dt,Y" inputs="waveform:,dt:7060.value,Y:7190.x+y" outputs="output waveform:7200.output waveform" uid="7200" uid_parent="7030"/>
+                  <Tunnel _id="Out1" inputs="value:7190.x+y" mode="index" outputs="value:7210.value" uid="7210" uid_parent="7030"/>
+                  <Tunnel _id="Out2" inputs="value:7200.output waveform" mode="index" outputs="value:7220.value" uid="7220" uid_parent="7030"/>
+                </Structure>
+                <Indicator _name="Scaled Data Chart" inputs="value:7220.value" style="graph21717" type="array{doublewaveform.Waveform}" uid="7230" uid_parent="6920" value="[]"/>
+                <Node _name="Transpose 2D Array" inputs="2D array:7210.value" outputs="transposed array:7240.transposed array" uid="7240" uid_parent="6920"/>
+                <Node _name="Build Array" concat="true" inputs="array:6950.value,array:7240.transposed array" outputs="appended array:7250.appended array" uid="7250" uid_parent="6920"/>
+                <Constant outputs="value:7260.value" type="int32" uid="7260" uid_parent="6920" value="10178"/>
+                <Node _name="Equal?" inputs="x:6990.value,y:7260.value" outputs="x = y?:7270.x = y?" uid="7270" uid_parent="6920"/>
+                <Structure _name="Case Structure" selectin="7270.x = y?" uid="7280" uid_parent="6920">
+                  <Tunnel _id="In1" inputs="value:7000.task out" uid="7290" uid_parent="7280"/>
+                  <Tunnel _id="In2" inputs="value:7000.error out" uid="7300" uid_parent="7280"/>
+                  <CaseFrame selector="True" label="Finite: stop and clear after the read" selectout="" uid="7310" uid_parent="7280">
+                    <Tunnel _id="In1" outputs="value:7320.value" uid="7320" uid_parent="7310"/>
+                    <Tunnel _id="In2" outputs="value:7330.value" uid="7330" uid_parent="7310"/>
+                    <Call target="DAQmx Stop Task.vi" inputs="task/channels in:7320.value,error in:7330.value" outputs="task out:7340.task out,error out:7340.error out" uid="7340" uid_parent="7310"/>
+                    <Call target="DAQmx Clear Task.vi" inputs="task in:7340.task out,error in:7340.error out" outputs="error out:7350.error out" uid="7350" uid_parent="7310"/>
+                    <Constant outputs="value:7360.value" type="bool" uid="7360" uid_parent="7310" value="false"/>
+                    <Tunnel _id="Out1" inputs="value:7320.value" uid="7370" uid_parent="7310"/>
+                    <Tunnel _id="Out2" inputs="value:7350.error out" uid="7380" uid_parent="7310"/>
+                    <Tunnel _id="Out3" inputs="value:7360.value" uid="7390" uid_parent="7310"/>
+                  </CaseFrame>
+                  <CaseFrame selector="False" label="Continuous: keep running" selectout="" uid="7400" uid_parent="7280">
+                    <Tunnel _id="In1" outputs="value:7410.value" uid="7410" uid_parent="7400"/>
+                    <Tunnel _id="In2" outputs="value:7420.value" uid="7420" uid_parent="7400"/>
+                    <Constant outputs="value:7430.value" type="bool" uid="7430" uid_parent="7400" value="true"/>
+                    <Tunnel _id="Out1" inputs="value:7410.value" uid="7440" uid_parent="7400"/>
+                    <Tunnel _id="Out2" inputs="value:7420.value" uid="7450" uid_parent="7400"/>
+                    <Tunnel _id="Out3" inputs="value:7430.value" uid="7460" uid_parent="7400"/>
+                  </CaseFrame>
+                  <Tunnel _id="Out1" outputs="value:7470.value" uid="7470" uid_parent="7280"/>
+                  <Tunnel _id="Out2" outputs="value:7480.value" uid="7480" uid_parent="7280"/>
+                  <Tunnel _id="Out3" outputs="value:7490.value" uid="7490" uid_parent="7280"/>
+                </Structure>
+                <Tunnel _id="Out1" inputs="value:7470.value" uid="7500" uid_parent="6920"/>
+                <Tunnel _id="Out2" inputs="value:7480.value" uid="7510" uid_parent="6920"/>
+                <Tunnel _id="Out3" inputs="value:7250.appended array" uid="7520" uid_parent="6920"/>
+                <Tunnel _id="Out4" inputs="value:7490.value" uid="7530" uid_parent="6920"/>
+              </CaseFrame>
+              <CaseFrame selector="False" label="Idle" selectout="" uid="7540" uid_parent="6840">
+                <Tunnel _id="In1" outputs="value:7550.value" uid="7550" uid_parent="7540"/>
+                <Tunnel _id="In2" outputs="value:7560.value" uid="7560" uid_parent="7540"/>
+                <Tunnel _id="In3" outputs="value:7570.value" uid="7570" uid_parent="7540"/>
+                <Tunnel _id="In4" outputs="value:7580.value" uid="7580" uid_parent="7540"/>
+                <Tunnel _id="In5" outputs="value:7590.value" uid="7590" uid_parent="7540"/>
+                <Tunnel _id="In6" outputs="value:7600.value" uid="7600" uid_parent="7540"/>
+                <Tunnel _id="In7" outputs="value:7610.value" uid="7610" uid_parent="7540"/>
+                <Constant outputs="value:7620.value" type="bool" uid="7620" uid_parent="7540" value="false"/>
+                <Tunnel _id="Out1" inputs="value:7550.value" uid="7630" uid_parent="7540"/>
+                <Tunnel _id="Out2" inputs="value:7560.value" uid="7640" uid_parent="7540"/>
+                <Tunnel _id="Out3" inputs="value:7570.value" uid="7650" uid_parent="7540"/>
+                <Tunnel _id="Out4" inputs="value:7620.value" uid="7660" uid_parent="7540"/>
+              </CaseFrame>
+              <Tunnel _id="Out1" outputs="value:7670.value" uid="7670" uid_parent="6840"/>
+              <Tunnel _id="Out2" outputs="value:7680.value" uid="7680" uid_parent="6840"/>
+              <Tunnel _id="Out3" outputs="value:7690.value" uid="7690" uid_parent="6840"/>
+              <Tunnel _id="Out4" outputs="value:7700.value" uid="7700" uid_parent="6840"/>
+            </Structure>
+            <Constant outputs="value:7710.value" type="bool" uid="7710" uid_parent="6750" value="false"/>
+            <Tunnel _id="Out1" inputs="value:7670.value" uid="7720" uid_parent="6750"/>
+            <Tunnel _id="Out2" inputs="value:7700.value" uid="7730" uid_parent="6750"/>
+            <Tunnel _id="Out3" inputs="value:7690.value" uid="7740" uid_parent="6750"/>
+            <Tunnel _id="Out4" inputs="value:7680.value" uid="7750" uid_parent="6750"/>
+            <Tunnel _id="Out5" inputs="value:7710.value" uid="7760" uid_parent="6750"/>
+            <Tunnel _id="Out6" inputs="value:6800.value" uid="7770" uid_parent="6750"/>
+            <Tunnel _id="Out7" inputs="value:6810.value" uid="7780" uid_parent="6750"/>
+            <Tunnel _id="Out8" inputs="value:6820.value" uid="7790" uid_parent="6750"/>
+          </CaseFrame>
+          <CaseFrame selector=" Panel Close? " selectout="" uid="7800" uid_parent="5230">
+            <Tunnel _id="In1" outputs="value:7810.value" uid="7810" uid_parent="7800"/>
+            <Tunnel _id="In2" outputs="value:7820.value" uid="7820" uid_parent="7800"/>
+            <Tunnel _id="In3" outputs="value:7830.value" uid="7830" uid_parent="7800"/>
+            <Tunnel _id="In4" outputs="value:7840.value" uid="7840" uid_parent="7800"/>
+            <Tunnel _id="In5" outputs="value:7850.value" uid="7850" uid_parent="7800"/>
+            <Tunnel _id="In6" outputs="value:7860.value" uid="7860" uid_parent="7800"/>
+            <Tunnel _id="In7" outputs="value:7870.value" uid="7870" uid_parent="7800"/>
+            <Constant outputs="value:7880.value" type="bool" uid="7880" uid_parent="7800" value="true"/>
+            <Tunnel _id="Out1" inputs="value:7810.value" uid="7890" uid_parent="7800"/>
+            <Tunnel _id="Out2" inputs="value:7820.value" uid="7900" uid_parent="7800"/>
+            <Tunnel _id="Out3" inputs="value:7830.value" uid="7910" uid_parent="7800"/>
+            <Tunnel _id="Out4" inputs="value:7840.value" uid="7920" uid_parent="7800"/>
+            <Tunnel _id="Out5" inputs="value:7880.value" uid="7930" uid_parent="7800"/>
+            <Tunnel _id="Out6" inputs="value:7850.value" uid="7940" uid_parent="7800"/>
+            <Tunnel _id="Out7" inputs="value:7860.value" uid="7950" uid_parent="7800"/>
+            <Tunnel _id="Out8" inputs="value:7870.value" uid="7960" uid_parent="7800"/>
+          </CaseFrame>
+          <Tunnel _id="Out1" outputs="value:7970.value" uid="7970" uid_parent="5230"/>
+          <Tunnel _id="Out2" outputs="value:7980.value" uid="7980" uid_parent="5230"/>
+          <Tunnel _id="Out3" outputs="value:7990.value" uid="7990" uid_parent="5230"/>
+          <Tunnel _id="Out4" outputs="value:8000.value" uid="8000" uid_parent="5230"/>
+          <Tunnel _id="Out5" outputs="value:8010.value" uid="8010" uid_parent="5230"/>
+          <Tunnel _id="Out6" outputs="value:8020.value" uid="8020" uid_parent="5230"/>
+          <Tunnel _id="Out7" outputs="value:8030.value" uid="8030" uid_parent="5230"/>
+          <Tunnel _id="Out8" outputs="value:8040.value" uid="8040" uid_parent="5230"/>
+        </Structure>
+        <Node _name="Unbundle By Name" fields="status" inputs="input cluster:8000.value" outputs="status:8050.status" uid="8050" uid_parent="5120"/>
+        <Node _name="Or" inputs="x:8010.value,y:8050.status" outputs="x .or. y?:8060.x .or. y?" uid="8060" uid_parent="5120"/>
+        <Condition inputs="value:8060.x .or. y?" uid="8070" uid_parent="5120" value="stop"/>
+        <ShiftReg uid="8080" uid_parent="5120">
+          <Left inputs="value:5110.value" outputs="value:5130.value" uid="5130" uid_parent="8080"/>
+          <Right inputs="value:7970.value" outputs="value:8090.value" uid="8090" uid_parent="8080"/>
+        </ShiftReg>
+        <ShiftReg uid="8100" uid_parent="5120">
+          <Left inputs="value:5060.value" outputs="value:5140.value" uid="5140" uid_parent="8100"/>
+          <Right inputs="value:7980.value" outputs="value:8110.value" uid="8110" uid_parent="8100"/>
+        </ShiftReg>
+        <ShiftReg uid="8120" uid_parent="5120">
+          <Left inputs="value:5070.value" outputs="value:5150.value" uid="5150" uid_parent="8120"/>
+          <Right inputs="value:7990.value" outputs="value:" uid="8130" uid_parent="8120"/>
+        </ShiftReg>
+        <ShiftReg uid="8140" uid_parent="5120">
+          <Left inputs="value:5050.value" outputs="value:5160.value" uid="5160" uid_parent="8140"/>
+          <Right inputs="value:8000.value" outputs="value:8150.value" uid="8150" uid_parent="8140"/>
+        </ShiftReg>
+        <ShiftReg uid="8160" uid_parent="5120">
+          <Left inputs="value:5080.value" outputs="value:5170.value" uid="5170" uid_parent="8160"/>
+          <Right inputs="value:8020.value" outputs="value:" uid="8170" uid_parent="8160"/>
+        </ShiftReg>
+        <ShiftReg uid="8180" uid_parent="5120">
+          <Left inputs="value:5090.value" outputs="value:5180.value" uid="5180" uid_parent="8180"/>
+          <Right inputs="value:8030.value" outputs="value:" uid="8190" uid_parent="8180"/>
+        </ShiftReg>
+        <ShiftReg uid="8200" uid_parent="5120">
+          <Left inputs="value:5100.value" outputs="value:5190.value" uid="5190" uid_parent="8200"/>
+          <Right inputs="value:8040.value" outputs="value:" uid="8210" uid_parent="8200"/>
+        </ShiftReg>
+      </Structure>
+      <Structure _name="Case Structure" selectin="8110.value" uid="8220" uid_parent="5040">
+        <Tunnel _id="In1" inputs="value:8090.value" uid="8230" uid_parent="8220"/>
+        <Tunnel _id="In2" inputs="value:8150.value" uid="8240" uid_parent="8220"/>
+        <CaseFrame selector="True" label="Task still running: clear it" selectout="" uid="8250" uid_parent="8220">
+          <Tunnel _id="In1" outputs="value:8260.value" uid="8260" uid_parent="8250"/>
+          <Tunnel _id="In2" outputs="value:8270.value" uid="8270" uid_parent="8250"/>
+          <Call target="DAQmx Clear Task.vi" inputs="task in:8260.value,error in:8270.value" outputs="error out:8280.error out" uid="8280" uid_parent="8250"/>
+          <Tunnel _id="Out1" inputs="value:8280.error out" uid="8290" uid_parent="8250"/>
+        </CaseFrame>
+        <CaseFrame selector="False" selectout="" uid="8300" uid_parent="8220">
+          <Tunnel _id="In1" outputs="value:8310.value" uid="8310" uid_parent="8300"/>
+          <Tunnel _id="In2" outputs="value:8320.value" uid="8320" uid_parent="8300"/>
+          <Tunnel _id="Out1" inputs="value:8320.value" uid="8330" uid_parent="8300"/>
+        </CaseFrame>
+        <Tunnel _id="Out1" outputs="value:8340.value" uid="8340" uid_parent="8220"/>
+      </Structure>
+      <Tunnel _id="Out1" inputs="value:8340.value" uid="8350" uid_parent="5040"/>
+    </CaseFrame>
+    <CaseFrame selector="True" label="Error" selectout="" uid="8360" uid_parent="5020">
+      <Tunnel _id="In1" outputs="value:8370.value" uid="8370" uid_parent="8360"/>
+      <Tunnel _id="Out1" inputs="value:8370.value" uid="8380" uid_parent="8360"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:8390.value" uid="8390" uid_parent="5020"/>
+  </Structure>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:8390.value" type="cluster{bool.status,int32.code,string.source}" uid="4023" uid_parent="root" value="[false,0,]"/>
+</VI>

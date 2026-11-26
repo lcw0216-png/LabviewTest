@@ -1,0 +1,52 @@
+<VI _name="Scale_4to20mA.vi" description="4-20 mA current input scaled to 0-100 % engineering units, with high/low limit alarms.\0AScaled_Pct = (Current_mA - 4.0) / 16.0 * 100.0\0AHigh_Alarm = Scaled_Pct &gt; High_Limit_Pct. Low_Alarm = Scaled_Pct &lt; Low_Limit_Pct.\0AThe calculation runs only when error in carries no error. Otherwise outputs are 0 / False and the error passes through.">
+  <Control _name="Current_mA" conIdx="0" connection="required" outputs="value:4010.value" type="double" uid="4010" uid_parent="root" value="4"/>
+  <Control _name="High_Limit_Pct" conIdx="5" connection="recommended" outputs="value:4011.value" type="double" uid="4011" uid_parent="root" value="80"/>
+  <Control _name="Low_Limit_Pct" conIdx="7" connection="recommended" outputs="value:4012.value" type="double" uid="4012" uid_parent="root" value="20"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:4013.value" type="cluster{bool.status,int32.code,string.source}" uid="4013" uid_parent="root" value="[false,0,]"/>
+  <Indicator _name="Scaled_Pct" conIdx="4" connection="recommended" inputs="value:120.value" type="double" uid="4020" uid_parent="root" value="0"/>
+  <Indicator _name="High_Alarm" conIdx="6" connection="recommended" inputs="value:121.value" type="bool" uid="4021" uid_parent="root" value="false"/>
+  <Indicator _name="Low_Alarm" conIdx="8" connection="recommended" inputs="value:122.value" type="bool" uid="4022" uid_parent="root" value="false"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:123.value" type="cluster{bool.status,int32.code,string.source}" uid="4023" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:4013.value" outputs="status:50.status" uid="50" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="50.status" uid="100" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:4010.value" uid="110" uid_parent="100"/>
+    <Tunnel _id="In2" inputs="value:4011.value" uid="111" uid_parent="100"/>
+    <Tunnel _id="In3" inputs="value:4012.value" uid="112" uid_parent="100"/>
+    <Tunnel _id="In4" inputs="value:4013.value" uid="113" uid_parent="100"/>
+    <CaseFrame label="No Error" selector="False" selectout="" uid="200" uid_parent="100">
+      <Tunnel _id="In1" outputs="value:210.value" uid="210" uid_parent="200"/>
+      <Tunnel _id="In2" outputs="value:211.value" uid="211" uid_parent="200"/>
+      <Tunnel _id="In3" outputs="value:212.value" uid="212" uid_parent="200"/>
+      <Tunnel _id="In4" outputs="value:213.value" uid="213" uid_parent="200"/>
+      <Constant outputs="value:220.value" type="double" uid="220" uid_parent="200" value="4"/>
+      <Constant outputs="value:221.value" type="double" uid="221" uid_parent="200" value="16"/>
+      <Constant outputs="value:222.value" type="double" uid="222" uid_parent="200" value="100"/>
+      <Node _name="Subtract" inputs="x:210.value,y:220.value" outputs="x-y:230.x-y" uid="230" uid_parent="200"/>
+      <Node _name="Divide" inputs="x:230.x-y,y:221.value" outputs="x/y:231.x/y" uid="231" uid_parent="200"/>
+      <Node _name="Multiply" inputs="x:231.x/y,y:222.value" outputs="x*y:232.x*y" uid="232" uid_parent="200"/>
+      <Node _name="Greater?" inputs="x:232.x*y,y:211.value" outputs="x &gt; y?:233.x &gt; y?" uid="233" uid_parent="200"/>
+      <Node _name="Less?" inputs="x:232.x*y,y:212.value" outputs="x &lt; y?:234.x &lt; y?" uid="234" uid_parent="200"/>
+      <Tunnel _id="Out1" inputs="value:232.x*y" uid="240" uid_parent="200"/>
+      <Tunnel _id="Out2" inputs="value:233.x &gt; y?" uid="241" uid_parent="200"/>
+      <Tunnel _id="Out3" inputs="value:234.x &lt; y?" uid="242" uid_parent="200"/>
+      <Tunnel _id="Out4" inputs="value:213.value" uid="243" uid_parent="200"/>
+    </CaseFrame>
+    <CaseFrame label="Error" selector="True" selectout="" uid="300" uid_parent="100">
+      <Tunnel _id="In1" outputs="value:" uid="310" uid_parent="300"/>
+      <Tunnel _id="In2" outputs="value:" uid="311" uid_parent="300"/>
+      <Tunnel _id="In3" outputs="value:" uid="312" uid_parent="300"/>
+      <Tunnel _id="In4" outputs="value:313.value" uid="313" uid_parent="300"/>
+      <Constant outputs="value:320.value" type="double" uid="320" uid_parent="300" value="0"/>
+      <Constant outputs="value:321.value" type="bool" uid="321" uid_parent="300" value="false"/>
+      <Constant outputs="value:322.value" type="bool" uid="322" uid_parent="300" value="false"/>
+      <Tunnel _id="Out1" inputs="value:320.value" uid="340" uid_parent="300"/>
+      <Tunnel _id="Out2" inputs="value:321.value" uid="341" uid_parent="300"/>
+      <Tunnel _id="Out3" inputs="value:322.value" uid="342" uid_parent="300"/>
+      <Tunnel _id="Out4" inputs="value:313.value" uid="343" uid_parent="300"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:120.value" uid="120" uid_parent="100"/>
+    <Tunnel _id="Out2" outputs="value:121.value" uid="121" uid_parent="100"/>
+    <Tunnel _id="Out3" outputs="value:122.value" uid="122" uid_parent="100"/>
+    <Tunnel _id="Out4" outputs="value:123.value" uid="123" uid_parent="100"/>
+  </Structure>
+</VI>

@@ -1,0 +1,4 @@
+*.vi binary
+*.ctl binary
+*.png binary
+*.xml text eol=crlf
