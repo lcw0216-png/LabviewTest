@@ -1,0 +1,24 @@
+<VI _name="UI_Settings_Layout.vi" description="¼³Á¤ È­¸é ¹öÆ°/±ÛÀÚ ¹èÄ¡Ç¥. Group 0=¸ðµå, 1=¼±°ø, 2=³­ÀÌµµ, 3=±ÔÄ¢, 4=°ÔÀÓ ½ÃÀÛ.">
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5010.value" type="cluster{bool.status,int32.code,string.source}" uid="5010" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5010.value" outputs="status:5020.status" uid="5020" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5020.status" uid="5030" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5040" uid_parent="5030"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5050" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5060.value" uid="5060" uid_parent="5050"/>
+      <FreeLabel comment="¹öÆ°/±ÛÀÚ ¹èÄ¡Ç¥ (Rect\2C »ö\2C ±ÛÀÚ\2C Group\2C Value)" uid="5070" uid_parent="5050"/>
+      <Constant _name="Layout" outputs="value:5080.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5080" uid_parent="5050" value="[[[36,84,556,128],16777216,16777216,16777216,16777216,¿À¸ñÀ» ÇÒ ÁØºñ°¡ µÇ¼Ì³ª¿ä?,2899536,2899536,26,true,-1,-1,0],[[36,132,556,162],16777216,16777216,16777216,16777216,µ¹ ´Ù¼¸ °³¸¦ ¸ÕÀú ÀÏ·Ä·Î ³õÀ¸¸é ½Â¸®!,8359053,8359053,15,false,-1,-1,0],[[36,180,556,204],16777216,16777216,16777216,16777216,°ÔÀÓ ¸ðµå,9807270,9807270,14,false,-1,-1,0],[[76,210,292,262],16777215,15398140,14344163,3447003,»ç¶÷ vs AI,2899536,2899536,16,true,0,0,14],[[300,210,516,262],16777215,15398140,14344163,3447003,2ÀÎ ÇÃ·¹ÀÌ,2899536,2899536,16,true,0,1,14],[[36,280,556,304],16777216,16777216,16777216,16777216,¼±°ø ¡¤ ÈÄ°ø ¼±ÅÃ,9807270,9807270,14,false,-1,-1,0],[[76,310,292,362],16777215,15398140,14344163,3447003,¡Ü Èæ ¡¤ ¼±°ø,2899536,2899536,16,true,1,0,14],[[300,310,516,362],16777215,15398140,14344163,3447003,¡Û ¹é ¡¤ ÈÄ°ø,2899536,2899536,16,true,1,1,14],[[36,380,556,404],16777216,16777216,16777216,16777216,³­ÀÌµµ ¼±ÅÃ,9807270,9807270,14,false,-1,-1,0],[[76,410,180,462],14022115,2600544,14022115,2899536,½¬¿ò,2600544,16777215,16,true,2,0,14],[[188,410,292,462],14084856,3447003,14084856,2899536,º¸Åë,3447003,16777215,16,true,2,1,14],[[300,410,404,462],16442835,15105570,16442835,2899536,¾î·Á¿ò,15105570,16777215,16,true,2,2,14],[[412,410,516,462],16440280,15158332,16440280,2899536,¸¶½ºÅÍ,15158332,16777215,16,true,2,3,14],[[36,480,556,504],16777216,16777216,16777216,16777216,±ÔÄ¢,9807270,9807270,14,false,-1,-1,0],[[76,510,292,562],16777215,15398140,14344163,3447003,·»ÁÖ·ê (Èæ ±Ý¼ö),2899536,2899536,16,true,3,1,14],[[300,510,516,562],16777215,15398140,14344163,3447003,ÀÚÀ¯·ê (Á¦ÇÑ ¾øÀ½),2899536,2899536,16,true,3,0,14],[[76,600,516,670],2899536,2899536,2899536,2899536,°ÔÀÓ ½ÃÀÛ,16777215,16777215,22,true,4,-1,14]]"/>
+      <Tunnel _id="Out1" inputs="value:5080.value" uid="5090" uid_parent="5050"/>
+      <Tunnel _id="Out2" inputs="value:5060.value" uid="5100" uid_parent="5050"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5110" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5120.value" uid="5120" uid_parent="5110"/>
+      <Constant outputs="value:5130.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5130" uid_parent="5110" value="[]"/>
+      <Tunnel _id="Out1" inputs="value:5130.value" uid="5140" uid_parent="5110"/>
+      <Tunnel _id="Out2" inputs="value:5120.value" uid="5150" uid_parent="5110"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5160.value" uid="5160" uid_parent="5030"/>
+    <Tunnel _id="Out2" outputs="value:5170.value" uid="5170" uid_parent="5030"/>
+  </Structure>
+  <Indicator _name="Specs" conIdx="4" connection="recommended" inputs="value:5160.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5180" uid_parent="root" value="[]"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5170.value" type="cluster{bool.status,int32.code,string.source}" uid="5190" uid_parent="root" value="[false,0,]"/>
+</VI>

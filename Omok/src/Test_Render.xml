@@ -1,0 +1,53 @@
+<VI _name="Test_Render.vi" description="UI_Render Å×½ºÆ®: È­¸éÀ» PNG·Î ÀúÀå.">
+  <Control _name="Screen" outputs="value:5010.value" type="uint16{Settings,Game}" uid="5010" uid_parent="root" value="0"/>
+  <Control _name="Settings" outputs="value:5020.value" type="array{int32}" uid="5020" uid_parent="root" value="[0,0,1,1]"/>
+  <Control _name="Hover Button" outputs="value:5030.value" type="int32" uid="5030" uid_parent="root" value="-1"/>
+  <Control _name="Rows" outputs="value:5040.value" type="array{int32}" uid="5040" uid_parent="root" value="[7,7]"/>
+  <Control _name="Cols" outputs="value:5050.value" type="array{int32}" uid="5050" uid_parent="root" value="[7,8]"/>
+  <Control _name="Stones" outputs="value:5060.value" type="array{int32}" uid="5060" uid_parent="root" value="[1,2]"/>
+  <Control _name="Status" outputs="value:5070.value" type="uint16{Idle,Player Turn,AI Thinking,Game Over}" uid="5070" uid_parent="root" value="1"/>
+  <Control _name="Status Text" outputs="value:5080.value" type="string" uid="5080" uid_parent="root" value=""/>
+  <Control _name="PNG Path" outputs="value:5090.value" type="path" uid="5090" uid_parent="root" value=""/>
+  <FreeLabel comment="Å×½ºÆ®\3A Context¸¦ ¸¸µé¾î È­¸é ·»´õ" uid="5100" uid_parent="root"/>
+  <Constant outputs="value:5110.value" type="array.2{uint8{Empty,Black,White}}" uid="5110" uid_parent="root" value="[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]"/>
+  <Structure _name="For Loop" count="5120.value" maxin="" maxout="" uid="5120" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5040.value" mode="index" outputs="value:5130.value" uid="5130" uid_parent="5120"/>
+    <Tunnel _id="In2" inputs="value:5050.value" mode="index" outputs="value:5140.value" uid="5140" uid_parent="5120"/>
+    <Tunnel _id="In3" inputs="value:5060.value" mode="index" outputs="value:5150.value" uid="5150" uid_parent="5120"/>
+    <Constant outputs="value:5170.value" type="uint8{Empty,Black,White}" uid="5170" uid_parent="5120" value="0"/>
+    <Constant outputs="value:5180.value" type="uint8{Empty,Black,White}" uid="5180" uid_parent="5120" value="1"/>
+    <Constant outputs="value:5190.value" type="uint8{Empty,Black,White}" uid="5190" uid_parent="5120" value="2"/>
+    <Constant outputs="value:5200.value" type="int32" uid="5200" uid_parent="5120" value="1"/>
+    <Node _name="Equal?" inputs="x:5150.value,y:5200.value" outputs="x = y?:5210.x = y?" uid="5210" uid_parent="5120"/>
+    <Constant outputs="value:5220.value" type="int32" uid="5220" uid_parent="5120" value="2"/>
+    <Node _name="Equal?" inputs="x:5150.value,y:5220.value" outputs="x = y?:5230.x = y?" uid="5230" uid_parent="5120"/>
+    <Node _name="Select" inputs="t:5190.value,s:5230.x = y?,f:5170.value" outputs="s? t\3Af:5240.s? t\3Af" uid="5240" uid_parent="5120"/>
+    <Node _name="Select" inputs="t:5180.value,s:5210.x = y?,f:5240.s? t\3Af" outputs="s? t\3Af:5250.s? t\3Af" uid="5250" uid_parent="5120"/>
+    <Constant outputs="value:5260.value" type="cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}" uid="5260" uid_parent="5120" value="[0,0,0]"/>
+    <Node _name="Bundle By Name" fields="Row,Col,Stone" inputs="Row:5130.value,Col:5140.value,Stone:5250.s? t\3Af,input cluster:5260.value" outputs="output cluster:5270.output cluster" uid="5270" uid_parent="5120"/>
+    <Node _name="Replace Array Subset" dimensions="2" inputs="array:5160.value,index (row):5130.value,index (col):5140.value,new element/subarray:5250.s? t\3Af" outputs="output array:5280.output array" uid="5280" uid_parent="5120"/>
+    <Tunnel _id="Out1" inputs="value:5270.output cluster" mode="index" outputs="value:5290.value" uid="5290" uid_parent="5120"/>
+    <ShiftReg uid="5300" uid_parent="5120">
+      <Left inputs="value:5110.value" outputs="value:5160.value" uid="5160" uid_parent="5300"/>
+      <Right inputs="value:5280.output array" outputs="value:5310.value" uid="5310" uid_parent="5300"/>
+    </ShiftReg>
+  </Structure>
+  <Node _name="Array Size" inputs="array:5290.value" outputs="size(s):5320.size(s)" uid="5320" uid_parent="root"/>
+  <Constant outputs="value:5330.value" type="int32" uid="5330" uid_parent="root" value="1"/>
+  <Node _name="Subtract" inputs="x:5320.size(s),y:5330.value" outputs="x-y:5340.x-y" uid="5340" uid_parent="root"/>
+  <Node _name="Index Array" inputs="array:5290.value,index:5340.x-y" outputs="element:5350.element" uid="5350" uid_parent="root"/>
+  <Constant outputs="value:5360.value" type="cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}" uid="5360" uid_parent="root" value="[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]]"/>
+  <Node _name="Bundle By Name" fields="Grid,Move History,Last Move" inputs="Grid:5310.value,Move History:5290.value,Last Move:5350.element,input cluster:5360.value" outputs="output cluster:5370.output cluster" uid="5370" uid_parent="root"/>
+  <Constant outputs="value:5380.value" type="cluster{uint16{Settings,Game}.Screen,array{int32}.Settings,cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}.Board,uint16{Idle,Player Turn,AI Thinking,Game Over}.Status,uint32.Game ID,uint8{Empty,Black,White}.Player Stone,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Hover,int32.Hover Button,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Win Line,int32.Score 1,int32.Score 2,int32.Draws,string.Status Text,uint32.Status Color}" uid="5380" uid_parent="root" value="[0,[0,0,1,1],[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]],0,0,1,[-1,-1,0],-1,[],0,0,0,,0]"/>
+  <Constant outputs="value:5390.value" type="int32" uid="5390" uid_parent="root" value="2"/>
+  <Constant outputs="value:5400.value" type="int32" uid="5400" uid_parent="root" value="1"/>
+  <Constant outputs="value:5410.value" type="uint32" uid="5410" uid_parent="root" value="2899536"/>
+  <Node _name="Bundle By Name" fields="Screen,Settings,Board,Status,Hover Button,Status Text,Score 1,Score 2,Status Color" inputs="Screen:5010.value,Settings:5020.value,Board:5370.output cluster,Status:5070.value,Hover Button:5030.value,Status Text:5080.value,Score 1:5390.value,Score 2:5400.value,Status Color:5410.value,input cluster:5380.value" outputs="output cluster:5420.output cluster" uid="5420" uid_parent="root"/>
+  <Constant outputs="value:5430.value" type="cluster{bool.status,int32.code,string.source}" uid="5430" uid_parent="root" value="[false,0,]"/>
+  <Call target="UI_Render.vi" inputs="Context:5420.output cluster,error in:5430.value" outputs="Picture:5440.Picture,error out:5440.error out" uid="5440" uid_parent="root"/>
+  <Constant outputs="value:5450.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5450" uid_parent="root" value="[0,0,592,780]"/>
+  <Constant outputs="value:5460.value" type="int32" uid="5460" uid_parent="root" value="24"/>
+  <Call target="Picture to Pixmap.vi" inputs="picture:5440.Picture,rect:5450.value,depth:5460.value" outputs="new picture:5470.new picture,image data:5470.image data" uid="5470" uid_parent="root"/>
+  <Call target="Write PNG File.vi" inputs="error in (no error):5440.error out,path to PNG file:5090.value,image data:5470.image data" outputs="error out:5480.error out,path:5480.path" uid="5480" uid_parent="root"/>
+  <Indicator _name="error out" inputs="value:5480.error out" type="cluster{bool.status,int32.code,string.source}" uid="5490" uid_parent="root" value="[false,0,]"/>
+</VI>

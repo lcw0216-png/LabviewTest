@@ -8,7 +8,7 @@ GRID = "array.2{" + STONE + "}"
 MOVE = "cluster{int32.Row,int32.Col," + STONE + ".Stone}"
 MOVES = "array{" + MOVE + "}"
 DIR = "cluster{int32.dR,int32.dC}"
-DIFF = "uint8{Easy,Normal,Hard}"
+DIFF = "uint8{Easy,Normal,Hard,Master}"
 FORB = "uint8{None,Double Three,Double Four,Overline}"
 EMPTY, BLACK, WHITE = "0", "1", "2"
 EMPTY_GRID = "[" + ",".join(["[" + ",".join(["0"] * 15) + "]"] * 15) + "]"
@@ -339,3 +339,71 @@ def qr(d, p, dep, x, y):
 def opp_stone(d, p, dep, st):
     return d.sel(p, dep, d.eq(p, dep, st, d.const(p, dep, STONE, BLACK)), d.const(p, dep, STONE, WHITE),
                  d.const(p, dep, STONE, BLACK))
+
+
+# ---- v2: canvas UI -------------------------------------------------------
+W, H = 592, 780
+FONT = ("cluster{string.Font Name\\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,"
+        "bool.Shadow?,bool.Bold?}")
+ALIGN = "cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}"
+SPEC = ("cluster{" + RECT16 + ".Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,"
+        "uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}")
+SPECS = "array{" + SPEC + "}"
+SCREEN = "uint16{Settings,Game}"
+GSTAT = "uint16{Idle,Player Turn,AI Thinking,Game Over}"
+CTX = ("cluster{" + SCREEN + ".Screen,array{int32}.Settings," + BOARD_STATE + ".Board," + GSTAT + ".Status,"
+       "uint32.Game ID," + STONE + ".Player Stone," + MOVE + ".Hover,int32.Hover Button," + MOVES + ".Win Line,"
+       "int32.Score 1,int32.Score 2,int32.Draws,string.Status Text,uint32.Status Color}")
+EMPTY_BS = "[" + EMPTY_GRID + ",[],[-1,-1,0]]"
+CTX0 = "[0,[0,0,1,1]," + EMPTY_BS + ",0,0,1,[-1,-1,0],-1,[],0,0,0,,0]"
+TRANSP = 16777216
+BG = 0x3B2A1E
+INK = 0x2C3E50
+
+
+def font(d, p, dep, size, bold):
+    f = d.const(p, dep, FONT, "[Malgun Gothic,16,false,false,false,false,false,false]")
+    return d.bnd(p, dep, f, [("Size", size), ("Bold?", bold)])
+
+
+def text_at(d, p, dep, pic, text, x, y, size, bold, color):
+    """centered text; x, y, size: nets (int16-compatible)"""
+    org = d.bnd(p, dep, d.const(p, dep, POINT16, "[0,0]"), [("x", x), ("y", y)])
+    o = d.call(p, dep, "Draw Text at Point.vi",
+               [("picture", pic), ("text", text), ("text color(black)", color), ("origin", org),
+                ("alignment(left\\2C top)", d.const(p, dep, ALIGN, "[1,1]")),
+                ("desired font(Application)", d.const(p, dep, "uint16{User-specified Font,Application Font,System Font,Dialog Font}", "0")),
+                ("[user-specified font]", font(d, p, dep, size, bold))], ["text rect", "new picture"])
+    return o["new picture"]
+
+
+def u32(d, p, dep, v):
+    return d.const(p, dep, "uint32", str(v))
+
+
+def i16(d, p, dep, v):
+    return d.const(p, dep, "int16", str(v))
+
+
+def rrect(d, p, dep, pic, rect, color, fill, radius, pen_w=None):
+    ins = [("rect", rect), ("color(black)", color), ("fill?(F)", d.b(p, dep, fill) if isinstance(fill, bool) else fill),
+           ("oval width", radius), ("oval height", radius)]
+    if pic is not None:
+        ins.append(("picture", pic))
+    if pen_w is not None:
+        ins.append(("pen", d.bnd(p, dep, d.const(p, dep, PEN, "[2,0]"), [("Width", pen_w)])))
+    return d.call(p, dep, "Draw Round Rect.vi", ins, ["new picture"])["new picture"]
+
+
+def rect_c(d, p, dep, l, t, r, b):
+    return d.const(p, dep, RECT16, f"[{l},{t},{r},{b}]")
+
+
+def ai_inputs(d, p, dep, ctx):
+    """Grid, AI Stone, Difficulty enum, Renju, Game ID taken from the Context."""
+    sets, bs, pst, gid = d.unb(p, dep, ctx, ["Settings", "Board", "Player Stone", "Game ID"])
+    grid = d.unb(p, dep, bs, ["Grid"])[0]
+    diffs = d.const(p, dep, "array{" + DIFF + "}", "[0,1,2,3]", name="Difficulties")
+    diff = d.idx1(p, dep, diffs, d.idx1(p, dep, sets, d.i32(p, dep, 2)))
+    renju = d.eq(p, dep, d.idx1(p, dep, sets, d.i32(p, dep, 3)), d.i32(p, dep, 1))
+    return grid, opp_stone(d, p, dep, pst), diff, renju, gid

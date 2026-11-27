@@ -1,0 +1,24 @@
+<VI _name="UI_Game_Layout.vi" description="°ÔÀÓ È­¸é ¹öÆ° ¹èÄ¡Ç¥. Group 5: 0=¹«¸£±â, 1=»õ °ÔÀÓ, 2=¼³Á¤.">
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5010.value" type="cluster{bool.status,int32.code,string.source}" uid="5010" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5010.value" outputs="status:5020.status" uid="5020" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5020.status" uid="5030" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5040" uid_parent="5030"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5050" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5060.value" uid="5060" uid_parent="5050"/>
+      <FreeLabel comment="¹öÆ°/±ÛÀÚ ¹èÄ¡Ç¥ (Rect\2C »ö\2C ±ÛÀÚ\2C Group\2C Value)" uid="5070" uid_parent="5050"/>
+      <Constant _name="Layout" outputs="value:5080.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5080" uid_parent="5050" value="[[[12,690,196,750],6122878,6122878,6122878,6122878,¹«¸£±â,16777215,16777215,18,true,5,0,14],[[204,690,388,750],2600544,2600544,2600544,2600544,»õ °ÔÀÓ,16777215,16777215,18,true,5,1,14],[[396,690,580,750],15105570,15105570,15105570,15105570,¼³Á¤,16777215,16777215,18,true,5,2,14]]"/>
+      <Tunnel _id="Out1" inputs="value:5080.value" uid="5090" uid_parent="5050"/>
+      <Tunnel _id="Out2" inputs="value:5060.value" uid="5100" uid_parent="5050"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5110" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5120.value" uid="5120" uid_parent="5110"/>
+      <Constant outputs="value:5130.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5130" uid_parent="5110" value="[]"/>
+      <Tunnel _id="Out1" inputs="value:5130.value" uid="5140" uid_parent="5110"/>
+      <Tunnel _id="Out2" inputs="value:5120.value" uid="5150" uid_parent="5110"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5160.value" uid="5160" uid_parent="5030"/>
+    <Tunnel _id="Out2" outputs="value:5170.value" uid="5170" uid_parent="5030"/>
+  </Structure>
+  <Indicator _name="Specs" conIdx="4" connection="recommended" inputs="value:5160.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5180" uid_parent="root" value="[]"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5170.value" type="cluster{bool.status,int32.code,string.source}" uid="5190" uid_parent="root" value="[false,0,]"/>
+</VI>

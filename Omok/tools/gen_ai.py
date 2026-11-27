@@ -158,7 +158,9 @@ def calculate_move():
     def body(fu, dep, ins):
         grid, ai, diff, renju = ins
         easy = d.eq(fu, dep, diff, d.const(fu, dep, DIFF, "0"))
-        hard = d.eq(fu, dep, diff, d.const(fu, dep, DIFF, "2"))
+        master = d.eq(fu, dep, diff, d.const(fu, dep, DIFF, "3"))
+        hard = d.or_(fu, dep, d.eq(fu, dep, diff, d.const(fu, dep, DIFF, "2")), master)
+        topk = d.sel(fu, dep, master, d.i32(fu, dep, 12), d.i32(fu, dep, 6))
         w = d.sel(fu, dep, easy, d.dbl(fu, dep, 0.6), d.dbl(fu, dep, 0.9))
         nz = d.sel(fu, dep, easy, d.dbl(fu, dep, 400), d.dbl(fu, dep, 2))
         d.label(fu, dep, "Easy: 수비0.6+큰 잡음, 그 외 수비0.9")
@@ -169,12 +171,12 @@ def calculate_move():
             return [d.idx1(f2, d2, j[0], d.i32(f2, d2, 0))]
 
         def look(f2, d2, j):
-            rk, g, a, o, rj, n = j
-            la = d.call(f2, d2, "AI_Lookahead.vi", [("Ranked", rk), ("Grid", g), ("AI Stone", a), ("Renju", rj),
+            rk, g, a, o, rj, n, kk = j
+            la = d.call(f2, d2, "AI_Lookahead.vi", [("Ranked", rk), ("Grid", g), ("AI Stone", a), ("Renju", rj), ("Top K", kk),
                                                      ("error in", d.noerr(f2, d2))], ["Best", "error out"])
             return [la["Best"]]
-        best = d.case(fu, dep, hard, [ranked, grid, ai, opp, renju, cnt], 1,
-                      [("True", "Hard", look), ("False", "Easy / Normal", greedy)])[0]
+        best = d.case(fu, dep, hard, [ranked, grid, ai, opp, renju, cnt, topk], 1,
+                      [("True", "Hard / Master", look), ("False", "Easy / Normal", greedy)])[0]
         s, r, c = d.unb(fu, dep, best, ["Score", "Row", "Col"])
         mv = d.bnd(fu, dep, d.const(fu, dep, MOVE, "[-1,-1,0]"), [("Row", r), ("Col", c), ("Stone", ai)])
         valid = d.gt(fu, dep, cnt, d.i32(fu, dep, 0))
@@ -186,7 +188,7 @@ def calculate_move():
               ("Renju", "bool", "true", "r9", "recommended")],
           [("Move", MOVE, "[-1,-1,0]", 3), ("Score", "double", "0", 2), ("Valid", "bool", "false", 1)], body)
     return d.write(f"{OUT}/AI_Calculate_Move.xml", "AI_Calculate_Move.vi",
-                   "AI 착수 결정. Easy=탐욕+큰 잡음, Normal=탐욕(공격+0.9*수비), Hard=상위 6후보에 상대 최선 응수를 빼는 2수 탐색.\\0A"
+                   "AI 착수 결정. Easy=탐욕+큰 잡음, Normal=탐욕(공격+0.9*수비), Hard=상위 6후보, Master=상위 12후보에 상대 최선 응수를 빼는 2수 탐색.\\0A"
                    "Valid=False면 둘 곳이 없음(무승부).")
 
 
@@ -195,14 +197,14 @@ def lookahead():
     SCV = "AI_Score_Candidates.vi"
 
     def body(fu, dep, ins):
-        rk, g, a, rj = ins
+        rk, g, a, rj, topk = ins
         o = opp_stone(d, fu, dep, a)
         n = d.size(fu, dep, rk)
-        k = d.node(fu, dep, "Max & Min", [("x", n), ("y", d.i32(fu, dep, 6))],
+        k = d.node(fu, dep, "Max & Min", [("x", n), ("y", topk)],
                    ["max(x\\2Cy)", "min(x\\2Cy)"])["min(x\\2Cy)"]
         top = d.node(fu, dep, "Array Subset", [("array", rk), ("index", d.i32(fu, dep, 0)), ("length", k)],
                      ["subarray"])["subarray"]
-        d.label(fu, dep, "상위 6수마다 상대 최선 응수 점수를 뺀다")
+        d.label(fu, dep, "상위 K수마다 상대 최선 응수 점수를 뺀다")
 
         def lb(lu, ld, i, L, it):
             gg, aa, oo, rr, e = i
@@ -225,10 +227,11 @@ def lookahead():
     subvi(d, [("Ranked", SCS, "[]", 11, "required"),
               ("Grid", GRID, EMPTY_GRID, 10, "required"),
               ("AI Stone", STONE, WHITE, 9, "required"),
-              ("Renju", "bool", "true", "r9", "recommended")],
+              ("Renju", "bool", "true", "r9", "recommended"),
+              ("Top K", "int32", "6", "r1", "recommended")],
           [("Best", SC, "[0,0,0]", 3), ("Value", "double", "0", 2)], body)
     return d.write(f"{OUT}/AI_Lookahead.xml", "AI_Lookahead.vi",
-                   "Hard 난이도 2수 탐색: Ranked 상위 6수를 각각 가상 착수 후 상대의 최선 응수 점수*0.8을 뺀 값이 최대인 수.\\0A"
+                   "Hard/Master 2수 탐색: Ranked 상위 K수(Hard 6, Master 12)를 각각 가상 착수 후 상대의 최선 응수 점수*0.8을 뺀 값이 최대인 수.\\0A"
                    "내 수가 5목(>=100000)이면 즉시 그 수.")
 
 

@@ -1,0 +1,220 @@
+<VI _name="UI_Render.vi" description="°ÔÀÓ Context¸¦ È­¸é ÀüÃ¼(592x780) Picture·Î ±×¸°´Ù.\0A¼³Á¤ È­¸é: °¥»ö ¹è°æ + Èò Ä«µå + ¸ðµå/¼±°ø/³­ÀÌµµ/±ÔÄ¢ ¼±ÅÃ + °ÔÀÓ ½ÃÀÛ.\0A°ÔÀÓ È­¸é: ¿À¸ñÆÇ + »óÅÂ Ä«µå(Â÷·Ê µ¹, »óÅÂ, Á¡¼ö) + ¹«¸£±â/»õ °ÔÀÓ/¼³Á¤ ¹öÆ°.">
+  <Control _name="Context" conIdx="0" connection="required" outputs="value:5010.value" type="cluster{uint16{Settings,Game}.Screen,array{int32}.Settings,cluster{array.2{uint8{Empty,Black,White}}.Grid,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Move History,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Last Move}.Board,uint16{Idle,Player Turn,AI Thinking,Game Over}.Status,uint32.Game ID,uint8{Empty,Black,White}.Player Stone,cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}.Hover,int32.Hover Button,array{cluster{int32.Row,int32.Col,uint8{Empty,Black,White}.Stone}}.Win Line,int32.Score 1,int32.Score 2,int32.Draws,string.Status Text,uint32.Status Color}" uid="5010" uid_parent="root" value="[0,[0,0,1,1],[[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],[],[-1,-1,0]],0,0,1,[-1,-1,0],-1,[],0,0,0,,0]"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5020.value" type="cluster{bool.status,int32.code,string.source}" uid="5020" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5020.value" outputs="status:5030.status" uid="5030" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5030.status" uid="5040" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5050" uid_parent="5040"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5060" uid_parent="5040"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5070" uid_parent="5040">
+      <Tunnel _id="In1" outputs="value:5080.value" uid="5080" uid_parent="5070"/>
+      <Tunnel _id="In2" outputs="value:5090.value" uid="5090" uid_parent="5070"/>
+      <Node _name="Unbundle By Name" fields="Screen,Settings,Board,Status,Player Stone,Hover,Hover Button,Win Line,Score 1,Score 2,Draws,Status Text,Status Color" inputs="input cluster:5080.value" outputs="Screen:5100.Screen,Settings:5100.Settings,Board:5100.Board,Status:5100.Status,Player Stone:5100.Player Stone,Hover:5100.Hover,Hover Button:5100.Hover Button,Win Line:5100.Win Line,Score 1:5100.Score 1,Score 2:5100.Score 2,Draws:5100.Draws,Status Text:5100.Status Text,Status Color:5100.Status Color" uid="5100" uid_parent="5070"/>
+      <Constant outputs="value:5110.value" type="int32" uid="5110" uid_parent="5070" value="0"/>
+      <Node _name="Index Array" inputs="array:5100.Settings,index:5110.value" outputs="element:5120.element" uid="5120" uid_parent="5070"/>
+      <Constant outputs="value:5130.value" type="int32" uid="5130" uid_parent="5070" value="1"/>
+      <Node _name="Equal?" inputs="x:5120.element,y:5130.value" outputs="x = y?:5140.x = y?" uid="5140" uid_parent="5070"/>
+      <Constant outputs="value:5150.value" type="uint16{Settings,Game}" uid="5150" uid_parent="5070" value="0"/>
+      <Node _name="Equal?" inputs="x:5100.Screen,y:5150.value" outputs="x = y?:5160.x = y?" uid="5160" uid_parent="5070"/>
+      <FreeLabel comment="È­¸é\3A ¼³Á¤ / °ÔÀÓ" uid="5170" uid_parent="5070"/>
+      <Structure _name="Case Structure" selectin="5160.x = y?" uid="5180" uid_parent="5070">
+        <Tunnel _id="In1" inputs="value:5100.Screen" uid="5190" uid_parent="5180"/>
+        <Tunnel _id="In2" inputs="value:5100.Settings" uid="5200" uid_parent="5180"/>
+        <Tunnel _id="In3" inputs="value:5100.Board" uid="5210" uid_parent="5180"/>
+        <Tunnel _id="In4" inputs="value:5100.Status" uid="5220" uid_parent="5180"/>
+        <Tunnel _id="In5" inputs="value:5100.Player Stone" uid="5230" uid_parent="5180"/>
+        <Tunnel _id="In6" inputs="value:5100.Hover" uid="5240" uid_parent="5180"/>
+        <Tunnel _id="In7" inputs="value:5100.Hover Button" uid="5250" uid_parent="5180"/>
+        <Tunnel _id="In8" inputs="value:5100.Win Line" uid="5260" uid_parent="5180"/>
+        <Tunnel _id="In9" inputs="value:5100.Score 1" uid="5270" uid_parent="5180"/>
+        <Tunnel _id="In10" inputs="value:5100.Score 2" uid="5280" uid_parent="5180"/>
+        <Tunnel _id="In11" inputs="value:5100.Draws" uid="5290" uid_parent="5180"/>
+        <Tunnel _id="In12" inputs="value:5100.Status Text" uid="5300" uid_parent="5180"/>
+        <Tunnel _id="In13" inputs="value:5100.Status Color" uid="5310" uid_parent="5180"/>
+        <Tunnel _id="In14" inputs="value:5140.x = y?" uid="5320" uid_parent="5180"/>
+        <CaseFrame selector="True" selectout="" label="¼³Á¤ È­¸é" uid="5330" uid_parent="5180">
+          <Tunnel _id="In1" outputs="value:5340.value" uid="5340" uid_parent="5330"/>
+          <Tunnel _id="In2" outputs="value:5350.value" uid="5350" uid_parent="5330"/>
+          <Tunnel _id="In3" outputs="value:5360.value" uid="5360" uid_parent="5330"/>
+          <Tunnel _id="In4" outputs="value:5370.value" uid="5370" uid_parent="5330"/>
+          <Tunnel _id="In5" outputs="value:5380.value" uid="5380" uid_parent="5330"/>
+          <Tunnel _id="In6" outputs="value:5390.value" uid="5390" uid_parent="5330"/>
+          <Tunnel _id="In7" outputs="value:5400.value" uid="5400" uid_parent="5330"/>
+          <Tunnel _id="In8" outputs="value:5410.value" uid="5410" uid_parent="5330"/>
+          <Tunnel _id="In9" outputs="value:5420.value" uid="5420" uid_parent="5330"/>
+          <Tunnel _id="In10" outputs="value:5430.value" uid="5430" uid_parent="5330"/>
+          <Tunnel _id="In11" outputs="value:5440.value" uid="5440" uid_parent="5330"/>
+          <Tunnel _id="In12" outputs="value:5450.value" uid="5450" uid_parent="5330"/>
+          <Tunnel _id="In13" outputs="value:5460.value" uid="5460" uid_parent="5330"/>
+          <Tunnel _id="In14" outputs="value:5470.value" uid="5470" uid_parent="5330"/>
+          <Constant outputs="value:5480.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5480" uid_parent="5330" value="[0,0,592,780]"/>
+          <Constant outputs="value:5490.value" type="bool" uid="5490" uid_parent="5330" value="true"/>
+          <Constant outputs="value:5500.value" type="uint32" uid="5500" uid_parent="5330" value="3877406"/>
+          <Call target="Draw Rectangle.vi" inputs="rect:5480.value,fill?(F):5490.value,color(black):5500.value" outputs="new picture:5510.new picture" uid="5510" uid_parent="5330"/>
+          <Constant outputs="value:5520.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5520" uid_parent="5330" value="[36,50,556,700]"/>
+          <Constant outputs="value:5530.value" type="uint32" uid="5530" uid_parent="5330" value="16777215"/>
+          <Constant outputs="value:5540.value" type="int16" uid="5540" uid_parent="5330" value="40"/>
+          <Constant outputs="value:5550.value" type="bool" uid="5550" uid_parent="5330" value="true"/>
+          <Call target="Draw Round Rect.vi" inputs="rect:5520.value,color(black):5530.value,fill?(F):5550.value,oval width:5540.value,oval height:5540.value,picture:5510.new picture" outputs="new picture:5560.new picture" uid="5560" uid_parent="5330"/>
+          <Constant outputs="value:5570.value" type="cluster{int16.horizontal,int16.vertical}" uid="5570" uid_parent="5330" value="[268,40]"/>
+          <Constant outputs="value:5580.value" type="int16" uid="5580" uid_parent="5330" value="22"/>
+          <Constant outputs="value:5590.value" type="bool" uid="5590" uid_parent="5330" value="true"/>
+          <Constant outputs="value:5600.value" type="uint32" uid="5600" uid_parent="5330" value="1842204"/>
+          <Call target="Draw Circle by Radius.vi" inputs="picture:5560.new picture,pixel center:5570.value,radius:5580.value,fill?(F):5590.value,color(black):5600.value" outputs="new picture:5610.new picture" uid="5610" uid_parent="5330"/>
+          <Constant outputs="value:5620.value" type="int16" uid="5620" uid_parent="5330" value="22"/>
+          <Constant outputs="value:5630.value" type="bool" uid="5630" uid_parent="5330" value="false"/>
+          <Constant outputs="value:5640.value" type="uint32" uid="5640" uid_parent="5330" value="5592405"/>
+          <Call target="Draw Circle by Radius.vi" inputs="picture:5610.new picture,pixel center:5570.value,radius:5620.value,fill?(F):5630.value,color(black):5640.value" outputs="new picture:5650.new picture" uid="5650" uid_parent="5330"/>
+          <Constant outputs="value:5660.value" type="cluster{int16.horizontal,int16.vertical}" uid="5660" uid_parent="5330" value="[324,40]"/>
+          <Constant outputs="value:5670.value" type="int16" uid="5670" uid_parent="5330" value="22"/>
+          <Constant outputs="value:5680.value" type="bool" uid="5680" uid_parent="5330" value="true"/>
+          <Constant outputs="value:5690.value" type="uint32" uid="5690" uid_parent="5330" value="16777215"/>
+          <Call target="Draw Circle by Radius.vi" inputs="picture:5650.new picture,pixel center:5660.value,radius:5670.value,fill?(F):5680.value,color(black):5690.value" outputs="new picture:5700.new picture" uid="5700" uid_parent="5330"/>
+          <Constant outputs="value:5710.value" type="int16" uid="5710" uid_parent="5330" value="22"/>
+          <Constant outputs="value:5720.value" type="bool" uid="5720" uid_parent="5330" value="false"/>
+          <Constant outputs="value:5730.value" type="uint32" uid="5730" uid_parent="5330" value="5592405"/>
+          <Call target="Draw Circle by Radius.vi" inputs="picture:5700.new picture,pixel center:5660.value,radius:5710.value,fill?(F):5720.value,color(black):5730.value" outputs="new picture:5740.new picture" uid="5740" uid_parent="5330"/>
+          <FreeLabel comment="¹è°æ + Èò Ä«µå + Èæ¹é µ¹ Àå½Ä" uid="5750" uid_parent="5330"/>
+          <Constant outputs="value:5760.value" type="cluster{bool.status,int32.code,string.source}" uid="5760" uid_parent="5330" value="[false,0,]"/>
+          <Call target="UI_Settings_Layout.vi" inputs="error in:5760.value" outputs="Specs:5770.Specs,error out:5770.error out" uid="5770" uid_parent="5330"/>
+          <Constant outputs="value:5780.value" type="bool" uid="5780" uid_parent="5330" value="false"/>
+          <Node _name="Build Array" inputs="element:5780.value,element:5470.value,element:5470.value" outputs="appended array:5790.appended array" uid="5790" uid_parent="5330"/>
+          <Constant outputs="value:5800.value" type="cluster{bool.status,int32.code,string.source}" uid="5800" uid_parent="5330" value="[false,0,]"/>
+          <Call target="UI_Draw_Buttons.vi" inputs="Picture:5740.new picture,Specs:5770.Specs,Values:5350.value,Dim Groups:5790.appended array,Hover:5400.value,error in:5800.value" outputs="New Picture:5810.New Picture,error out:5810.error out" uid="5810" uid_parent="5330"/>
+          <Tunnel _id="Out1" inputs="value:5810.New Picture" uid="5820" uid_parent="5330"/>
+        </CaseFrame>
+        <CaseFrame selector="False" selectout="" label="°ÔÀÓ È­¸é" uid="5830" uid_parent="5180">
+          <Tunnel _id="In1" outputs="value:5840.value" uid="5840" uid_parent="5830"/>
+          <Tunnel _id="In2" outputs="value:5850.value" uid="5850" uid_parent="5830"/>
+          <Tunnel _id="In3" outputs="value:5860.value" uid="5860" uid_parent="5830"/>
+          <Tunnel _id="In4" outputs="value:5870.value" uid="5870" uid_parent="5830"/>
+          <Tunnel _id="In5" outputs="value:5880.value" uid="5880" uid_parent="5830"/>
+          <Tunnel _id="In6" outputs="value:5890.value" uid="5890" uid_parent="5830"/>
+          <Tunnel _id="In7" outputs="value:5900.value" uid="5900" uid_parent="5830"/>
+          <Tunnel _id="In8" outputs="value:5910.value" uid="5910" uid_parent="5830"/>
+          <Tunnel _id="In9" outputs="value:5920.value" uid="5920" uid_parent="5830"/>
+          <Tunnel _id="In10" outputs="value:5930.value" uid="5930" uid_parent="5830"/>
+          <Tunnel _id="In11" outputs="value:5940.value" uid="5940" uid_parent="5830"/>
+          <Tunnel _id="In12" outputs="value:5950.value" uid="5950" uid_parent="5830"/>
+          <Tunnel _id="In13" outputs="value:5960.value" uid="5960" uid_parent="5830"/>
+          <Tunnel _id="In14" outputs="value:5970.value" uid="5970" uid_parent="5830"/>
+          <Constant outputs="value:5980.value" type="cluster{bool.status,int32.code,string.source}" uid="5980" uid_parent="5830" value="[false,0,]"/>
+          <Call target="UI_Draw_Board.vi" inputs="Board State:5860.value,Hover:5890.value,Win Line:5910.value,error in:5980.value" outputs="Picture:5990.Picture,error out:5990.error out" uid="5990" uid_parent="5830"/>
+          <Constant outputs="value:6000.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="6000" uid_parent="5830" value="[0,592,592,780]"/>
+          <Constant outputs="value:6010.value" type="bool" uid="6010" uid_parent="5830" value="true"/>
+          <Constant outputs="value:6020.value" type="uint32" uid="6020" uid_parent="5830" value="3877406"/>
+          <Call target="Draw Rectangle.vi" inputs="picture:5990.Picture,rect:6000.value,fill?(F):6010.value,color(black):6020.value" outputs="new picture:6030.new picture" uid="6030" uid_parent="5830"/>
+          <Constant outputs="value:6040.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="6040" uid_parent="5830" value="[12,602,580,678]"/>
+          <Constant outputs="value:6050.value" type="uint32" uid="6050" uid_parent="5830" value="16777215"/>
+          <Constant outputs="value:6060.value" type="int16" uid="6060" uid_parent="5830" value="32"/>
+          <Constant outputs="value:6070.value" type="bool" uid="6070" uid_parent="5830" value="true"/>
+          <Call target="Draw Round Rect.vi" inputs="rect:6040.value,color(black):6050.value,fill?(F):6070.value,oval width:6060.value,oval height:6060.value,picture:6030.new picture" outputs="new picture:6080.new picture" uid="6080" uid_parent="5830"/>
+          <FreeLabel comment="¾Æ·¡\3A »óÅÂ Ä«µå + ¹öÆ° 3°³" uid="6090" uid_parent="5830"/>
+          <Node _name="Unbundle By Name" fields="Move History" inputs="input cluster:5860.value" outputs="Move History:6100.Move History" uid="6100" uid_parent="5830"/>
+          <Node _name="Array Size" inputs="array:6100.Move History" outputs="size(s):6110.size(s)" uid="6110" uid_parent="5830"/>
+          <Constant outputs="value:6120.value" type="int32" uid="6120" uid_parent="5830" value="2"/>
+          <Node _name="Quotient &amp; Remainder" inputs="x:6110.size(s),y:6120.value" outputs="x-y*floor(x/y):6130.x-y*floor(x/y),floor(x/y):6130.floor(x/y)" uid="6130" uid_parent="5830"/>
+          <Constant outputs="value:6140.value" type="uint8{Empty,Black,White}" uid="6140" uid_parent="5830" value="1"/>
+          <Constant outputs="value:6150.value" type="uint8{Empty,Black,White}" uid="6150" uid_parent="5830" value="2"/>
+          <Constant outputs="value:6160.value" type="int32" uid="6160" uid_parent="5830" value="0"/>
+          <Node _name="Equal?" inputs="x:6130.x-y*floor(x/y),y:6160.value" outputs="x = y?:6170.x = y?" uid="6170" uid_parent="5830"/>
+          <Node _name="Select" inputs="t:6140.value,s:6170.x = y?,f:6150.value" outputs="s? t\3Af:6180.s? t\3Af" uid="6180" uid_parent="5830"/>
+          <Constant outputs="value:6190.value" type="uint16{Idle,Player Turn,AI Thinking,Game Over}" uid="6190" uid_parent="5830" value="2"/>
+          <Node _name="Equal?" inputs="x:5870.value,y:6190.value" outputs="x = y?:6200.x = y?" uid="6200" uid_parent="5830"/>
+          <Constant outputs="value:6210.value" type="uint8{Empty,Black,White}" uid="6210" uid_parent="5830" value="1"/>
+          <Node _name="Equal?" inputs="x:5880.value,y:6210.value" outputs="x = y?:6220.x = y?" uid="6220" uid_parent="5830"/>
+          <Constant outputs="value:6230.value" type="uint8{Empty,Black,White}" uid="6230" uid_parent="5830" value="2"/>
+          <Constant outputs="value:6240.value" type="uint8{Empty,Black,White}" uid="6240" uid_parent="5830" value="1"/>
+          <Node _name="Select" inputs="t:6230.value,s:6220.x = y?,f:6240.value" outputs="s? t\3Af:6250.s? t\3Af" uid="6250" uid_parent="5830"/>
+          <Node _name="Select" inputs="t:6250.s? t\3Af,s:6200.x = y?,f:5880.value" outputs="s? t\3Af:6260.s? t\3Af" uid="6260" uid_parent="5830"/>
+          <Node _name="Select" inputs="t:6180.s? t\3Af,s:5970.value,f:6260.s? t\3Af" outputs="s? t\3Af:6270.s? t\3Af" uid="6270" uid_parent="5830"/>
+          <Constant outputs="value:6280.value" type="uint16{Idle,Player Turn,AI Thinking,Game Over}" uid="6280" uid_parent="5830" value="1"/>
+          <Node _name="Equal?" inputs="x:5870.value,y:6280.value" outputs="x = y?:6290.x = y?" uid="6290" uid_parent="5830"/>
+          <Node _name="Or" inputs="x:6290.x = y?,y:6200.x = y?" outputs="x .or. y?:6300.x .or. y?" uid="6300" uid_parent="5830"/>
+          <Structure _name="Case Structure" selectin="6300.x .or. y?" uid="6310" uid_parent="5830">
+            <Tunnel _id="In1" inputs="value:6080.new picture" uid="6320" uid_parent="6310"/>
+            <Tunnel _id="In2" inputs="value:6270.s? t\3Af" uid="6330" uid_parent="6310"/>
+            <CaseFrame selector="True" selectout="" label="Â÷·Ê µ¹ Ç¥½Ã" uid="6340" uid_parent="6310">
+              <Tunnel _id="In1" outputs="value:6350.value" uid="6350" uid_parent="6340"/>
+              <Tunnel _id="In2" outputs="value:6360.value" uid="6360" uid_parent="6340"/>
+              <Constant outputs="value:6370.value" type="uint8{Empty,Black,White}" uid="6370" uid_parent="6340" value="1"/>
+              <Node _name="Equal?" inputs="x:6360.value,y:6370.value" outputs="x = y?:6380.x = y?" uid="6380" uid_parent="6340"/>
+              <Constant outputs="value:6390.value" type="uint32" uid="6390" uid_parent="6340" value="1842204"/>
+              <Constant outputs="value:6400.value" type="uint32" uid="6400" uid_parent="6340" value="16777215"/>
+              <Node _name="Select" inputs="t:6390.value,s:6380.x = y?,f:6400.value" outputs="s? t\3Af:6410.s? t\3Af" uid="6410" uid_parent="6340"/>
+              <Constant outputs="value:6420.value" type="cluster{int16.horizontal,int16.vertical}" uid="6420" uid_parent="6340" value="[46,640]"/>
+              <Constant outputs="value:6430.value" type="int16" uid="6430" uid_parent="6340" value="17"/>
+              <Constant outputs="value:6440.value" type="bool" uid="6440" uid_parent="6340" value="true"/>
+              <Call target="Draw Circle by Radius.vi" inputs="picture:6350.value,pixel center:6420.value,radius:6430.value,fill?(F):6440.value,color(black):6410.s? t\3Af" outputs="new picture:6450.new picture" uid="6450" uid_parent="6340"/>
+              <Constant outputs="value:6460.value" type="int16" uid="6460" uid_parent="6340" value="17"/>
+              <Constant outputs="value:6470.value" type="bool" uid="6470" uid_parent="6340" value="false"/>
+              <Constant outputs="value:6480.value" type="uint32" uid="6480" uid_parent="6340" value="5592405"/>
+              <Call target="Draw Circle by Radius.vi" inputs="picture:6450.new picture,pixel center:6420.value,radius:6460.value,fill?(F):6470.value,color(black):6480.value" outputs="new picture:6490.new picture" uid="6490" uid_parent="6340"/>
+              <Tunnel _id="Out1" inputs="value:6490.new picture" uid="6500" uid_parent="6340"/>
+            </CaseFrame>
+            <CaseFrame selector="False" selectout="" label="Ç¥½Ã ¾È ÇÔ" uid="6510" uid_parent="6310">
+              <Tunnel _id="In1" outputs="value:6520.value" uid="6520" uid_parent="6510"/>
+              <Tunnel _id="In2" outputs="value:6530.value" uid="6530" uid_parent="6510"/>
+              <Tunnel _id="Out1" inputs="value:6520.value" uid="6540" uid_parent="6510"/>
+            </CaseFrame>
+            <Tunnel _id="Out1" outputs="value:6550.value" uid="6550" uid_parent="6310"/>
+          </Structure>
+          <Constant outputs="value:6560.value" type="int16" uid="6560" uid_parent="5830" value="306"/>
+          <Constant outputs="value:6570.value" type="int16" uid="6570" uid_parent="5830" value="626"/>
+          <Constant outputs="value:6580.value" type="int16" uid="6580" uid_parent="5830" value="20"/>
+          <Constant outputs="value:6590.value" type="bool" uid="6590" uid_parent="5830" value="true"/>
+          <Constant outputs="value:6600.value" type="cluster{int16.x,int16.y}" uid="6600" uid_parent="5830" value="[0,0]"/>
+          <Node _name="Bundle By Name" fields="x,y" inputs="x:6560.value,y:6570.value,input cluster:6600.value" outputs="output cluster:6610.output cluster" uid="6610" uid_parent="5830"/>
+          <Constant outputs="value:6620.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6620" uid_parent="5830" value="[1,1]"/>
+          <Constant outputs="value:6630.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6630" uid_parent="5830" value="0"/>
+          <Constant outputs="value:6640.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6640" uid_parent="5830" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+          <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6580.value,Bold?:6590.value,input cluster:6640.value" outputs="output cluster:6650.output cluster" uid="6650" uid_parent="5830"/>
+          <Call target="Draw Text at Point.vi" inputs="picture:6550.value,text:5950.value,text color(black):5960.value,origin:6610.output cluster,alignment(left\2C top):6620.value,desired font(Application):6630.value,[user-specified font]:6650.output cluster" outputs="text rect:6660.text rect,new picture:6660.new picture" uid="6660" uid_parent="5830"/>
+          <Constant outputs="value:6670.value" type="string" uid="6670" uid_parent="5830" value="Èæ "/>
+          <Constant outputs="value:6680.value" type="string" uid="6680" uid_parent="5830" value="ÇÃ·¹ÀÌ¾î "/>
+          <Node _name="Select" inputs="t:6670.value,s:5970.value,f:6680.value" outputs="s? t\3Af:6690.s? t\3Af" uid="6690" uid_parent="5830"/>
+          <Constant outputs="value:6700.value" type="string" uid="6700" uid_parent="5830" value=" ¹é"/>
+          <Constant outputs="value:6710.value" type="string" uid="6710" uid_parent="5830" value=" AI"/>
+          <Node _name="Select" inputs="t:6700.value,s:5970.value,f:6710.value" outputs="s? t\3Af:6720.s? t\3Af" uid="6720" uid_parent="5830"/>
+          <Node _name="Number To Decimal String" inputs="number:5920.value" outputs="decimal integer string:6730.decimal integer string" uid="6730" uid_parent="5830"/>
+          <Constant outputs="value:6740.value" type="string" uid="6740" uid_parent="5830" value=" \3A "/>
+          <Node _name="Number To Decimal String" inputs="number:5930.value" outputs="decimal integer string:6750.decimal integer string" uid="6750" uid_parent="5830"/>
+          <Constant outputs="value:6760.value" type="string" uid="6760" uid_parent="5830" value="   ¡¤   ¹«½ÂºÎ "/>
+          <Node _name="Number To Decimal String" inputs="number:5940.value" outputs="decimal integer string:6770.decimal integer string" uid="6770" uid_parent="5830"/>
+          <Node _name="Concatenate Strings" inputs="string:6690.s? t\3Af,string:6730.decimal integer string,string:6740.value,string:6750.decimal integer string,string:6720.s? t\3Af,string:6760.value,string:6770.decimal integer string" outputs="concatenated string:6780.concatenated string" uid="6780" uid_parent="5830"/>
+          <Constant outputs="value:6790.value" type="int16" uid="6790" uid_parent="5830" value="306"/>
+          <Constant outputs="value:6800.value" type="int16" uid="6800" uid_parent="5830" value="658"/>
+          <Constant outputs="value:6810.value" type="int16" uid="6810" uid_parent="5830" value="15"/>
+          <Constant outputs="value:6820.value" type="bool" uid="6820" uid_parent="5830" value="false"/>
+          <Constant outputs="value:6830.value" type="uint32" uid="6830" uid_parent="5830" value="8359053"/>
+          <Constant outputs="value:6840.value" type="cluster{int16.x,int16.y}" uid="6840" uid_parent="5830" value="[0,0]"/>
+          <Node _name="Bundle By Name" fields="x,y" inputs="x:6790.value,y:6800.value,input cluster:6840.value" outputs="output cluster:6850.output cluster" uid="6850" uid_parent="5830"/>
+          <Constant outputs="value:6860.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6860" uid_parent="5830" value="[1,1]"/>
+          <Constant outputs="value:6870.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6870" uid_parent="5830" value="0"/>
+          <Constant outputs="value:6880.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6880" uid_parent="5830" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+          <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6810.value,Bold?:6820.value,input cluster:6880.value" outputs="output cluster:6890.output cluster" uid="6890" uid_parent="5830"/>
+          <Call target="Draw Text at Point.vi" inputs="picture:6660.new picture,text:6780.concatenated string,text color(black):6830.value,origin:6850.output cluster,alignment(left\2C top):6860.value,desired font(Application):6870.value,[user-specified font]:6890.output cluster" outputs="text rect:6900.text rect,new picture:6900.new picture" uid="6900" uid_parent="5830"/>
+          <Constant outputs="value:6910.value" type="cluster{bool.status,int32.code,string.source}" uid="6910" uid_parent="5830" value="[false,0,]"/>
+          <Call target="UI_Game_Layout.vi" inputs="error in:6910.value" outputs="Specs:6920.Specs,error out:6920.error out" uid="6920" uid_parent="5830"/>
+          <Constant outputs="value:6930.value" type="cluster{bool.status,int32.code,string.source}" uid="6930" uid_parent="5830" value="[false,0,]"/>
+          <Call target="UI_Draw_Buttons.vi" inputs="Picture:6900.new picture,Specs:6920.Specs,Hover:5900.value,error in:6930.value" outputs="New Picture:6940.New Picture,error out:6940.error out" uid="6940" uid_parent="5830"/>
+          <Tunnel _id="Out1" inputs="value:6940.New Picture" uid="6950" uid_parent="5830"/>
+        </CaseFrame>
+        <Tunnel _id="Out1" outputs="value:6960.value" uid="6960" uid_parent="5180"/>
+      </Structure>
+      <Tunnel _id="Out1" inputs="value:6960.value" uid="6970" uid_parent="5070"/>
+      <Tunnel _id="Out2" inputs="value:5090.value" uid="6980" uid_parent="5070"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="6990" uid_parent="5040">
+      <Tunnel _id="In1" outputs="value:7000.value" uid="7000" uid_parent="6990"/>
+      <Tunnel _id="In2" outputs="value:7010.value" uid="7010" uid_parent="6990"/>
+      <Constant outputs="value:7020.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="7020" uid_parent="6990" value="[0,0,0,0]"/>
+      <Call target="Draw Rectangle.vi" inputs="rect:7020.value" outputs="new picture:7030.new picture" uid="7030" uid_parent="6990"/>
+      <Tunnel _id="Out1" inputs="value:7030.new picture" uid="7040" uid_parent="6990"/>
+      <Tunnel _id="Out2" inputs="value:7010.value" uid="7050" uid_parent="6990"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:7060.value" uid="7060" uid_parent="5040"/>
+    <Tunnel _id="Out2" outputs="value:7070.value" uid="7070" uid_parent="5040"/>
+  </Structure>
+  <Indicator _name="Picture" conIdx="4" connection="recommended" inputs="value:7060.value" type="picture" uid="7080" uid_parent="root" value=""/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:7070.value" type="cluster{bool.status,int32.code,string.source}" uid="7090" uid_parent="root" value="[false,0,]"/>
+</VI>

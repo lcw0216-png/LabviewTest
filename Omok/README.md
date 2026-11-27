@@ -1,74 +1,91 @@
-# Omok (Player vs AI)
+# Omok (Player vs AI / 2인 플레이)
 
-LabVIEW로 만든 15×15 오목 게임입니다. 플레이어와 AI가 대국하며, 렌주룰 흑 금수(3-3, 4-4, 장목)를 지원합니다.
-`Omok.lvproj`를 열고 `Omok_Main.vi`를 실행하세요.
+LabVIEW로 만든 15×15 오목 게임입니다. `Omok.lvproj`를 열고 `Omok_Main.vi`를 실행하세요.
+창 전체가 **2D Picture 한 장**으로 그려지는 모바일 게임 스타일 UI이며, 모든 조작은 마우스 클릭입니다.
 
-![대국 화면](docs/draw_play.png) ![승리 라인](docs/draw_win.png)
+| 설정 화면 | 2인 플레이 선택 시 | 게임 화면 (흑 승리) | 금수 안내 |
+|---|---|---|---|
+| ![](docs/settings.png) | ![](docs/settings_pvp.png) | ![](docs/game_pvp_win.png) | ![](docs/game_forbidden.png) |
+
+## 기능
+
+- **설정 화면** (실행 시 첫 화면)
+  - 게임 모드: 사람 vs AI / 2인 플레이
+  - 선공·후공: ● 흑·선공 / ○ 백·후공 (AI 대전에서만, 2인 플레이는 흑 선공 고정이라 회색 비활성)
+  - 난이도: 쉬움 / 보통 / 어려움 / 마스터 (AI 대전에서만)
+  - 규칙: 렌주룰(흑 3-3·4-4·장목 금지) / 자유룰
+  - **게임 시작** → 오목판 화면으로 전환 (점수 초기화)
+- **게임 화면**
+  - 오목판(마우스를 올리면 놓일 자리 미리보기, 마지막 수 빨간 점, 승리 5목 빨간 선)
+  - 상태 카드: 차례 돌 아이콘, 상태 문구(차례/승리/금수/무승부), 점수 (AI 대전: 플레이어 : AI, 2인: 흑 : 백, 무승부)
+  - 버튼: **무르기**(2인 1수, AI 대전은 내 차례까지 1~2수) / **새 게임**(점수 유지) / **설정**(설정 화면으로)
+- 버튼에 마우스를 올리면 진한 테두리로 강조, 선택된 항목은 색으로 표시
+- 창을 닫으면 세 루프가 모두 정상 종료
 
 ## 구조
 
-메인 VI는 큐 두 개로 연결된 루프 3개로 되어 있습니다(QMH / Producer-Consumer).
-
 ```
-UI 이벤트 루프 ──(게임 큐: Game_Message)──> 게임 루프 ──(AI 큐: AI_Request)──> AI 작업 루프
-   마우스/버튼                               상태 = Shift Register                    AI_Calculate_Move
-                     <──────────────(게임 큐: AI Move Ready)──────────────────────────┘
+UI 이벤트 루프 ──(게임 큐: Click/Hover + 좌표)──> 게임 루프 ──(AI 큐)──> AI 작업 루프
+  Board: Mouse Down / Mouse Move / Panel Close?      Context(Shift Register 1개)      AI_Calculate_Move
+                     <──────────────────(게임 큐: AI Move Ready + Game ID)──────────────────┘
 ```
 
-- **UI 이벤트 루프**: Board Mouse Down / Mouse Move, New Game, Undo, Exit, Panel Close? 이벤트를 메시지로 보냅니다.
-- **게임 루프**: Board State, 게임 상태, Game ID, 승패 카운터를 Shift Register로 들고 메시지를 처리합니다. 처리할 때마다 바둑판을 다시 그립니다.
-- **AI 작업 루프**: 착수 계산이 UI를 막지 않도록 따로 돕니다. 결과에 Game ID를 붙여 보내고, 새 게임이나 무르기 이후 도착한 지난 결과는 게임 루프가 버립니다.
+- 게임 상태는 `Context` 클러스터 하나(화면, 설정, 바둑판, 상태, Game ID, 호버, 점수, 문구)로 관리합니다.
+- 게임 루프: `Game_Click` / `Game_Hover` / `Game_AI_Move` 로 Context 갱신 → 필요하면 AI 요청 → `UI_Render` 로 다시 그리기
+  (마우스 이동은 호버 대상이 바뀔 때만 다시 그림)
+- 새 게임·무르기·설정으로 나가면 Game ID가 바뀌어, 계산 중이던 AI 결과는 버려집니다.
 
 ## 폴더
 
 | 폴더 | VI | 내용 |
 |---|---|---|
-| `/` | `Omok_Main.vi` | 메인 VI (이벤트 구조 + 큐 3루프) |
-| `Rules/` | `Rule_Count_Direction`, `Rule_Check_Win`, `Rule_Check_Forbidden` | 방향별 연속 수, 5목 판정, 렌주 금수 판정 |
-| `UI/` | `UI_Board_Geometry`, `UI_Pixel_To_Grid`, `UI_Draw_Board` | 바둑판 치수(원점 30 px, 칸 38 px, 592 px), 마우스 좌표 → 칸, 2D Picture 그리기 |
-| `AI/` | `AI_Get_Candidates`, `AI_Evaluate_Point`, `AI_Score_Candidates`, `AI_Lookahead`, `AI_Calculate_Move` | 후보 수(반경 2), 패턴 점수, 정렬, 2수 탐색, 난이도별 착수 |
-| `Game/` | `Game_Place_Stone`, `Game_Undo` | 착수(검사 + 승/무 판정), 무르기 |
-| `Typedefs/` | 12개 `.ctl` | Stone, Move, Board_State, Difficulty, Game_Status, Msg_Type 등 |
-| `Tests/` | `Test_Rules`, `Test_Draw`, `Test_AI`, `Test_Game` | 단위 테스트 VI |
-| `src/` | `*.xml` | 각 VI의 AIXML 원본 |
-| `tools/` | `*.py` | AIXML 생성 스크립트 (`lib.py` 공용) |
+| `/` | `Omok_Main.vi` | 메인 VI (창 설정, 이벤트 + 큐 3루프) |
+| `UI/` | `UI_Render` | Context → 화면 전체 Picture (설정 화면 / 게임 화면) |
+| | `UI_Draw_Buttons`, `UI_Hit_Test` | 버튼 배치표(Specs)를 둥근 버튼으로 그리기 / 클릭 좌표 → 버튼 찾기 |
+| | `UI_Settings_Layout`, `UI_Game_Layout` | 화면별 버튼·글자 배치표 (그리기와 클릭 판정이 같은 표 사용) |
+| | `UI_Draw_Board`, `UI_Pixel_To_Grid`, `UI_Board_Geometry` | 오목판 그리기, 좌표 → 칸 |
+| `Game/` | `Game_Click`, `Game_Hover`, `Game_AI_Move` | 마우스 클릭 / 이동 / AI 결과 처리 |
+| | `Game_Start`, `Game_Board_Click`, `Game_Undo_Move` | 새 판, 바둑판 착수(2인/AI), 무르기 |
+| | `Game_Place_Stone`, `Game_Undo` | 착수 검사·승패 판정, 기록 되돌리기 |
+| `AI/` | `AI_Calculate_Move` 외 4개 | 후보(반경 2) → 패턴 점수 → 정렬 → 2수 탐색 |
+| `Rules/` | 3개 | 연속 수, 5목 판정, 렌주 금수 |
+| `Typedefs/` | 12개 `.ctl` | 1차 설계 때 만든 형 정의 (v2 Context는 리터럴 타입) |
+| `Tests/` | `Test_Flow`, `Test_Render`, `Test_AI`, `Test_Game`, `Test_Rules`, `Test_Draw` | 단위·흐름 테스트 |
+| `src/`, `tools/` | | AIXML 원본, 생성 스크립트 |
 
-## AI
+## AI 난이도
 
 | 난이도 | 방식 |
 |---|---|
-| Easy | 공격 + 0.6×수비 점수 + 큰 난수 |
-| Normal | 공격 + 0.9×수비 점수 (탐욕) |
-| Hard | 상위 6수 각각에 대해 상대 최선 응수 점수×0.8을 뺀 값이 최대인 수 (2수 탐색) |
-
-칸 점수는 4방향 연속 길이와 열린 끝 수로 매깁니다: 5목 100000, 열린4 10000, 닫힌4·열린3 1000, 닫힌3·열린2 100 …
+| 쉬움 | 공격 + 0.6×수비 + 큰 난수 |
+| 보통 | 공격 + 0.9×수비 (탐욕) |
+| 어려움 | 상위 6수 × 상대 최선 응수 (2수 탐색) |
+| 마스터 | 상위 12수 × 상대 최선 응수 (2수 탐색) |
 
 ## 테스트 결과
 
-- 규칙: 5목, 4목, 장목, 렌주 흑 장목, 3-3, 4-4, 백 대각선, 렌주 OFF — 8개 모두 정상
-- AI: 상대 열린 4 차단, 자기 4 완성, 빈 판 천원(7,7), 열린 3 차단 — Normal 약 0.1초, Hard 약 0.2초
-- 착수/무르기: 같은 칸 거부, 3-3 금수 거부, 2수/전체 무르기 정상
-- 메인 VI: AI 선공(플레이어 백), 무르기 시 AI 첫 수 유지, New Game, Exit 후 정상 종료
-- 마우스 클릭/호버는 자동 테스트로 확인하지 못했습니다(실제 화면에서 확인 필요).
-
-## 설계서와 다른 점
-
-- Hard는 알파-베타 대신 상위 6수 2수 탐색으로 단순화했습니다.
-- 금수 판정은 연속된 돌만 봅니다(띈 3, 띈 4 미포함).
-- 수식 노드를 쓰지 않고 G 코드로 구현했습니다.
-- 큐 원소와 컨트롤은 typedef(.ctl)와 같은 구조의 리터럴 타입이며, .ctl에 연결되어 있지 않습니다.
-- `Omok_Main.vi` 블록 다이어그램이 넓습니다(약 11,000 px). 메시지 처리 프레임을 SubVI로 나누는 정리가 남아 있습니다.
+`Tests/Test_Flow.vi`에 클릭 좌표 배열을 넣어 실제 게임 흐름을 검증했습니다.
+- AI 대전: 게임 시작 → 착수 → AI 응수, 4수 진행 후 "당신 차례"
+- 2인 플레이: 흑 5목 → "흑 승리!", 흑 점수 1, 승리 라인 표시
+- 2인 플레이 무르기: 3수 후 무르기 → 2수, "흑 차례"
+- 백·후공 + 마스터: AI(흑) 첫 수 (7,7) → 설정 버튼으로 복귀, 설정값 유지
+- 2인 플레이에서 난이도 클릭 무시(비활성)
+- 렌주룰 2인 플레이: 흑 3-3 자리 → "금수 자리 (3-3)", 착수 거부
+- 실제 실행: 설정 화면 클릭, 게임 시작, 착수, 무르기, 창 닫기 종료까지 확인
 
 ## 다시 생성하기
 
 ```bash
 cd tools
-python3 gen_rules.py ../src
-python3 gen_ui.py ../src
-python3 gen_ai.py ../src
-python3 gen_game.py ../src
-python3 gen_main.py ../src
+python3 gen_rules.py ../src; python3 gen_ui.py ../src; python3 gen_ui2.py ../src
+python3 gen_ai.py ../src; python3 gen_game.py ../src; python3 gen_game2.py ../src
+python3 gen_main2.py ../src
 ```
 
 SubVI를 부르는 VI는 생성 시점에 그 SubVI가 LabVIEW에 열려 있어야 합니다(프로젝트를 통해 `lvai_open_file`).
 `Omok_Main.xml`은 이벤트 구조가 있으므로 `lvai_generate_vi_with_events`로 변환합니다.
+
+## 참고
+
+- 일부 SubVI의 블록 다이어그램은 1920×1080보다 넓습니다(특히 `Omok_Main`, `UI_Render`, `Game_Board_Click`).
+- 렌주 금수 판정은 연속된 돌만 봅니다(띈 3/띈 4 미포함).

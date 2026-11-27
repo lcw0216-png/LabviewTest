@@ -3,7 +3,7 @@
   <Control _name="Cols" outputs="value:5020.value" type="array{int32}" uid="5020" uid_parent="root" value="[3,4,5,6]"/>
   <Control _name="Stones" outputs="value:5030.value" type="array{int32}" uid="5030" uid_parent="root" value="[1,1,1,1]"/>
   <Control _name="AI Stone" outputs="value:5040.value" type="int32" uid="5040" uid_parent="root" value="2"/>
-  <Control _name="Difficulty" outputs="value:5050.value" type="uint8{Easy,Normal,Hard}" uid="5050" uid_parent="root" value="1"/>
+  <Control _name="Difficulty" outputs="value:5050.value" type="uint8{Easy,Normal,Hard,Master}" uid="5050" uid_parent="root" value="1"/>
   <Control _name="Renju" outputs="value:5060.value" type="bool" uid="5060" uid_parent="root" value="true"/>
   <FreeLabel comment="Å×½ºÆ®\3A Á¤¼ö ¹è¿­·Î Grid¸¦ ¸¸µé°í AI Âø¼ö °è»ê" uid="5070" uid_parent="root"/>
   <Constant outputs="value:5080.value" type="array.2{uint8{Empty,Black,White}}" uid="5080" uid_parent="root" value="[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]"/>
