@@ -1,0 +1,195 @@
+<VI _name="UI_Render_Main.vi" description="¸ÞÀÎ È­¸é 1600x940 ÀüÃ¼ ±×¸®±â: ÁÖÈ² Á¦¸ñ ¶ì + ¹öÆ° 6°³, 128Ã¤³Î Å¸ÀÏ ¹ÙµÏÆÇ, ÇÏ´Ü ±×·¡ÇÁ Ä«µå.">
+  <Control _name="Channels" conIdx="0" connection="required" outputs="value:5010.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="5010" uid_parent="root" value="[]"/>
+  <Control _name="Data" conIdx="5" connection="recommended" outputs="value:5020.value" type="array.2{double}" uid="5020" uid_parent="root" value="[]"/>
+  <Control _name="dt" conIdx="7" connection="recommended" outputs="value:5030.value" type="double" uid="5030" uid_parent="root" value="0.001"/>
+  <Control _name="Running" conIdx="9" connection="recommended" outputs="value:5040.value" type="bool" uid="5040" uid_parent="root" value="false"/>
+  <Control _name="Logging" conIdx="1" connection="recommended" outputs="value:5050.value" type="bool" uid="5050" uid_parent="root" value="false"/>
+  <Control _name="Hover Button" conIdx="2" connection="recommended" outputs="value:5060.value" type="int32" uid="5060" uid_parent="root" value="-1"/>
+  <Control _name="Phase" conIdx="3" connection="recommended" outputs="value:5070.value" type="bool" uid="5070" uid_parent="root" value="false"/>
+  <Control _name="Status" conIdx="12" connection="recommended" outputs="value:5080.value" type="string" uid="5080" uid_parent="root" value=""/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5090.value" type="cluster{bool.status,int32.code,string.source}" uid="5090" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5090.value" outputs="status:5100.status" uid="5100" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5100.status" uid="5110" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5120" uid_parent="5110"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5130" uid_parent="5110"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5140" uid_parent="5110"/>
+    <Tunnel _id="In4" inputs="value:5040.value" uid="5150" uid_parent="5110"/>
+    <Tunnel _id="In5" inputs="value:5050.value" uid="5160" uid_parent="5110"/>
+    <Tunnel _id="In6" inputs="value:5060.value" uid="5170" uid_parent="5110"/>
+    <Tunnel _id="In7" inputs="value:5070.value" uid="5180" uid_parent="5110"/>
+    <Tunnel _id="In8" inputs="value:5080.value" uid="5190" uid_parent="5110"/>
+    <Tunnel _id="In9" inputs="value:5090.value" uid="5200" uid_parent="5110"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5210" uid_parent="5110">
+      <Tunnel _id="In1" outputs="value:5220.value" uid="5220" uid_parent="5210"/>
+      <Tunnel _id="In2" outputs="value:5230.value" uid="5230" uid_parent="5210"/>
+      <Tunnel _id="In3" outputs="value:5240.value" uid="5240" uid_parent="5210"/>
+      <Tunnel _id="In4" outputs="value:5250.value" uid="5250" uid_parent="5210"/>
+      <Tunnel _id="In5" outputs="value:5260.value" uid="5260" uid_parent="5210"/>
+      <Tunnel _id="In6" outputs="value:5270.value" uid="5270" uid_parent="5210"/>
+      <Tunnel _id="In7" outputs="value:5280.value" uid="5280" uid_parent="5210"/>
+      <Tunnel _id="In8" outputs="value:5290.value" uid="5290" uid_parent="5210"/>
+      <Tunnel _id="In9" outputs="value:5300.value" uid="5300" uid_parent="5210"/>
+      <Constant outputs="value:5310.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5310" uid_parent="5210" value="[0,0,1600,940]"/>
+      <Constant outputs="value:5320.value" type="bool" uid="5320" uid_parent="5210" value="true"/>
+      <Constant outputs="value:5330.value" type="uint32" uid="5330" uid_parent="5210" value="15987441"/>
+      <Call target="Draw Rectangle.vi" inputs="rect:5310.value,fill?(F):5320.value,color(black):5330.value" outputs="new picture:5340.new picture" uid="5340" uid_parent="5210"/>
+      <Constant outputs="value:5350.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5350" uid_parent="5210" value="[0,0,1600,64]"/>
+      <Constant outputs="value:5360.value" type="bool" uid="5360" uid_parent="5210" value="true"/>
+      <Constant outputs="value:5370.value" type="uint32" uid="5370" uid_parent="5210" value="12860956"/>
+      <Call target="Draw Rectangle.vi" inputs="picture:5340.new picture,rect:5350.value,fill?(F):5360.value,color(black):5370.value" outputs="new picture:5380.new picture" uid="5380" uid_parent="5210"/>
+      <FreeLabel comment="Á¦¸ñ ¶ì(PowerPoint ÁÖÈ²) + »óÅÂ + ¹öÆ°" uid="5390" uid_parent="5210"/>
+      <Constant outputs="value:5400.value" type="string" uid="5400" uid_parent="5210" value="128CH ¾Æ³¯·Î±× ÀÔ·Â ¸ð´ÏÅÍ"/>
+      <Constant outputs="value:5410.value" type="int16" uid="5410" uid_parent="5210" value="24"/>
+      <Constant outputs="value:5420.value" type="int16" uid="5420" uid_parent="5210" value="32"/>
+      <Constant outputs="value:5430.value" type="int16" uid="5430" uid_parent="5210" value="20"/>
+      <Constant outputs="value:5440.value" type="bool" uid="5440" uid_parent="5210" value="true"/>
+      <Constant outputs="value:5450.value" type="uint32" uid="5450" uid_parent="5210" value="16777215"/>
+      <Constant outputs="value:5460.value" type="cluster{int16.x,int16.y}" uid="5460" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:5410.value,y:5420.value,input cluster:5460.value" outputs="output cluster:5470.output cluster" uid="5470" uid_parent="5210"/>
+      <Constant outputs="value:5480.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="5480" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:5490.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="5490" uid_parent="5210" value="0"/>
+      <Constant outputs="value:5500.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="5500" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:5430.value,Bold?:5440.value,input cluster:5500.value" outputs="output cluster:5510.output cluster" uid="5510" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:5380.new picture,text:5400.value,text color(black):5450.value,origin:5470.output cluster,alignment(left\2C top):5480.value,desired font(Application):5490.value,[user-specified font]:5510.output cluster" outputs="text rect:5520.text rect,new picture:5520.new picture" uid="5520" uid_parent="5210"/>
+      <Constant outputs="value:5530.value" type="int16" uid="5530" uid_parent="5210" value="360"/>
+      <Constant outputs="value:5540.value" type="int16" uid="5540" uid_parent="5210" value="32"/>
+      <Constant outputs="value:5550.value" type="int16" uid="5550" uid_parent="5210" value="13"/>
+      <Constant outputs="value:5560.value" type="bool" uid="5560" uid_parent="5210" value="false"/>
+      <Constant outputs="value:5570.value" type="uint32" uid="5570" uid_parent="5210" value="16573654"/>
+      <Constant outputs="value:5580.value" type="cluster{int16.x,int16.y}" uid="5580" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:5530.value,y:5540.value,input cluster:5580.value" outputs="output cluster:5590.output cluster" uid="5590" uid_parent="5210"/>
+      <Constant outputs="value:5600.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="5600" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:5610.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="5610" uid_parent="5210" value="0"/>
+      <Constant outputs="value:5620.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="5620" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:5550.value,Bold?:5560.value,input cluster:5620.value" outputs="output cluster:5630.output cluster" uid="5630" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:5520.new picture,text:5290.value,text color(black):5570.value,origin:5590.output cluster,alignment(left\2C top):5600.value,desired font(Application):5610.value,[user-specified font]:5630.output cluster" outputs="text rect:5640.text rect,new picture:5640.new picture" uid="5640" uid_parent="5210"/>
+      <Constant outputs="value:5650.value" type="int32" uid="5650" uid_parent="5210" value="-1"/>
+      <Constant outputs="value:5660.value" type="int32" uid="5660" uid_parent="5210" value="0"/>
+      <Node _name="Select" inputs="t:5660.value,s:5260.value,f:5650.value" outputs="s? t\3Af:5670.s? t\3Af" uid="5670" uid_parent="5210"/>
+      <Node _name="Build Array" inputs="element:5650.value,element:5650.value,element:5650.value,element:5670.s? t\3Af" outputs="appended array:5680.appended array" uid="5680" uid_parent="5210"/>
+      <Node _name="Not" inputs="x:5250.value" outputs=".not. x?:5690..not. x?" uid="5690" uid_parent="5210"/>
+      <Node _name="Build Array" inputs="element:5250.value,element:5250.value,element:5690..not. x?,element:5690..not. x?" outputs="appended array:5700.appended array" uid="5700" uid_parent="5210"/>
+      <Constant outputs="value:5710.value" type="cluster{bool.status,int32.code,string.source}" uid="5710" uid_parent="5210" value="[false,0,]"/>
+      <Call target="UI_Header_Layout.vi" inputs="error in:5710.value" outputs="Specs:5720.Specs,error out:5720.error out" uid="5720" uid_parent="5210"/>
+      <Constant outputs="value:5730.value" type="cluster{bool.status,int32.code,string.source}" uid="5730" uid_parent="5210" value="[false,0,]"/>
+      <Call target="UI_Draw_Buttons.vi" inputs="Picture:5640.new picture,Specs:5720.Specs,Values:5680.appended array,Dim Groups:5700.appended array,Hover:5270.value,error in:5730.value" outputs="New Picture:5740.New Picture,error out:5740.error out" uid="5740" uid_parent="5210"/>
+      <Constant outputs="value:5750.value" type="string" uid="5750" uid_parent="5210" value="Ã¤³Î ¸ð´ÏÅÍ   ¡¤   Å¸ÀÏÀ» Å¬¸¯ÇÏ¸é »óÇÑ/ÇÏÇÑ ¡¤ ½ºÄÉÀÏ ¡¤ ÀúÀå ¡¤ ±×·¡ÇÁ ¼³Á¤"/>
+      <Constant outputs="value:5760.value" type="int16" uid="5760" uid_parent="5210" value="24"/>
+      <Constant outputs="value:5770.value" type="int16" uid="5770" uid_parent="5210" value="86"/>
+      <Constant outputs="value:5780.value" type="int16" uid="5780" uid_parent="5210" value="13"/>
+      <Constant outputs="value:5790.value" type="bool" uid="5790" uid_parent="5210" value="true"/>
+      <Constant outputs="value:5800.value" type="uint32" uid="5800" uid_parent="5210" value="2500134"/>
+      <Constant outputs="value:5810.value" type="cluster{int16.x,int16.y}" uid="5810" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:5760.value,y:5770.value,input cluster:5810.value" outputs="output cluster:5820.output cluster" uid="5820" uid_parent="5210"/>
+      <Constant outputs="value:5830.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="5830" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:5840.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="5840" uid_parent="5210" value="0"/>
+      <Constant outputs="value:5850.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="5850" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:5780.value,Bold?:5790.value,input cluster:5850.value" outputs="output cluster:5860.output cluster" uid="5860" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:5740.New Picture,text:5750.value,text color(black):5800.value,origin:5820.output cluster,alignment(left\2C top):5830.value,desired font(Application):5840.value,[user-specified font]:5860.output cluster" outputs="text rect:5870.text rect,new picture:5870.new picture" uid="5870" uid_parent="5210"/>
+      <Constant outputs="value:5880.value" type="string" uid="5880" uid_parent="5210" value="¡á »óÇÑ ÃÊ°ú"/>
+      <Constant outputs="value:5890.value" type="int16" uid="5890" uid_parent="5210" value="1130"/>
+      <Constant outputs="value:5900.value" type="int16" uid="5900" uid_parent="5210" value="86"/>
+      <Constant outputs="value:5910.value" type="int16" uid="5910" uid_parent="5210" value="12"/>
+      <Constant outputs="value:5920.value" type="bool" uid="5920" uid_parent="5210" value="true"/>
+      <Constant outputs="value:5930.value" type="uint32" uid="5930" uid_parent="5210" value="15208739"/>
+      <Constant outputs="value:5940.value" type="cluster{int16.x,int16.y}" uid="5940" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:5890.value,y:5900.value,input cluster:5940.value" outputs="output cluster:5950.output cluster" uid="5950" uid_parent="5210"/>
+      <Constant outputs="value:5960.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="5960" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:5970.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="5970" uid_parent="5210" value="0"/>
+      <Constant outputs="value:5980.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="5980" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:5910.value,Bold?:5920.value,input cluster:5980.value" outputs="output cluster:5990.output cluster" uid="5990" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:5870.new picture,text:5880.value,text color(black):5930.value,origin:5950.output cluster,alignment(left\2C top):5960.value,desired font(Application):5970.value,[user-specified font]:5990.output cluster" outputs="text rect:6000.text rect,new picture:6000.new picture" uid="6000" uid_parent="5210"/>
+      <Constant outputs="value:6010.value" type="string" uid="6010" uid_parent="5210" value="¡á ÇÏÇÑ ¹Ì¸¸"/>
+      <Constant outputs="value:6020.value" type="int16" uid="6020" uid_parent="5210" value="1240"/>
+      <Constant outputs="value:6030.value" type="int16" uid="6030" uid_parent="5210" value="86"/>
+      <Constant outputs="value:6040.value" type="int16" uid="6040" uid_parent="5210" value="12"/>
+      <Constant outputs="value:6050.value" type="bool" uid="6050" uid_parent="5210" value="true"/>
+      <Constant outputs="value:6060.value" type="uint32" uid="6060" uid_parent="5210" value="30932"/>
+      <Constant outputs="value:6070.value" type="cluster{int16.x,int16.y}" uid="6070" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:6020.value,y:6030.value,input cluster:6070.value" outputs="output cluster:6080.output cluster" uid="6080" uid_parent="5210"/>
+      <Constant outputs="value:6090.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6090" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:6100.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6100" uid_parent="5210" value="0"/>
+      <Constant outputs="value:6110.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6110" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6040.value,Bold?:6050.value,input cluster:6110.value" outputs="output cluster:6120.output cluster" uid="6120" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:6000.new picture,text:6010.value,text color(black):6060.value,origin:6080.output cluster,alignment(left\2C top):6090.value,desired font(Application):6100.value,[user-specified font]:6120.output cluster" outputs="text rect:6130.text rect,new picture:6130.new picture" uid="6130" uid_parent="5210"/>
+      <Constant outputs="value:6140.value" type="string" uid="6140" uid_parent="5210" value="G ±×·¡ÇÁ"/>
+      <Constant outputs="value:6150.value" type="int16" uid="6150" uid_parent="5210" value="1350"/>
+      <Constant outputs="value:6160.value" type="int16" uid="6160" uid_parent="5210" value="86"/>
+      <Constant outputs="value:6170.value" type="int16" uid="6170" uid_parent="5210" value="12"/>
+      <Constant outputs="value:6180.value" type="bool" uid="6180" uid_parent="5210" value="true"/>
+      <Constant outputs="value:6190.value" type="uint32" uid="6190" uid_parent="5210" value="30932"/>
+      <Constant outputs="value:6200.value" type="cluster{int16.x,int16.y}" uid="6200" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:6150.value,y:6160.value,input cluster:6200.value" outputs="output cluster:6210.output cluster" uid="6210" uid_parent="5210"/>
+      <Constant outputs="value:6220.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6220" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:6230.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6230" uid_parent="5210" value="0"/>
+      <Constant outputs="value:6240.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6240" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6170.value,Bold?:6180.value,input cluster:6240.value" outputs="output cluster:6250.output cluster" uid="6250" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:6130.new picture,text:6140.value,text color(black):6190.value,origin:6210.output cluster,alignment(left\2C top):6220.value,desired font(Application):6230.value,[user-specified font]:6250.output cluster" outputs="text rect:6260.text rect,new picture:6260.new picture" uid="6260" uid_parent="5210"/>
+      <Constant outputs="value:6270.value" type="string" uid="6270" uid_parent="5210" value="S ÀúÀå"/>
+      <Constant outputs="value:6280.value" type="int16" uid="6280" uid_parent="5210" value="1450"/>
+      <Constant outputs="value:6290.value" type="int16" uid="6290" uid_parent="5210" value="86"/>
+      <Constant outputs="value:6300.value" type="int16" uid="6300" uid_parent="5210" value="12"/>
+      <Constant outputs="value:6310.value" type="bool" uid="6310" uid_parent="5210" value="true"/>
+      <Constant outputs="value:6320.value" type="uint32" uid="6320" uid_parent="5210" value="30932"/>
+      <Constant outputs="value:6330.value" type="cluster{int16.x,int16.y}" uid="6330" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:6280.value,y:6290.value,input cluster:6330.value" outputs="output cluster:6340.output cluster" uid="6340" uid_parent="5210"/>
+      <Constant outputs="value:6350.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6350" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:6360.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6360" uid_parent="5210" value="0"/>
+      <Constant outputs="value:6370.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6370" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6300.value,Bold?:6310.value,input cluster:6370.value" outputs="output cluster:6380.output cluster" uid="6380" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:6260.new picture,text:6270.value,text color(black):6320.value,origin:6340.output cluster,alignment(left\2C top):6350.value,desired font(Application):6360.value,[user-specified font]:6380.output cluster" outputs="text rect:6390.text rect,new picture:6390.new picture" uid="6390" uid_parent="5210"/>
+      <Constant outputs="value:6400.value" type="cluster{bool.status,int32.code,string.source}" uid="6400" uid_parent="5210" value="[false,0,]"/>
+      <Call target="UI_Draw_Tiles.vi" inputs="Picture:6390.new picture,Channels:5220.value,Running:5250.value,Phase:5280.value,error in:6400.value" outputs="New Picture:6410.New Picture,error out:6410.error out" uid="6410" uid_parent="5210"/>
+      <FreeLabel comment="¾Æ·¡\3A ±×·¡ÇÁ Ä«µå" uid="6420" uid_parent="5210"/>
+      <Constant outputs="value:6430.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="6430" uid_parent="5210" value="[24,612,1576,926]"/>
+      <Constant outputs="value:6440.value" type="uint32" uid="6440" uid_parent="5210" value="16777215"/>
+      <Constant outputs="value:6450.value" type="int16" uid="6450" uid_parent="5210" value="16"/>
+      <Constant outputs="value:6460.value" type="bool" uid="6460" uid_parent="5210" value="true"/>
+      <Call target="Draw Round Rect.vi" inputs="rect:6430.value,color(black):6440.value,fill?(F):6460.value,oval width:6450.value,oval height:6450.value,picture:6410.New Picture" outputs="new picture:6470.new picture" uid="6470" uid_parent="5210"/>
+      <Constant outputs="value:6480.value" type="uint32" uid="6480" uid_parent="5210" value="13816014"/>
+      <Constant outputs="value:6490.value" type="int16" uid="6490" uid_parent="5210" value="16"/>
+      <Constant outputs="value:6500.value" type="uint16" uid="6500" uid_parent="5210" value="1"/>
+      <Constant outputs="value:6510.value" type="bool" uid="6510" uid_parent="5210" value="false"/>
+      <Constant outputs="value:6520.value" type="cluster{uint16.Width,uint32{Solid,Dash,Dot,DashDot,DashDotDot}.Style}" uid="6520" uid_parent="5210" value="[2,0]"/>
+      <Node _name="Bundle By Name" fields="Width" inputs="Width:6500.value,input cluster:6520.value" outputs="output cluster:6530.output cluster" uid="6530" uid_parent="5210"/>
+      <Call target="Draw Round Rect.vi" inputs="rect:6430.value,color(black):6480.value,fill?(F):6510.value,oval width:6490.value,oval height:6490.value,picture:6470.new picture,pen:6530.output cluster" outputs="new picture:6540.new picture" uid="6540" uid_parent="5210"/>
+      <Constant outputs="value:6550.value" type="string" uid="6550" uid_parent="5210" value="±×·¡ÇÁ - ¼±ÅÃ Ã¤³Î (G)"/>
+      <Constant outputs="value:6560.value" type="int16" uid="6560" uid_parent="5210" value="40"/>
+      <Constant outputs="value:6570.value" type="int16" uid="6570" uid_parent="5210" value="628"/>
+      <Constant outputs="value:6580.value" type="int16" uid="6580" uid_parent="5210" value="14"/>
+      <Constant outputs="value:6590.value" type="bool" uid="6590" uid_parent="5210" value="true"/>
+      <Constant outputs="value:6600.value" type="uint32" uid="6600" uid_parent="5210" value="2500134"/>
+      <Constant outputs="value:6610.value" type="cluster{int16.x,int16.y}" uid="6610" uid_parent="5210" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:6560.value,y:6570.value,input cluster:6610.value" outputs="output cluster:6620.output cluster" uid="6620" uid_parent="5210"/>
+      <Constant outputs="value:6630.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6630" uid_parent="5210" value="[0,1]"/>
+      <Constant outputs="value:6640.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6640" uid_parent="5210" value="0"/>
+      <Constant outputs="value:6650.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6650" uid_parent="5210" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6580.value,Bold?:6590.value,input cluster:6650.value" outputs="output cluster:6660.output cluster" uid="6660" uid_parent="5210"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:6540.new picture,text:6550.value,text color(black):6600.value,origin:6620.output cluster,alignment(left\2C top):6630.value,desired font(Application):6640.value,[user-specified font]:6660.output cluster" outputs="text rect:6670.text rect,new picture:6670.new picture" uid="6670" uid_parent="5210"/>
+      <Constant outputs="value:6680.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="6680" uid_parent="5210" value="[96,648,1380,896]"/>
+      <Constant outputs="value:6690.value" type="cluster{bool.status,int32.code,string.source}" uid="6690" uid_parent="5210" value="[false,0,]"/>
+      <Call target="UI_Draw_Graph.vi" inputs="Picture:6670.new picture,Plot Rect:6680.value,Data:5230.value,Channels:5220.value,dt:5240.value,error in:6690.value" outputs="New Picture:6700.New Picture,error out:6700.error out" uid="6700" uid_parent="5210"/>
+      <Tunnel _id="Out1" inputs="value:6700.New Picture" uid="6710" uid_parent="5210"/>
+      <Tunnel _id="Out2" inputs="value:5300.value" uid="6720" uid_parent="5210"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="6730" uid_parent="5110">
+      <Tunnel _id="In1" outputs="value:6740.value" uid="6740" uid_parent="6730"/>
+      <Tunnel _id="In2" outputs="value:6750.value" uid="6750" uid_parent="6730"/>
+      <Tunnel _id="In3" outputs="value:6760.value" uid="6760" uid_parent="6730"/>
+      <Tunnel _id="In4" outputs="value:6770.value" uid="6770" uid_parent="6730"/>
+      <Tunnel _id="In5" outputs="value:6780.value" uid="6780" uid_parent="6730"/>
+      <Tunnel _id="In6" outputs="value:6790.value" uid="6790" uid_parent="6730"/>
+      <Tunnel _id="In7" outputs="value:6800.value" uid="6800" uid_parent="6730"/>
+      <Tunnel _id="In8" outputs="value:6810.value" uid="6810" uid_parent="6730"/>
+      <Tunnel _id="In9" outputs="value:6820.value" uid="6820" uid_parent="6730"/>
+      <Constant outputs="value:6830.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="6830" uid_parent="6730" value="[0,0,0,0]"/>
+      <Call target="Draw Rectangle.vi" inputs="rect:6830.value" outputs="new picture:6840.new picture" uid="6840" uid_parent="6730"/>
+      <Tunnel _id="Out1" inputs="value:6840.new picture" uid="6850" uid_parent="6730"/>
+      <Tunnel _id="Out2" inputs="value:6820.value" uid="6860" uid_parent="6730"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:6870.value" uid="6870" uid_parent="5110"/>
+    <Tunnel _id="Out2" outputs="value:6880.value" uid="6880" uid_parent="5110"/>
+  </Structure>
+  <Indicator _name="Picture" conIdx="4" connection="recommended" inputs="value:6870.value" type="picture" uid="6890" uid_parent="root" value=""/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:6880.value" type="cluster{bool.status,int32.code,string.source}" uid="6900" uid_parent="root" value="[false,0,]"/>
+</VI>

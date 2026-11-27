@@ -1,0 +1,440 @@
+<VI _name="AI_DAQ_Main.vi" description="128Ã¤³Î(NI 9178 x2 + NI 9203 x16) Àü·ù ÀÔ·Â ÃøÁ¤/°¡½ÃÈ­ ¸ÞÀÎ.\0AUI »óÅÂ¸Ó½Å(Init/Wait/Update/Settings/Start/Stop/Save/Channel/Graph/Exit) + DAQ ¿£Áø + ±×·¡ÇÁ ÆË¾÷ ·çÇÁ.\0AÃ¢ ÀüÃ¼°¡ Picture 'Screen' ÇÏ³ª: »ó´Ü ¹öÆ° 6°³, 128Ã¤³Î Å¸ÀÏ, ÇÏ´Ü ±×·¡ÇÁ.">
+  <FreeLabel comment="128CH AI ÃøÁ¤/°¡½ÃÈ­ - ¸ÞÀÎ (»óÅÂ¸Ó½Å)" uid="5010" uid_parent="root"/>
+  <Constant outputs="value:5020.value" type="cluster{bool.status,int32.code,string.source}" uid="5020" uid_parent="root" value="[false,0,]"/>
+  <Constant outputs="value:5030.value" type="bool" uid="5030" uid_parent="root" value="false"/>
+  <Constant outputs="value:5040.value" type="int32" uid="5040" uid_parent="root" value="0"/>
+  <Constant outputs="value:5050.value" type="int32" uid="5050" uid_parent="root" value="0"/>
+  <Constant outputs="value:5060.value" type="cluster{int32.Width,int32.Height}" uid="5060" uid_parent="root" value="[1600,940]"/>
+  <Node _name="Property Node" fields="write+Label.Visible,write+Position\3ALeft,write+Position\3ATop,write+Draw Area Size" link="Screen" type="{LV.Picture}" inputs="error in (no error):5020.value,Label.Visible:5030.value,Position\3ALeft:5040.value,Position\3ATop:5050.value,Draw Area Size:5060.value" outputs="error out:5070.error out" uid="5070" uid_parent="root"/>
+  <Constant outputs="value:5080.value" type="bool" uid="5080" uid_parent="root" value="false"/>
+  <Constant outputs="value:5090.value" type="string" uid="5090" uid_parent="root" value="128CH AI ¸ð´ÏÅÍ"/>
+  <Constant outputs="value:5100.value" type="cluster{int32.Left,int32.Top,int32.Right,int32.Bottom}" uid="5100" uid_parent="root" value="[40,40,1640,980]"/>
+  <Node _name="Property Node" fields="write+Front Panel Window\3AShow Scroll Bars,write+Front Panel Window\3ATitle,write+Front Panel Window\3APanel Bounds" type="{LV.VI}" inputs="error in (no error):5070.error out,Front Panel Window\3AShow Scroll Bars:5080.value,Front Panel Window\3ATitle:5090.value,Front Panel Window\3APanel Bounds:5100.value" outputs="error out:5110.error out" uid="5110" uid_parent="root"/>
+  <FreeLabel comment="Ã¢ = 1600x940 Äµ¹ö½º\2C ÀÌ¸§ ÀÖ´Â Å¥ ÁØºñ" uid="5120" uid_parent="root"/>
+  <Constant outputs="value:5130.value" type="string" uid="5130" uid_parent="root" value="AIDAQ_CMD"/>
+  <Constant outputs="value:5140.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="5140" uid_parent="root" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+  <Constant outputs="value:5150.value" type="int32" uid="5150" uid_parent="root" value="-1"/>
+  <Node _name="Obtain Queue" inputs="name (unnamed):5130.value,element data type:5140.value,max queue size (-1\2C unlimited):5150.value,error in (no error):5110.error out" outputs="queue out:5160.queue out,created new?:5160.created new?,error out:5160.error out" uid="5160" uid_parent="root"/>
+  <Constant outputs="value:5170.value" type="string" uid="5170" uid_parent="root" value="AIDAQ_LIVE"/>
+  <Constant outputs="value:5180.value" type="cluster{array.2{double}.Data,array{double}.Values,double.dt,bool.Running,bool.Logging,string.Message,path.Log File}" uid="5180" uid_parent="root" value="[[],[],0.001,false,false,,]"/>
+  <Constant outputs="value:5190.value" type="int32" uid="5190" uid_parent="root" value="1"/>
+  <Node _name="Obtain Queue" inputs="name (unnamed):5170.value,element data type:5180.value,max queue size (-1\2C unlimited):5190.value,error in (no error):5160.error out" outputs="queue out:5200.queue out,created new?:5200.created new?,error out:5200.error out" uid="5200" uid_parent="root"/>
+  <Constant outputs="value:5210.value" type="string" uid="5210" uid_parent="root" value="AIDAQ_POPUP"/>
+  <Constant outputs="value:5220.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="5220" uid_parent="root" value="[]"/>
+  <Constant outputs="value:5230.value" type="int32" uid="5230" uid_parent="root" value="-1"/>
+  <Node _name="Obtain Queue" inputs="name (unnamed):5210.value,element data type:5220.value,max queue size (-1\2C unlimited):5230.value,error in (no error):5200.error out" outputs="queue out:5240.queue out,created new?:5240.created new?,error out:5240.error out" uid="5240" uid_parent="root"/>
+  <Constant outputs="value:5250.value" type="cluster{bool.status,int32.code,string.source}" uid="5250" uid_parent="root" value="[false,0,]"/>
+  <Call target="DAQ_Engine.vi" inputs="error in:5250.value" outputs="error out:5260.error out" uid="5260" uid_parent="root"/>
+  <FreeLabel comment="DAQ ¿£Áø\3A º°µµ ·çÇÁ·Î ÃøÁ¤/ÀúÀå" uid="5270" uid_parent="root"/>
+  <Structure _name="While Loop" count="5280.value" label="±×·¡ÇÁ ÆË¾÷ ·çÇÁ" uid="5280" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5240.queue out" outputs="value:5290.value" uid="5290" uid_parent="5280"/>
+    <Constant outputs="value:5300.value" type="cluster{bool.status,int32.code,string.source}" uid="5300" uid_parent="5280" value="[false,0,]"/>
+    <Node _name="Dequeue Element" inputs="queue:5290.value,error in (no error):5300.value" outputs="queue out:5310.queue out,element:5310.element,timed out?:5310.timed out?,error out:5310.error out" uid="5310" uid_parent="5280"/>
+    <Node _name="Array Size" inputs="array:5310.element" outputs="size(s):5320.size(s)" uid="5320" uid_parent="5280"/>
+    <Constant outputs="value:5330.value" type="int32" uid="5330" uid_parent="5280" value="0"/>
+    <Node _name="Equal?" inputs="x:5320.size(s),y:5330.value" outputs="x = y?:5340.x = y?" uid="5340" uid_parent="5280"/>
+    <Structure _name="Case Structure" selectin="5340.x = y?" uid="5350" uid_parent="5280">
+      <Tunnel _id="In1" inputs="value:5310.element" uid="5360" uid_parent="5350"/>
+      <Tunnel _id="In2" inputs="value:5310.error out" uid="5370" uid_parent="5350"/>
+      <CaseFrame selector="False" selectout="" label="±×·¡ÇÁ ÆË¾÷ ¿­±â" uid="5380" uid_parent="5350">
+        <Tunnel _id="In1" outputs="value:5390.value" uid="5390" uid_parent="5380"/>
+        <Tunnel _id="In2" outputs="value:5400.value" uid="5400" uid_parent="5380"/>
+        <Constant outputs="value:5410.value" type="cluster{bool.status,int32.code,string.source}" uid="5410" uid_parent="5380" value="[false,0,]"/>
+        <Call target="Dlg_Graph.vi" inputs="Channels:5390.value,error in:5410.value" outputs="error out:5420.error out" uid="5420" uid_parent="5380"/>
+        <Tunnel _id="Out1" inputs="value:5420.error out" uid="5430" uid_parent="5380"/>
+      </CaseFrame>
+      <CaseFrame selector="True" selectout="" label="Á¾·á ½ÅÈ£" uid="5440" uid_parent="5350">
+        <Tunnel _id="In1" outputs="value:5450.value" uid="5450" uid_parent="5440"/>
+        <Tunnel _id="In2" outputs="value:5460.value" uid="5460" uid_parent="5440"/>
+        <Tunnel _id="Out1" inputs="value:5460.value" uid="5470" uid_parent="5440"/>
+      </CaseFrame>
+      <Tunnel _id="Out1" outputs="value:5480.value" uid="5480" uid_parent="5350"/>
+    </Structure>
+    <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5310.error out" outputs="status:5490.status" uid="5490" uid_parent="5280"/>
+    <Node _name="Or" inputs="x:5340.x = y?,y:5490.status" outputs="x .or. y?:5500.x .or. y?" uid="5500" uid_parent="5280"/>
+    <Tunnel _id="Out1" inputs="value:5480.value" outputs="value:5510.value" uid="5510" uid_parent="5280"/>
+    <Condition inputs="value:5500.x .or. y?" uid="5520" uid_parent="5280" value="stop"/>
+  </Structure>
+  <Constant outputs="value:5530.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="5530" uid_parent="root" value="0"/>
+  <Constant outputs="value:5540.value" type="cluster{array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,bool.Running,bool.Logging,array.2{double}.Data,double.dt,int32.Hover,int32.Selected,string.Message,path.Log File}" uid="5540" uid_parent="root" value="[[],[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],false,false,[],0.001,-1,-1,,]"/>
+  <Structure _name="While Loop" count="5550.value" label="UI »óÅÂ¸Ó½Å" uid="5550" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5160.queue out" outputs="value:5560.value" uid="5560" uid_parent="5550"/>
+    <Tunnel _id="In2" inputs="value:5200.queue out" outputs="value:5570.value" uid="5570" uid_parent="5550"/>
+    <Tunnel _id="In3" inputs="value:5240.queue out" outputs="value:5580.value" uid="5580" uid_parent="5550"/>
+    <Structure _name="Case Structure" selectin="5590.value" uid="5620" uid_parent="5550">
+      <Tunnel _id="In1" inputs="value:5600.value" uid="5630" uid_parent="5620"/>
+      <Tunnel _id="In2" inputs="value:5610.value" uid="5640" uid_parent="5620"/>
+      <Tunnel _id="In3" inputs="value:5560.value" uid="5650" uid_parent="5620"/>
+      <Tunnel _id="In4" inputs="value:5570.value" uid="5660" uid_parent="5620"/>
+      <Tunnel _id="In5" inputs="value:5580.value" uid="5670" uid_parent="5620"/>
+      <CaseFrame selector='"Init"' selectout="" label="ÃÊ±âÈ­" uid="5680" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:5690.value" uid="5690" uid_parent="5680"/>
+        <Tunnel _id="In2" outputs="value:5700.value" uid="5700" uid_parent="5680"/>
+        <Tunnel _id="In3" outputs="value:5710.value" uid="5710" uid_parent="5680"/>
+        <Tunnel _id="In4" outputs="value:5720.value" uid="5720" uid_parent="5680"/>
+        <Tunnel _id="In5" outputs="value:5730.value" uid="5730" uid_parent="5680"/>
+        <Call target="Ch_Defaults.vi" inputs="error in:5700.value" outputs="Channels:5740.Channels,error out:5740.error out" uid="5740" uid_parent="5680"/>
+        <Node _name="Bundle By Name" fields="Channels" inputs="Channels:5740.Channels,input cluster:5690.value" outputs="output cluster:5750.output cluster" uid="5750" uid_parent="5680"/>
+        <Node _name="Unbundle By Name" fields="Channels,Settings" inputs="input cluster:5750.output cluster" outputs="Channels:5760.Channels,Settings:5760.Settings" uid="5760" uid_parent="5680"/>
+        <Constant outputs="value:5770.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="5770" uid_parent="5680" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+        <Constant outputs="value:5780.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="5780" uid_parent="5680" value="2"/>
+        <Node _name="Bundle By Name" fields="Cmd,Settings,Channels" inputs="Cmd:5780.value,Settings:5760.Settings,Channels:5760.Channels,input cluster:5770.value" outputs="output cluster:5790.output cluster" uid="5790" uid_parent="5680"/>
+        <Constant outputs="value:5800.value" type="cluster{bool.status,int32.code,string.source}" uid="5800" uid_parent="5680" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:5710.value,element:5790.output cluster,error in (no error):5800.value" outputs="queue out:5810.queue out,timed out?:5810.timed out?,error out:5810.error out" uid="5810" uid_parent="5680"/>
+        <FreeLabel comment="ÃÊ±âÈ­\3A 128Ã¤³Î ±âº»°ª -&gt; ¿£Áø¿¡ Config" uid="5820" uid_parent="5680"/>
+        <Constant outputs="value:5830.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="5830" uid_parent="5680" value="2"/>
+        <Constant outputs="value:5840.value" type="bool" uid="5840" uid_parent="5680" value="false"/>
+        <Tunnel _id="Out1" inputs="value:5750.output cluster" uid="5850" uid_parent="5680"/>
+        <Tunnel _id="Out2" inputs="value:5830.value" uid="5860" uid_parent="5680"/>
+        <Tunnel _id="Out3" inputs="value:5740.error out" uid="5870" uid_parent="5680"/>
+        <Tunnel _id="Out4" inputs="value:5840.value" uid="5880" uid_parent="5680"/>
+      </CaseFrame>
+      <CaseFrame selector='"Wait"' selectout="" label="ÀÌº¥Æ® ´ë±â (200 ms)" uid="5890" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:5900.value" uid="5900" uid_parent="5890"/>
+        <Tunnel _id="In2" outputs="value:5910.value" uid="5910" uid_parent="5890"/>
+        <Tunnel _id="In3" outputs="value:5920.value" uid="5920" uid_parent="5890"/>
+        <Tunnel _id="In4" outputs="value:5930.value" uid="5930" uid_parent="5890"/>
+        <Tunnel _id="In5" outputs="value:5940.value" uid="5940" uid_parent="5890"/>
+        <Node _name="Unbundle By Name" fields="Running" inputs="input cluster:5900.value" outputs="Running:5950.Running" uid="5950" uid_parent="5890"/>
+        <Node _name="Not" inputs="x:5950.Running" outputs=".not. x?:5960..not. x?" uid="5960" uid_parent="5890"/>
+        <Node _name="Build Array" inputs="element:5950.Running,element:5950.Running,element:5960..not. x?,element:5960..not. x?" outputs="appended array:5970.appended array" uid="5970" uid_parent="5890"/>
+        <Constant outputs="value:5980.value" type="int32" uid="5980" uid_parent="5890" value="200"/>
+        <Structure _name="Event Structure" timeoutin="5980.value" uid="5990" uid_parent="5890">
+          <Tunnel _id="In1" inputs="value:5900.value" uid="6000" uid_parent="5990"/>
+          <Tunnel _id="In2" inputs="value:5970.appended array" uid="6010" uid_parent="5990"/>
+          <CaseFrame selector=' "Screen"\3A Mouse Down ' selectout="" uid="6020" uid_parent="5990">
+            <Tunnel _id="In1" outputs="value:6030.value" uid="6030" uid_parent="6020"/>
+            <Tunnel _id="In2" outputs="value:6040.value" uid="6040" uid_parent="6020"/>
+            <Constant outputs="value:6050.value" type="cluster{bool.status,int32.code,string.source}" uid="6050" uid_parent="6020" value="[false,0,]"/>
+            <Node _name="Property Node" fields="read+Mouse" link="Screen" type="{LV.Picture}" inputs="error in (no error):6050.value" outputs="Mouse:6060.Mouse,error out:6060.error out" uid="6060" uid_parent="6020"/>
+            <Node _name="Unbundle By Name" fields="Mouse Position" inputs="input cluster:6060.Mouse" outputs="Mouse Position:6070.Mouse Position" uid="6070" uid_parent="6020"/>
+            <Call target="UI_Point_XY.vi" inputs="Point:6070.Mouse Position,error in:6060.error out" outputs="X:6080.X,Y:6080.Y,error out:6080.error out" uid="6080" uid_parent="6020"/>
+            <Constant outputs="value:6090.value" type="cluster{bool.status,int32.code,string.source}" uid="6090" uid_parent="6020" value="[false,0,]"/>
+            <Call target="UI_Header_Layout.vi" inputs="error in:6090.value" outputs="Specs:6100.Specs,error out:6100.error out" uid="6100" uid_parent="6020"/>
+            <Constant outputs="value:6110.value" type="cluster{bool.status,int32.code,string.source}" uid="6110" uid_parent="6020" value="[false,0,]"/>
+            <Call target="UI_Hit_Test.vi" inputs="X:6080.X,Y:6080.Y,Specs:6100.Specs,Dim Groups:6040.value,error in:6110.value" outputs="Index:6120.Index,Group:6120.Group,Value:6120.Value,error out:6120.error out" uid="6120" uid_parent="6020"/>
+            <Constant outputs="value:6130.value" type="cluster{bool.status,int32.code,string.source}" uid="6130" uid_parent="6020" value="[false,0,]"/>
+            <Call target="UI_Tile_Hit.vi" inputs="X:6080.X,Y:6080.Y,error in:6130.value" outputs="Channel Index:6140.Channel Index,error out:6140.error out" uid="6140" uid_parent="6020"/>
+            <Constant _name="Button -&gt; State" outputs="value:6150.value" type="array{uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}}" uid="6150" uid_parent="6020" value="[3,4,5,6,8,9]"/>
+            <Constant outputs="value:6160.value" type="int32" uid="6160" uid_parent="6020" value="0"/>
+            <Node _name="Greater Or Equal?" inputs="x:6120.Group,y:6160.value" outputs="x &gt;= y?:6170.x &gt;= y?" uid="6170" uid_parent="6020"/>
+            <Constant outputs="value:6180.value" type="int32" uid="6180" uid_parent="6020" value="0"/>
+            <Node _name="Greater Or Equal?" inputs="x:6140.Channel Index,y:6180.value" outputs="x &gt;= y?:6190.x &gt;= y?" uid="6190" uid_parent="6020"/>
+            <Node _name="Index Array" inputs="array:6150.value,index:6120.Group" outputs="element:6200.element" uid="6200" uid_parent="6020"/>
+            <Constant outputs="value:6210.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="6210" uid_parent="6020" value="7"/>
+            <Constant outputs="value:6220.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="6220" uid_parent="6020" value="1"/>
+            <Node _name="Select" inputs="t:6210.value,s:6190.x &gt;= y?,f:6220.value" outputs="s? t\3Af:6230.s? t\3Af" uid="6230" uid_parent="6020"/>
+            <Node _name="Select" inputs="t:6200.element,s:6170.x &gt;= y?,f:6230.s? t\3Af" outputs="s? t\3Af:6240.s? t\3Af" uid="6240" uid_parent="6020"/>
+            <FreeLabel comment="Å¬¸¯\3A ¹öÆ° -&gt; ÇØ´ç »óÅÂ\2C Å¸ÀÏ -&gt; Ã¤³Î ¼³Á¤" uid="6250" uid_parent="6020"/>
+            <Node _name="Bundle By Name" fields="Selected" inputs="Selected:6140.Channel Index,input cluster:6030.value" outputs="output cluster:6260.output cluster" uid="6260" uid_parent="6020"/>
+            <Constant outputs="value:6270.value" type="bool" uid="6270" uid_parent="6020" value="false"/>
+            <Tunnel _id="Out1" inputs="value:6260.output cluster" uid="6280" uid_parent="6020"/>
+            <Tunnel _id="Out2" inputs="value:6240.s? t\3Af" uid="6290" uid_parent="6020"/>
+            <Tunnel _id="Out3" inputs="value:6270.value" uid="6300" uid_parent="6020"/>
+          </CaseFrame>
+          <CaseFrame selector=' "Screen"\3A Mouse Move ' selectout="" uid="6310" uid_parent="5990">
+            <Tunnel _id="In1" outputs="value:6320.value" uid="6320" uid_parent="6310"/>
+            <Tunnel _id="In2" outputs="value:6330.value" uid="6330" uid_parent="6310"/>
+            <Constant outputs="value:6340.value" type="cluster{bool.status,int32.code,string.source}" uid="6340" uid_parent="6310" value="[false,0,]"/>
+            <Node _name="Property Node" fields="read+Mouse" link="Screen" type="{LV.Picture}" inputs="error in (no error):6340.value" outputs="Mouse:6350.Mouse,error out:6350.error out" uid="6350" uid_parent="6310"/>
+            <Node _name="Unbundle By Name" fields="Mouse Position" inputs="input cluster:6350.Mouse" outputs="Mouse Position:6360.Mouse Position" uid="6360" uid_parent="6310"/>
+            <Call target="UI_Point_XY.vi" inputs="Point:6360.Mouse Position,error in:6350.error out" outputs="X:6370.X,Y:6370.Y,error out:6370.error out" uid="6370" uid_parent="6310"/>
+            <Constant outputs="value:6380.value" type="cluster{bool.status,int32.code,string.source}" uid="6380" uid_parent="6310" value="[false,0,]"/>
+            <Call target="UI_Header_Layout.vi" inputs="error in:6380.value" outputs="Specs:6390.Specs,error out:6390.error out" uid="6390" uid_parent="6310"/>
+            <Constant outputs="value:6400.value" type="cluster{bool.status,int32.code,string.source}" uid="6400" uid_parent="6310" value="[false,0,]"/>
+            <Call target="UI_Hit_Test.vi" inputs="X:6370.X,Y:6370.Y,Specs:6390.Specs,Dim Groups:6330.value,error in:6400.value" outputs="Index:6410.Index,Group:6410.Group,Value:6410.Value,error out:6410.error out" uid="6410" uid_parent="6310"/>
+            <Node _name="Unbundle By Name" fields="Hover" inputs="input cluster:6320.value" outputs="Hover:6420.Hover" uid="6420" uid_parent="6310"/>
+            <Node _name="Not Equal?" inputs="x:6420.Hover,y:6410.Index" outputs="x != y?:6430.x != y?" uid="6430" uid_parent="6310"/>
+            <FreeLabel comment="¹öÆ° À§ °­Á¶°¡ ¹Ù²î¸é ´Ù½Ã ±×¸²" uid="6440" uid_parent="6310"/>
+            <Node _name="Bundle By Name" fields="Hover" inputs="Hover:6410.Index,input cluster:6320.value" outputs="output cluster:6450.output cluster" uid="6450" uid_parent="6310"/>
+            <Constant outputs="value:6460.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="6460" uid_parent="6310" value="2"/>
+            <Constant outputs="value:6470.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="6470" uid_parent="6310" value="1"/>
+            <Node _name="Select" inputs="t:6460.value,s:6430.x != y?,f:6470.value" outputs="s? t\3Af:6480.s? t\3Af" uid="6480" uid_parent="6310"/>
+            <Constant outputs="value:6490.value" type="bool" uid="6490" uid_parent="6310" value="false"/>
+            <Tunnel _id="Out1" inputs="value:6450.output cluster" uid="6500" uid_parent="6310"/>
+            <Tunnel _id="Out2" inputs="value:6480.s? t\3Af" uid="6510" uid_parent="6310"/>
+            <Tunnel _id="Out3" inputs="value:6490.value" uid="6520" uid_parent="6310"/>
+          </CaseFrame>
+          <CaseFrame selector=" Panel Close? " selectout="" uid="6530" uid_parent="5990">
+            <Tunnel _id="In1" outputs="value:6540.value" uid="6540" uid_parent="6530"/>
+            <Tunnel _id="In2" outputs="value:6550.value" uid="6550" uid_parent="6530"/>
+            <Constant outputs="value:6560.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="6560" uid_parent="6530" value="9"/>
+            <Constant outputs="value:6570.value" type="bool" uid="6570" uid_parent="6530" value="false"/>
+            <Tunnel _id="Out1" inputs="value:6540.value" uid="6580" uid_parent="6530"/>
+            <Tunnel _id="Out2" inputs="value:6560.value" uid="6590" uid_parent="6530"/>
+            <Tunnel _id="Out3" inputs="value:6570.value" uid="6600" uid_parent="6530"/>
+          </CaseFrame>
+          <CaseFrame selector=" Timeout " selectout="" uid="6610" uid_parent="5990">
+            <Tunnel _id="In1" outputs="value:6620.value" uid="6620" uid_parent="6610"/>
+            <Tunnel _id="In2" outputs="value:6630.value" uid="6630" uid_parent="6610"/>
+            <Constant outputs="value:6640.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="6640" uid_parent="6610" value="2"/>
+            <Constant outputs="value:6650.value" type="bool" uid="6650" uid_parent="6610" value="false"/>
+            <Tunnel _id="Out1" inputs="value:6620.value" uid="6660" uid_parent="6610"/>
+            <Tunnel _id="Out2" inputs="value:6640.value" uid="6670" uid_parent="6610"/>
+            <Tunnel _id="Out3" inputs="value:6650.value" uid="6680" uid_parent="6610"/>
+          </CaseFrame>
+          <Tunnel _id="Out1" outputs="value:6690.value" uid="6690" uid_parent="5990"/>
+          <Tunnel _id="Out2" outputs="value:6700.value" uid="6700" uid_parent="5990"/>
+          <Tunnel _id="Out3" outputs="value:6710.value" uid="6710" uid_parent="5990"/>
+        </Structure>
+        <Tunnel _id="Out1" inputs="value:6690.value" uid="6720" uid_parent="5890"/>
+        <Tunnel _id="Out2" inputs="value:6700.value" uid="6730" uid_parent="5890"/>
+        <Tunnel _id="Out3" inputs="value:5910.value" uid="6740" uid_parent="5890"/>
+        <Tunnel _id="Out4" inputs="value:6710.value" uid="6750" uid_parent="5890"/>
+      </CaseFrame>
+      <CaseFrame selector='"Update"' selectout="" label="µ¥ÀÌÅÍ ¹Ý¿µ + È­¸é ±×¸®±â" uid="6760" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:6770.value" uid="6770" uid_parent="6760"/>
+        <Tunnel _id="In2" outputs="value:6780.value" uid="6780" uid_parent="6760"/>
+        <Tunnel _id="In3" outputs="value:6790.value" uid="6790" uid_parent="6760"/>
+        <Tunnel _id="In4" outputs="value:6800.value" uid="6800" uid_parent="6760"/>
+        <Tunnel _id="In5" outputs="value:6810.value" uid="6810" uid_parent="6760"/>
+        <Constant outputs="value:6820.value" type="int32" uid="6820" uid_parent="6760" value="0"/>
+        <Constant outputs="value:6830.value" type="cluster{bool.status,int32.code,string.source}" uid="6830" uid_parent="6760" value="[false,0,]"/>
+        <Node _name="Dequeue Element" inputs="queue:6800.value,timeout in ms (-1):6820.value,error in (no error):6830.value" outputs="queue out:6840.queue out,element:6840.element,timed out?:6840.timed out?,error out:6840.error out" uid="6840" uid_parent="6760"/>
+        <Structure _name="Case Structure" selectin="6840.timed out?" uid="6850" uid_parent="6760">
+          <Tunnel _id="In1" inputs="value:6770.value" uid="6860" uid_parent="6850"/>
+          <Tunnel _id="In2" inputs="value:6840.element" uid="6870" uid_parent="6850"/>
+          <CaseFrame selector="False" selectout="" label="»õ µ¥ÀÌÅÍ ¹Ý¿µ" uid="6880" uid_parent="6850">
+            <Tunnel _id="In1" outputs="value:6890.value" uid="6890" uid_parent="6880"/>
+            <Tunnel _id="In2" outputs="value:6900.value" uid="6900" uid_parent="6880"/>
+            <Node _name="Unbundle By Name" fields="Data,Values,dt,Running,Logging,Message,Log File" inputs="input cluster:6900.value" outputs="Data:6910.Data,Values:6910.Values,dt:6910.dt,Running:6910.Running,Logging:6910.Logging,Message:6910.Message,Log File:6910.Log File" uid="6910" uid_parent="6880"/>
+            <Node _name="Unbundle By Name" fields="Channels" inputs="input cluster:6890.value" outputs="Channels:6920.Channels" uid="6920" uid_parent="6880"/>
+            <Constant outputs="value:6930.value" type="cluster{bool.status,int32.code,string.source}" uid="6930" uid_parent="6880" value="[false,0,]"/>
+            <Call target="Ch_Merge_Values.vi" inputs="Channels:6920.Channels,Values:6910.Values,error in:6930.value" outputs="Channels out:6940.Channels out,error out:6940.error out" uid="6940" uid_parent="6880"/>
+            <Node _name="Bundle By Name" fields="Channels,Data,dt,Running,Logging,Message,Log File" inputs="Channels:6940.Channels out,Data:6910.Data,dt:6910.dt,Running:6910.Running,Logging:6910.Logging,Message:6910.Message,Log File:6910.Log File,input cluster:6890.value" outputs="output cluster:6950.output cluster" uid="6950" uid_parent="6880"/>
+            <Tunnel _id="Out1" inputs="value:6950.output cluster" uid="6960" uid_parent="6880"/>
+          </CaseFrame>
+          <CaseFrame selector="True" selectout="" label="»õ µ¥ÀÌÅÍ ¾øÀ½" uid="6970" uid_parent="6850">
+            <Tunnel _id="In1" outputs="value:6980.value" uid="6980" uid_parent="6970"/>
+            <Tunnel _id="In2" outputs="value:6990.value" uid="6990" uid_parent="6970"/>
+            <Tunnel _id="Out1" inputs="value:6980.value" uid="7000" uid_parent="6970"/>
+          </CaseFrame>
+          <Tunnel _id="Out1" outputs="value:7010.value" uid="7010" uid_parent="6850"/>
+        </Structure>
+        <Node _name="Unbundle By Name" fields="Channels,Settings,Running,Logging,Data,dt,Hover,Message,Log File" inputs="input cluster:7010.value" outputs="Channels:7020.Channels,Settings:7020.Settings,Running:7020.Running,Logging:7020.Logging,Data:7020.Data,dt:7020.dt,Hover:7020.Hover,Message:7020.Message,Log File:7020.Log File" uid="7020" uid_parent="6760"/>
+        <Constant outputs="value:7030.value" type="cluster{bool.status,int32.code,string.source}" uid="7030" uid_parent="6760" value="[false,0,]"/>
+        <Call target="UI_Status_Text.vi" inputs="Settings:7020.Settings,Running:7020.Running,Logging:7020.Logging,Log File:7020.Log File,Message:7020.Message,error in:7030.value" outputs="Status:7040.Status,error out:7040.error out" uid="7040" uid_parent="6760"/>
+        <Node _name="Tick Count (ms)" inputs="" outputs="millisecond timer value:7050.millisecond timer value" uid="7050" uid_parent="6760"/>
+        <Constant outputs="value:7060.value" type="uint32" uid="7060" uid_parent="6760" value="400"/>
+        <Node _name="Quotient &amp; Remainder" inputs="x:7050.millisecond timer value,y:7060.value" outputs="x-y*floor(x/y):7070.x-y*floor(x/y),floor(x/y):7070.floor(x/y)" uid="7070" uid_parent="6760"/>
+        <Constant outputs="value:7080.value" type="uint32" uid="7080" uid_parent="6760" value="2"/>
+        <Node _name="Quotient &amp; Remainder" inputs="x:7070.floor(x/y),y:7080.value" outputs="x-y*floor(x/y):7090.x-y*floor(x/y),floor(x/y):7090.floor(x/y)" uid="7090" uid_parent="6760"/>
+        <Constant outputs="value:7100.value" type="uint32" uid="7100" uid_parent="6760" value="0"/>
+        <Node _name="Equal?" inputs="x:7090.x-y*floor(x/y),y:7100.value" outputs="x = y?:7110.x = y?" uid="7110" uid_parent="6760"/>
+        <FreeLabel comment="È­¸é °»½Å (400 ms ÁÖ±â Á¡¸ê)" uid="7120" uid_parent="6760"/>
+        <Constant outputs="value:7130.value" type="cluster{bool.status,int32.code,string.source}" uid="7130" uid_parent="6760" value="[false,0,]"/>
+        <Call target="UI_Render_Main.vi" inputs="Channels:7020.Channels,Data:7020.Data,dt:7020.dt,Running:7020.Running,Logging:7020.Logging,Hover Button:7020.Hover,Phase:7110.x = y?,Status:7040.Status,error in:7130.value" outputs="Picture:7140.Picture,error out:7140.error out" uid="7140" uid_parent="6760"/>
+        <Indicator _name="Screen" inputs="value:7140.Picture" type="picture" uid="7150" uid_parent="6760" value=""/>
+        <Constant outputs="value:7160.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="7160" uid_parent="6760" value="1"/>
+        <Constant outputs="value:7170.value" type="bool" uid="7170" uid_parent="6760" value="false"/>
+        <Tunnel _id="Out1" inputs="value:7010.value" uid="7180" uid_parent="6760"/>
+        <Tunnel _id="Out2" inputs="value:7160.value" uid="7190" uid_parent="6760"/>
+        <Tunnel _id="Out3" inputs="value:6780.value" uid="7200" uid_parent="6760"/>
+        <Tunnel _id="Out4" inputs="value:7170.value" uid="7210" uid_parent="6760"/>
+      </CaseFrame>
+      <CaseFrame selector='"Settings"' selectout="" label="ÃøÁ¤ ¼³Á¤ ÆË¾÷" uid="7220" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:7230.value" uid="7230" uid_parent="7220"/>
+        <Tunnel _id="In2" outputs="value:7240.value" uid="7240" uid_parent="7220"/>
+        <Tunnel _id="In3" outputs="value:7250.value" uid="7250" uid_parent="7220"/>
+        <Tunnel _id="In4" outputs="value:7260.value" uid="7260" uid_parent="7220"/>
+        <Tunnel _id="In5" outputs="value:7270.value" uid="7270" uid_parent="7220"/>
+        <Node _name="Unbundle By Name" fields="Settings" inputs="input cluster:7230.value" outputs="Settings:7280.Settings" uid="7280" uid_parent="7220"/>
+        <Constant outputs="value:7290.value" type="cluster{bool.status,int32.code,string.source}" uid="7290" uid_parent="7220" value="[false,0,]"/>
+        <Call target="Dlg_Settings.vi" inputs="Settings:7280.Settings,error in:7290.value" outputs="Settings out:7300.Settings out,OK?:7300.OK?,error out:7300.error out" uid="7300" uid_parent="7220"/>
+        <FreeLabel comment="ÃøÁ¤ ¿É¼Ç ÆË¾÷ (´ë±â Áß¿¡¸¸ ¹öÆ° È°¼º)" uid="7310" uid_parent="7220"/>
+        <Node _name="Bundle By Name" fields="Settings" inputs="Settings:7300.Settings out,input cluster:7230.value" outputs="output cluster:7320.output cluster" uid="7320" uid_parent="7220"/>
+        <Constant outputs="value:7330.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="7330" uid_parent="7220" value="2"/>
+        <Constant outputs="value:7340.value" type="bool" uid="7340" uid_parent="7220" value="false"/>
+        <Tunnel _id="Out1" inputs="value:7320.output cluster" uid="7350" uid_parent="7220"/>
+        <Tunnel _id="Out2" inputs="value:7330.value" uid="7360" uid_parent="7220"/>
+        <Tunnel _id="Out3" inputs="value:7240.value" uid="7370" uid_parent="7220"/>
+        <Tunnel _id="Out4" inputs="value:7340.value" uid="7380" uid_parent="7220"/>
+      </CaseFrame>
+      <CaseFrame selector='"Start"' selectout="" label="ÃøÁ¤ ½ÃÀÛ" uid="7390" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:7400.value" uid="7400" uid_parent="7390"/>
+        <Tunnel _id="In2" outputs="value:7410.value" uid="7410" uid_parent="7390"/>
+        <Tunnel _id="In3" outputs="value:7420.value" uid="7420" uid_parent="7390"/>
+        <Tunnel _id="In4" outputs="value:7430.value" uid="7430" uid_parent="7390"/>
+        <Tunnel _id="In5" outputs="value:7440.value" uid="7440" uid_parent="7390"/>
+        <Node _name="Unbundle By Name" fields="Channels,Settings" inputs="input cluster:7400.value" outputs="Channels:7450.Channels,Settings:7450.Settings" uid="7450" uid_parent="7390"/>
+        <Constant outputs="value:7460.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="7460" uid_parent="7390" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+        <Constant outputs="value:7470.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="7470" uid_parent="7390" value="0"/>
+        <Node _name="Bundle By Name" fields="Cmd,Settings,Channels" inputs="Cmd:7470.value,Settings:7450.Settings,Channels:7450.Channels,input cluster:7460.value" outputs="output cluster:7480.output cluster" uid="7480" uid_parent="7390"/>
+        <Constant outputs="value:7490.value" type="cluster{bool.status,int32.code,string.source}" uid="7490" uid_parent="7390" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:7420.value,element:7480.output cluster,error in (no error):7490.value" outputs="queue out:7500.queue out,timed out?:7500.timed out?,error out:7500.error out" uid="7500" uid_parent="7390"/>
+        <Constant outputs="value:7510.value" type="string" uid="7510" uid_parent="7390" value="ÃøÁ¤ ½ÃÀÛ ¿äÃ»"/>
+        <Node _name="Bundle By Name" fields="Message" inputs="Message:7510.value,input cluster:7400.value" outputs="output cluster:7520.output cluster" uid="7520" uid_parent="7390"/>
+        <Constant outputs="value:7530.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="7530" uid_parent="7390" value="2"/>
+        <Constant outputs="value:7540.value" type="bool" uid="7540" uid_parent="7390" value="false"/>
+        <Tunnel _id="Out1" inputs="value:7520.output cluster" uid="7550" uid_parent="7390"/>
+        <Tunnel _id="Out2" inputs="value:7530.value" uid="7560" uid_parent="7390"/>
+        <Tunnel _id="Out3" inputs="value:7410.value" uid="7570" uid_parent="7390"/>
+        <Tunnel _id="Out4" inputs="value:7540.value" uid="7580" uid_parent="7390"/>
+      </CaseFrame>
+      <CaseFrame selector='"Stop"' selectout="" label="ÃøÁ¤ Á¤Áö" uid="7590" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:7600.value" uid="7600" uid_parent="7590"/>
+        <Tunnel _id="In2" outputs="value:7610.value" uid="7610" uid_parent="7590"/>
+        <Tunnel _id="In3" outputs="value:7620.value" uid="7620" uid_parent="7590"/>
+        <Tunnel _id="In4" outputs="value:7630.value" uid="7630" uid_parent="7590"/>
+        <Tunnel _id="In5" outputs="value:7640.value" uid="7640" uid_parent="7590"/>
+        <Node _name="Unbundle By Name" fields="Channels,Settings" inputs="input cluster:7600.value" outputs="Channels:7650.Channels,Settings:7650.Settings" uid="7650" uid_parent="7590"/>
+        <Constant outputs="value:7660.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="7660" uid_parent="7590" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+        <Constant outputs="value:7670.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="7670" uid_parent="7590" value="1"/>
+        <Node _name="Bundle By Name" fields="Cmd,Settings,Channels" inputs="Cmd:7670.value,Settings:7650.Settings,Channels:7650.Channels,input cluster:7660.value" outputs="output cluster:7680.output cluster" uid="7680" uid_parent="7590"/>
+        <Constant outputs="value:7690.value" type="cluster{bool.status,int32.code,string.source}" uid="7690" uid_parent="7590" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:7620.value,element:7680.output cluster,error in (no error):7690.value" outputs="queue out:7700.queue out,timed out?:7700.timed out?,error out:7700.error out" uid="7700" uid_parent="7590"/>
+        <Constant outputs="value:7710.value" type="string" uid="7710" uid_parent="7590" value="ÃøÁ¤ Á¤Áö ¿äÃ»"/>
+        <Node _name="Bundle By Name" fields="Message" inputs="Message:7710.value,input cluster:7600.value" outputs="output cluster:7720.output cluster" uid="7720" uid_parent="7590"/>
+        <Constant outputs="value:7730.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="7730" uid_parent="7590" value="2"/>
+        <Constant outputs="value:7740.value" type="bool" uid="7740" uid_parent="7590" value="false"/>
+        <Tunnel _id="Out1" inputs="value:7720.output cluster" uid="7750" uid_parent="7590"/>
+        <Tunnel _id="Out2" inputs="value:7730.value" uid="7760" uid_parent="7590"/>
+        <Tunnel _id="Out3" inputs="value:7610.value" uid="7770" uid_parent="7590"/>
+        <Tunnel _id="Out4" inputs="value:7740.value" uid="7780" uid_parent="7590"/>
+      </CaseFrame>
+      <CaseFrame selector='"Save"' selectout="" label="TDMS ÀúÀå ½ÃÀÛ/³¡" uid="7790" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:7800.value" uid="7800" uid_parent="7790"/>
+        <Tunnel _id="In2" outputs="value:7810.value" uid="7810" uid_parent="7790"/>
+        <Tunnel _id="In3" outputs="value:7820.value" uid="7820" uid_parent="7790"/>
+        <Tunnel _id="In4" outputs="value:7830.value" uid="7830" uid_parent="7790"/>
+        <Tunnel _id="In5" outputs="value:7840.value" uid="7840" uid_parent="7790"/>
+        <Node _name="Unbundle By Name" fields="Logging" inputs="input cluster:7800.value" outputs="Logging:7850.Logging" uid="7850" uid_parent="7790"/>
+        <Node _name="Unbundle By Name" fields="Channels,Settings" inputs="input cluster:7800.value" outputs="Channels:7860.Channels,Settings:7860.Settings" uid="7860" uid_parent="7790"/>
+        <Constant outputs="value:7870.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="7870" uid_parent="7790" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+        <Constant outputs="value:7880.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="7880" uid_parent="7790" value="4"/>
+        <Constant outputs="value:7890.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="7890" uid_parent="7790" value="3"/>
+        <Node _name="Select" inputs="t:7880.value,s:7850.Logging,f:7890.value" outputs="s? t\3Af:7900.s? t\3Af" uid="7900" uid_parent="7790"/>
+        <Node _name="Bundle By Name" fields="Cmd,Settings,Channels" inputs="Cmd:7900.s? t\3Af,Settings:7860.Settings,Channels:7860.Channels,input cluster:7870.value" outputs="output cluster:7910.output cluster" uid="7910" uid_parent="7790"/>
+        <Constant outputs="value:7920.value" type="cluster{bool.status,int32.code,string.source}" uid="7920" uid_parent="7790" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:7820.value,element:7910.output cluster,error in (no error):7920.value" outputs="queue out:7930.queue out,timed out?:7930.timed out?,error out:7930.error out" uid="7930" uid_parent="7790"/>
+        <FreeLabel comment="ÀúÀå ÁßÀÌ¸é Log Off\2C ¾Æ´Ï¸é Log On" uid="7940" uid_parent="7790"/>
+        <Constant outputs="value:7950.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="7950" uid_parent="7790" value="2"/>
+        <Constant outputs="value:7960.value" type="bool" uid="7960" uid_parent="7790" value="false"/>
+        <Tunnel _id="Out1" inputs="value:7800.value" uid="7970" uid_parent="7790"/>
+        <Tunnel _id="Out2" inputs="value:7950.value" uid="7980" uid_parent="7790"/>
+        <Tunnel _id="Out3" inputs="value:7810.value" uid="7990" uid_parent="7790"/>
+        <Tunnel _id="Out4" inputs="value:7960.value" uid="8000" uid_parent="7790"/>
+      </CaseFrame>
+      <CaseFrame selector='"Channel"' selectout="" label="Ã¤³Î ¼³Á¤ ÆË¾÷" uid="8010" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:8020.value" uid="8020" uid_parent="8010"/>
+        <Tunnel _id="In2" outputs="value:8030.value" uid="8030" uid_parent="8010"/>
+        <Tunnel _id="In3" outputs="value:8040.value" uid="8040" uid_parent="8010"/>
+        <Tunnel _id="In4" outputs="value:8050.value" uid="8050" uid_parent="8010"/>
+        <Tunnel _id="In5" outputs="value:8060.value" uid="8060" uid_parent="8010"/>
+        <Node _name="Unbundle By Name" fields="Channels,Selected" inputs="input cluster:8020.value" outputs="Channels:8070.Channels,Selected:8070.Selected" uid="8070" uid_parent="8010"/>
+        <Node _name="Index Array" inputs="array:8070.Channels,index:8070.Selected" outputs="element:8080.element" uid="8080" uid_parent="8010"/>
+        <Constant outputs="value:8090.value" type="cluster{bool.status,int32.code,string.source}" uid="8090" uid_parent="8010" value="[false,0,]"/>
+        <Call target="Dlg_Channel.vi" inputs="Channel:8080.element,error in:8090.value" outputs="Channel out:8100.Channel out,OK?:8100.OK?,Apply All:8100.Apply All,error out:8100.error out" uid="8100" uid_parent="8010"/>
+        <Structure _name="Case Structure" selectin="8100.OK?" uid="8110" uid_parent="8010">
+          <Tunnel _id="In1" inputs="value:8020.value" uid="8120" uid_parent="8110"/>
+          <Tunnel _id="In2" inputs="value:8070.Channels" uid="8130" uid_parent="8110"/>
+          <Tunnel _id="In3" inputs="value:8070.Selected" uid="8140" uid_parent="8110"/>
+          <Tunnel _id="In4" inputs="value:8100.Channel out" uid="8150" uid_parent="8110"/>
+          <Tunnel _id="In5" inputs="value:8100.Apply All" uid="8160" uid_parent="8110"/>
+          <Tunnel _id="In6" inputs="value:8040.value" uid="8170" uid_parent="8110"/>
+          <CaseFrame selector="True" selectout="" label="Àû¿ë + ¿£Áø Config" uid="8180" uid_parent="8110">
+            <Tunnel _id="In1" outputs="value:8190.value" uid="8190" uid_parent="8180"/>
+            <Tunnel _id="In2" outputs="value:8200.value" uid="8200" uid_parent="8180"/>
+            <Tunnel _id="In3" outputs="value:8210.value" uid="8210" uid_parent="8180"/>
+            <Tunnel _id="In4" outputs="value:8220.value" uid="8220" uid_parent="8180"/>
+            <Tunnel _id="In5" outputs="value:8230.value" uid="8230" uid_parent="8180"/>
+            <Tunnel _id="In6" outputs="value:8240.value" uid="8240" uid_parent="8180"/>
+            <Constant outputs="value:8250.value" type="cluster{bool.status,int32.code,string.source}" uid="8250" uid_parent="8180" value="[false,0,]"/>
+            <Call target="Ch_Apply.vi" inputs="Channels:8200.value,Index:8210.value,Channel:8220.value,Apply All:8230.value,error in:8250.value" outputs="Channels out:8260.Channels out,error out:8260.error out" uid="8260" uid_parent="8180"/>
+            <Node _name="Bundle By Name" fields="Channels" inputs="Channels:8260.Channels out,input cluster:8190.value" outputs="output cluster:8270.output cluster" uid="8270" uid_parent="8180"/>
+            <Node _name="Unbundle By Name" fields="Channels,Settings" inputs="input cluster:8270.output cluster" outputs="Channels:8280.Channels,Settings:8280.Settings" uid="8280" uid_parent="8180"/>
+            <Constant outputs="value:8290.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="8290" uid_parent="8180" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+            <Constant outputs="value:8300.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="8300" uid_parent="8180" value="2"/>
+            <Node _name="Bundle By Name" fields="Cmd,Settings,Channels" inputs="Cmd:8300.value,Settings:8280.Settings,Channels:8280.Channels,input cluster:8290.value" outputs="output cluster:8310.output cluster" uid="8310" uid_parent="8180"/>
+            <Constant outputs="value:8320.value" type="cluster{bool.status,int32.code,string.source}" uid="8320" uid_parent="8180" value="[false,0,]"/>
+            <Node _name="Enqueue Element" inputs="queue:8240.value,element:8310.output cluster,error in (no error):8320.value" outputs="queue out:8330.queue out,timed out?:8330.timed out?,error out:8330.error out" uid="8330" uid_parent="8180"/>
+            <Tunnel _id="Out1" inputs="value:8270.output cluster" uid="8340" uid_parent="8180"/>
+          </CaseFrame>
+          <CaseFrame selector="False" selectout="" label="Ãë¼Ò" uid="8350" uid_parent="8110">
+            <Tunnel _id="In1" outputs="value:8360.value" uid="8360" uid_parent="8350"/>
+            <Tunnel _id="In2" outputs="value:8370.value" uid="8370" uid_parent="8350"/>
+            <Tunnel _id="In3" outputs="value:8380.value" uid="8380" uid_parent="8350"/>
+            <Tunnel _id="In4" outputs="value:8390.value" uid="8390" uid_parent="8350"/>
+            <Tunnel _id="In5" outputs="value:8400.value" uid="8400" uid_parent="8350"/>
+            <Tunnel _id="In6" outputs="value:8410.value" uid="8410" uid_parent="8350"/>
+            <Tunnel _id="Out1" inputs="value:8360.value" uid="8420" uid_parent="8350"/>
+          </CaseFrame>
+          <Tunnel _id="Out1" outputs="value:8430.value" uid="8430" uid_parent="8110"/>
+        </Structure>
+        <FreeLabel comment="Å¸ÀÏ Å¬¸¯\3A Ã¤³Î ¼³Á¤ ÆË¾÷" uid="8440" uid_parent="8010"/>
+        <Constant outputs="value:8450.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="8450" uid_parent="8010" value="2"/>
+        <Constant outputs="value:8460.value" type="bool" uid="8460" uid_parent="8010" value="false"/>
+        <Tunnel _id="Out1" inputs="value:8430.value" uid="8470" uid_parent="8010"/>
+        <Tunnel _id="Out2" inputs="value:8450.value" uid="8480" uid_parent="8010"/>
+        <Tunnel _id="Out3" inputs="value:8030.value" uid="8490" uid_parent="8010"/>
+        <Tunnel _id="Out4" inputs="value:8460.value" uid="8500" uid_parent="8010"/>
+      </CaseFrame>
+      <CaseFrame selector='"Graph"' selectout="" label="±×·¡ÇÁ ÆË¾÷" uid="8510" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:8520.value" uid="8520" uid_parent="8510"/>
+        <Tunnel _id="In2" outputs="value:8530.value" uid="8530" uid_parent="8510"/>
+        <Tunnel _id="In3" outputs="value:8540.value" uid="8540" uid_parent="8510"/>
+        <Tunnel _id="In4" outputs="value:8550.value" uid="8550" uid_parent="8510"/>
+        <Tunnel _id="In5" outputs="value:8560.value" uid="8560" uid_parent="8510"/>
+        <Node _name="Unbundle By Name" fields="Channels" inputs="input cluster:8520.value" outputs="Channels:8570.Channels" uid="8570" uid_parent="8510"/>
+        <Constant outputs="value:8580.value" type="cluster{bool.status,int32.code,string.source}" uid="8580" uid_parent="8510" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:8560.value,element:8570.Channels,error in (no error):8580.value" outputs="queue out:8590.queue out,timed out?:8590.timed out?,error out:8590.error out" uid="8590" uid_parent="8510"/>
+        <FreeLabel comment="±×·¡ÇÁ ÆË¾÷ ·çÇÁ¿¡ ¿­±â ¿äÃ»" uid="8600" uid_parent="8510"/>
+        <Constant outputs="value:8610.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="8610" uid_parent="8510" value="2"/>
+        <Constant outputs="value:8620.value" type="bool" uid="8620" uid_parent="8510" value="false"/>
+        <Tunnel _id="Out1" inputs="value:8520.value" uid="8630" uid_parent="8510"/>
+        <Tunnel _id="Out2" inputs="value:8610.value" uid="8640" uid_parent="8510"/>
+        <Tunnel _id="Out3" inputs="value:8530.value" uid="8650" uid_parent="8510"/>
+        <Tunnel _id="Out4" inputs="value:8620.value" uid="8660" uid_parent="8510"/>
+      </CaseFrame>
+      <CaseFrame selector='"Exit"' selectout="" label="Á¾·á" uid="8670" uid_parent="5620">
+        <Tunnel _id="In1" outputs="value:8680.value" uid="8680" uid_parent="8670"/>
+        <Tunnel _id="In2" outputs="value:8690.value" uid="8690" uid_parent="8670"/>
+        <Tunnel _id="In3" outputs="value:8700.value" uid="8700" uid_parent="8670"/>
+        <Tunnel _id="In4" outputs="value:8710.value" uid="8710" uid_parent="8670"/>
+        <Tunnel _id="In5" outputs="value:8720.value" uid="8720" uid_parent="8670"/>
+        <Node _name="Unbundle By Name" fields="Channels,Settings" inputs="input cluster:8680.value" outputs="Channels:8730.Channels,Settings:8730.Settings" uid="8730" uid_parent="8670"/>
+        <Constant outputs="value:8740.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="8740" uid_parent="8670" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+        <Constant outputs="value:8750.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="8750" uid_parent="8670" value="5"/>
+        <Node _name="Bundle By Name" fields="Cmd,Settings,Channels" inputs="Cmd:8750.value,Settings:8730.Settings,Channels:8730.Channels,input cluster:8740.value" outputs="output cluster:8760.output cluster" uid="8760" uid_parent="8670"/>
+        <Constant outputs="value:8770.value" type="cluster{bool.status,int32.code,string.source}" uid="8770" uid_parent="8670" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:8700.value,element:8760.output cluster,error in (no error):8770.value" outputs="queue out:8780.queue out,timed out?:8780.timed out?,error out:8780.error out" uid="8780" uid_parent="8670"/>
+        <Constant outputs="value:8790.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="8790" uid_parent="8670" value="[]"/>
+        <Constant outputs="value:8800.value" type="cluster{bool.status,int32.code,string.source}" uid="8800" uid_parent="8670" value="[false,0,]"/>
+        <Node _name="Enqueue Element" inputs="queue:8720.value,element:8790.value,error in (no error):8800.value" outputs="queue out:8810.queue out,timed out?:8810.timed out?,error out:8810.error out" uid="8810" uid_parent="8670"/>
+        <FreeLabel comment="Á¾·á\3A ¿£Áø/ÆË¾÷ ·çÇÁ¿¡ Á¾·á ¾Ë¸²" uid="8820" uid_parent="8670"/>
+        <Constant outputs="value:8830.value" type="uint16{Init,Wait,Update,Settings,Start,Stop,Save,Channel,Graph,Exit}" uid="8830" uid_parent="8670" value="9"/>
+        <Constant outputs="value:8840.value" type="bool" uid="8840" uid_parent="8670" value="true"/>
+        <Tunnel _id="Out1" inputs="value:8680.value" uid="8850" uid_parent="8670"/>
+        <Tunnel _id="Out2" inputs="value:8830.value" uid="8860" uid_parent="8670"/>
+        <Tunnel _id="Out3" inputs="value:8690.value" uid="8870" uid_parent="8670"/>
+        <Tunnel _id="Out4" inputs="value:8840.value" uid="8880" uid_parent="8670"/>
+      </CaseFrame>
+      <Tunnel _id="Out1" outputs="value:8890.value" uid="8890" uid_parent="5620"/>
+      <Tunnel _id="Out2" outputs="value:8900.value" uid="8900" uid_parent="5620"/>
+      <Tunnel _id="Out3" outputs="value:8910.value" uid="8910" uid_parent="5620"/>
+      <Tunnel _id="Out4" outputs="value:8920.value" uid="8920" uid_parent="5620"/>
+    </Structure>
+    <Node _name="Unbundle By Name" fields="status" inputs="input cluster:8910.value" outputs="status:8930.status" uid="8930" uid_parent="5550"/>
+    <Node _name="Or" inputs="x:8920.value,y:8930.status" outputs="x .or. y?:8940.x .or. y?" uid="8940" uid_parent="5550"/>
+    <Tunnel _id="Out1" inputs="value:8910.value" outputs="value:8950.value" uid="8950" uid_parent="5550"/>
+    <ShiftReg uid="8960" uid_parent="5550">
+      <Left inputs="value:5530.value" outputs="value:5590.value" uid="5590" uid_parent="8960"/>
+      <Right inputs="value:8900.value" outputs="value:8970.value" uid="8970" uid_parent="8960"/>
+    </ShiftReg>
+    <ShiftReg uid="8980" uid_parent="5550">
+      <Left inputs="value:5540.value" outputs="value:5600.value" uid="5600" uid_parent="8980"/>
+      <Right inputs="value:8890.value" outputs="value:8990.value" uid="8990" uid_parent="8980"/>
+    </ShiftReg>
+    <ShiftReg uid="9000" uid_parent="5550">
+      <Left inputs="value:5240.error out" outputs="value:5610.value" uid="5610" uid_parent="9000"/>
+      <Right inputs="value:8910.value" outputs="value:9010.value" uid="9010" uid_parent="9000"/>
+    </ShiftReg>
+    <Condition inputs="value:8940.x .or. y?" uid="9020" uid_parent="5550" value="stop"/>
+  </Structure>
+  <FreeLabel comment="¼¼ ·çÇÁ Á¾·á ÈÄ Å¥ ÇØÁ¦\2C ¿À·ù ÇÕÄ¡±â" uid="9030" uid_parent="root"/>
+  <Node _name="Merge Errors" inputs="error in:8950.value,error in:5260.error out,error in:5510.value" outputs="error out:9040.error out" uid="9040" uid_parent="root"/>
+  <Node _name="Release Queue" inputs="queue:5160.queue out,error in (no error):9040.error out" outputs="queue name:9050.queue name,remaining elements:9050.remaining elements,error out:9050.error out" uid="9050" uid_parent="root"/>
+  <Node _name="Release Queue" inputs="queue:5200.queue out,error in (no error):9050.error out" outputs="queue name:9060.queue name,remaining elements:9060.remaining elements,error out:9060.error out" uid="9060" uid_parent="root"/>
+  <Node _name="Release Queue" inputs="queue:5240.queue out,error in (no error):9060.error out" outputs="queue name:9070.queue name,remaining elements:9070.remaining elements,error out:9070.error out" uid="9070" uid_parent="root"/>
+  <Call target="Simple Error Handler.vi" inputs="error in (no error):9070.error out" outputs="error out:9080.error out" uid="9080" uid_parent="root"/>
+</VI>

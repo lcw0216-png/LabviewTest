@@ -1,0 +1,63 @@
+<VI _name="UI_Status_Text.vi" description="»ó´Ü »óÅÂ ¹®±¸: ÃøÁ¤ Áß/´ë±â, »ùÇÃ¸µ ¼Óµµ, »ùÇÃ ¼ö, ÀúÀå ÆÄÀÏ, ¸Þ½ÃÁö.">
+  <Control _name="Settings" conIdx="0" connection="required" outputs="value:5010.value" type="cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}" uid="5010" uid_parent="root" value="[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData]"/>
+  <Control _name="Running" conIdx="5" connection="recommended" outputs="value:5020.value" type="bool" uid="5020" uid_parent="root" value="false"/>
+  <Control _name="Logging" conIdx="7" connection="recommended" outputs="value:5030.value" type="bool" uid="5030" uid_parent="root" value="false"/>
+  <Control _name="Log File" conIdx="9" connection="recommended" outputs="value:5040.value" type="path" uid="5040" uid_parent="root" value=""/>
+  <Control _name="Message" conIdx="1" connection="recommended" outputs="value:5050.value" type="string" uid="5050" uid_parent="root" value=""/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5060.value" type="cluster{bool.status,int32.code,string.source}" uid="5060" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5060.value" outputs="status:5070.status" uid="5070" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5070.status" uid="5080" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5090" uid_parent="5080"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5100" uid_parent="5080"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5110" uid_parent="5080"/>
+    <Tunnel _id="In4" inputs="value:5040.value" uid="5120" uid_parent="5080"/>
+    <Tunnel _id="In5" inputs="value:5050.value" uid="5130" uid_parent="5080"/>
+    <Tunnel _id="In6" inputs="value:5060.value" uid="5140" uid_parent="5080"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5150" uid_parent="5080">
+      <Tunnel _id="In1" outputs="value:5160.value" uid="5160" uid_parent="5150"/>
+      <Tunnel _id="In2" outputs="value:5170.value" uid="5170" uid_parent="5150"/>
+      <Tunnel _id="In3" outputs="value:5180.value" uid="5180" uid_parent="5150"/>
+      <Tunnel _id="In4" outputs="value:5190.value" uid="5190" uid_parent="5150"/>
+      <Tunnel _id="In5" outputs="value:5200.value" uid="5200" uid_parent="5150"/>
+      <Tunnel _id="In6" outputs="value:5210.value" uid="5210" uid_parent="5150"/>
+      <Node _name="Unbundle By Name" fields="Sample Rate (Hz),Samples per Channel" inputs="input cluster:5160.value" outputs="Sample Rate (Hz):5220.Sample Rate (Hz),Samples per Channel:5220.Samples per Channel" uid="5220" uid_parent="5150"/>
+      <Node _name="Strip Path" inputs="path:5190.value" outputs="stripped path:5230.stripped path,name:5230.name" uid="5230" uid_parent="5150"/>
+      <FreeLabel comment="»ó´Ü »óÅÂ ¹®±¸ ¸¸µé±â" uid="5240" uid_parent="5150"/>
+      <Constant outputs="value:5250.value" type="string" uid="5250" uid_parent="5150" value="¡Ü ÃøÁ¤ Áß"/>
+      <Constant outputs="value:5260.value" type="string" uid="5260" uid_parent="5150" value="¡Û ´ë±â"/>
+      <Node _name="Select" inputs="t:5250.value,s:5170.value,f:5260.value" outputs="s? t\3Af:5270.s? t\3Af" uid="5270" uid_parent="5150"/>
+      <Constant outputs="value:5280.value" type="string" uid="5280" uid_parent="5150" value="   ¡¤   "/>
+      <Constant outputs="value:5290.value" type="int32" uid="5290" uid_parent="5150" value="0"/>
+      <Node _name="Number To Fractional String" inputs="number:5220.Sample Rate (Hz),precision (6):5290.value" outputs="F-format string:5300.F-format string" uid="5300" uid_parent="5150"/>
+      <Constant outputs="value:5310.value" type="string" uid="5310" uid_parent="5150" value=" Hz   ¡¤   "/>
+      <Node _name="Number To Decimal String" inputs="number:5220.Samples per Channel" outputs="decimal integer string:5320.decimal integer string" uid="5320" uid_parent="5150"/>
+      <Constant outputs="value:5330.value" type="string" uid="5330" uid_parent="5150" value=" »ùÇÃ/Ã¤³Î"/>
+      <Constant outputs="value:5340.value" type="string" uid="5340" uid_parent="5150" value="   ¡¤   ÀúÀå Áß "/>
+      <Node _name="Concatenate Strings" inputs="string:5340.value,string:5230.name" outputs="concatenated string:5350.concatenated string" uid="5350" uid_parent="5150"/>
+      <Constant outputs="value:5360.value" type="string" uid="5360" uid_parent="5150" value=""/>
+      <Node _name="Select" inputs="t:5350.concatenated string,s:5180.value,f:5360.value" outputs="s? t\3Af:5370.s? t\3Af" uid="5370" uid_parent="5150"/>
+      <Node _name="Concatenate Strings" inputs="string:5270.s? t\3Af,string:5280.value,string:5300.F-format string,string:5310.value,string:5320.decimal integer string,string:5330.value,string:5370.s? t\3Af" outputs="concatenated string:5380.concatenated string" uid="5380" uid_parent="5150"/>
+      <Node _name="Empty String/Path?" inputs="string/path:5200.value" outputs="empty?:5390.empty?" uid="5390" uid_parent="5150"/>
+      <Constant outputs="value:5400.value" type="string" uid="5400" uid_parent="5150" value="   ¡¤   "/>
+      <Node _name="Concatenate Strings" inputs="string:5380.concatenated string,string:5400.value,string:5200.value" outputs="concatenated string:5410.concatenated string" uid="5410" uid_parent="5150"/>
+      <Node _name="Select" inputs="t:5380.concatenated string,s:5390.empty?,f:5410.concatenated string" outputs="s? t\3Af:5420.s? t\3Af" uid="5420" uid_parent="5150"/>
+      <Tunnel _id="Out1" inputs="value:5420.s? t\3Af" uid="5430" uid_parent="5150"/>
+      <Tunnel _id="Out2" inputs="value:5210.value" uid="5440" uid_parent="5150"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5450" uid_parent="5080">
+      <Tunnel _id="In1" outputs="value:5460.value" uid="5460" uid_parent="5450"/>
+      <Tunnel _id="In2" outputs="value:5470.value" uid="5470" uid_parent="5450"/>
+      <Tunnel _id="In3" outputs="value:5480.value" uid="5480" uid_parent="5450"/>
+      <Tunnel _id="In4" outputs="value:5490.value" uid="5490" uid_parent="5450"/>
+      <Tunnel _id="In5" outputs="value:5500.value" uid="5500" uid_parent="5450"/>
+      <Tunnel _id="In6" outputs="value:5510.value" uid="5510" uid_parent="5450"/>
+      <Constant outputs="value:5520.value" type="string" uid="5520" uid_parent="5450" value=""/>
+      <Tunnel _id="Out1" inputs="value:5520.value" uid="5530" uid_parent="5450"/>
+      <Tunnel _id="Out2" inputs="value:5510.value" uid="5540" uid_parent="5450"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5550.value" uid="5550" uid_parent="5080"/>
+    <Tunnel _id="Out2" outputs="value:5560.value" uid="5560" uid_parent="5080"/>
+  </Structure>
+  <Indicator _name="Status" conIdx="4" connection="recommended" inputs="value:5550.value" type="string" uid="5570" uid_parent="root" value=""/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5560.value" type="cluster{bool.status,int32.code,string.source}" uid="5580" uid_parent="root" value="[false,0,]"/>
+</VI>

@@ -1,0 +1,191 @@
+<VI _name="UI_Draw_Graph.vi" description="Channels[i].Graph = True ÀÎ Ã¤³Î¸¸ Plot Rect¿¡ ²ªÀº¼± ±×·¡ÇÁ·Î ±×¸²(Y ÀÚµ¿ ½ºÄÉÀÏ, ´«±Ý, ¹ü·Ê, ½Ã°£Ãà).">
+  <Control _name="Picture" conIdx="0" connection="recommended" outputs="value:5010.value" type="picture" uid="5010" uid_parent="root" value=""/>
+  <Control _name="Plot Rect" conIdx="5" connection="required" outputs="value:5020.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5020" uid_parent="root" value="[96,648,1380,896]"/>
+  <Control _name="Data" conIdx="7" connection="required" outputs="value:5030.value" type="array.2{double}" uid="5030" uid_parent="root" value="[]"/>
+  <Control _name="Channels" conIdx="9" connection="required" outputs="value:5040.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="5040" uid_parent="root" value="[]"/>
+  <Control _name="dt" conIdx="1" connection="recommended" outputs="value:5050.value" type="double" uid="5050" uid_parent="root" value="0.001"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5060.value" type="cluster{bool.status,int32.code,string.source}" uid="5060" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5060.value" outputs="status:5070.status" uid="5070" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5070.status" uid="5080" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5090" uid_parent="5080"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5100" uid_parent="5080"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5110" uid_parent="5080"/>
+    <Tunnel _id="In4" inputs="value:5040.value" uid="5120" uid_parent="5080"/>
+    <Tunnel _id="In5" inputs="value:5050.value" uid="5130" uid_parent="5080"/>
+    <Tunnel _id="In6" inputs="value:5060.value" uid="5140" uid_parent="5080"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5150" uid_parent="5080">
+      <Tunnel _id="In1" outputs="value:5160.value" uid="5160" uid_parent="5150"/>
+      <Tunnel _id="In2" outputs="value:5170.value" uid="5170" uid_parent="5150"/>
+      <Tunnel _id="In3" outputs="value:5180.value" uid="5180" uid_parent="5150"/>
+      <Tunnel _id="In4" outputs="value:5190.value" uid="5190" uid_parent="5150"/>
+      <Tunnel _id="In5" outputs="value:5200.value" uid="5200" uid_parent="5150"/>
+      <Tunnel _id="In6" outputs="value:5210.value" uid="5210" uid_parent="5150"/>
+      <Node _name="Unbundle By Name" fields="left,top,right,bottom" inputs="input cluster:5170.value" outputs="left:5220.left,top:5220.top,right:5220.right,bottom:5220.bottom" uid="5220" uid_parent="5150"/>
+      <FreeLabel comment="Graph°¡ ÄÑÁø Ã¤³Î¸¸ °ñ¶ó Y ÀÚµ¿ ½ºÄÉÀÏ" uid="5230" uid_parent="5150"/>
+      <Structure _name="For Loop" count="5240.value" maxin="" maxout="" uid="5240" uid_parent="5150">
+        <Tunnel _id="In1" inputs="value:5180.value" mode="index" outputs="value:5250.value" uid="5250" uid_parent="5240"/>
+        <Tunnel _id="In2" inputs="value:5190.value" mode="index" outputs="value:5260.value" uid="5260" uid_parent="5240"/>
+        <Node _name="Unbundle By Name" fields="Name,Graph" inputs="input cluster:5260.value" outputs="Name:5270.Name,Graph:5270.Graph" uid="5270" uid_parent="5240"/>
+        <Tunnel _id="Out1" cond="5270.Graph" inputs="value:5250.value" mode="index" outputs="value:5280.value" uid="5280" uid_parent="5240"/>
+        <Tunnel _id="Out2" cond="5270.Graph" inputs="value:5270.Name" mode="index" outputs="value:5290.value" uid="5290" uid_parent="5240"/>
+      </Structure>
+      <Node _name="Array Max &amp; Min" inputs="array:5280.value" outputs="max value:5300.max value,max index (indices):5300.max index (indices),min value:5300.min value,min index (indices):5300.min index (indices)" uid="5300" uid_parent="5150"/>
+      <Node _name="Subtract" inputs="x:5300.max value,y:5300.min value" outputs="x-y:5310.x-y" uid="5310" uid_parent="5150"/>
+      <Constant outputs="value:5320.value" type="double" uid="5320" uid_parent="5150" value="1e-09"/>
+      <Node _name="Less?" inputs="x:5310.x-y,y:5320.value" outputs="x &lt; y?:5330.x &lt; y?" uid="5330" uid_parent="5150"/>
+      <Constant outputs="value:5340.value" type="double" uid="5340" uid_parent="5150" value="1"/>
+      <Node _name="Add" inputs="x:5300.max value,y:5340.value" outputs="x+y:5350.x+y" uid="5350" uid_parent="5150"/>
+      <Node _name="Select" inputs="t:5350.x+y,s:5330.x &lt; y?,f:5300.max value" outputs="s? t\3Af:5360.s? t\3Af" uid="5360" uid_parent="5150"/>
+      <Constant outputs="value:5370.value" type="double" uid="5370" uid_parent="5150" value="1"/>
+      <Node _name="Subtract" inputs="x:5300.min value,y:5370.value" outputs="x-y:5380.x-y" uid="5380" uid_parent="5150"/>
+      <Node _name="Select" inputs="t:5380.x-y,s:5330.x &lt; y?,f:5300.min value" outputs="s? t\3Af:5390.s? t\3Af" uid="5390" uid_parent="5150"/>
+      <Node _name="Subtract" inputs="x:5360.s? t\3Af,y:5390.s? t\3Af" outputs="x-y:5400.x-y" uid="5400" uid_parent="5150"/>
+      <Constant outputs="value:5410.value" type="double" uid="5410" uid_parent="5150" value="0.05"/>
+      <Node _name="Multiply" inputs="x:5400.x-y,y:5410.value" outputs="x*y:5420.x*y" uid="5420" uid_parent="5150"/>
+      <Node _name="Add" inputs="x:5360.s? t\3Af,y:5420.x*y" outputs="x+y:5430.x+y" uid="5430" uid_parent="5150"/>
+      <Node _name="Subtract" inputs="x:5390.s? t\3Af,y:5420.x*y" outputs="x-y:5440.x-y" uid="5440" uid_parent="5150"/>
+      <Constant outputs="value:5450.value" type="uint32" uid="5450" uid_parent="5150" value="13816014"/>
+      <Call target="Draw Rectangle.vi" inputs="picture:5160.value,rect:5170.value,color(black):5450.value" outputs="new picture:5460.new picture" uid="5460" uid_parent="5150"/>
+      <Constant outputs="value:5470.value" type="int32" uid="5470" uid_parent="5150" value="5"/>
+      <Structure _name="For Loop" count="5480.value" maxin="5470.value" maxout="" uid="5480" uid_parent="5150">
+        <Tunnel _id="In1" inputs="value:5220.left" outputs="value:5490.value" uid="5490" uid_parent="5480"/>
+        <Tunnel _id="In2" inputs="value:5220.top" outputs="value:5500.value" uid="5500" uid_parent="5480"/>
+        <Tunnel _id="In3" inputs="value:5220.right" outputs="value:5510.value" uid="5510" uid_parent="5480"/>
+        <Tunnel _id="In4" inputs="value:5220.bottom" outputs="value:5520.value" uid="5520" uid_parent="5480"/>
+        <Tunnel _id="In5" inputs="value:5440.x-y" outputs="value:5530.value" uid="5530" uid_parent="5480"/>
+        <Tunnel _id="In6" inputs="value:5430.x+y" outputs="value:5540.value" uid="5540" uid_parent="5480"/>
+        <Node _name="Subtract" inputs="x:5520.value,y:5500.value" outputs="x-y:5560.x-y" uid="5560" uid_parent="5480"/>
+        <Node _name="Multiply" inputs="x:5560.x-y,y:5480.value" outputs="x*y:5570.x*y" uid="5570" uid_parent="5480"/>
+        <Constant outputs="value:5580.value" type="int32" uid="5580" uid_parent="5480" value="4"/>
+        <Node _name="Divide" inputs="x:5570.x*y,y:5580.value" outputs="x/y:5590.x/y" uid="5590" uid_parent="5480"/>
+        <Node _name="Add" inputs="x:5500.value,y:5590.x/y" outputs="x+y:5600.x+y" uid="5600" uid_parent="5480"/>
+        <Node _name="To Word Integer" inputs="number:5600.x+y" outputs="16bit integer:5610.16bit integer" uid="5610" uid_parent="5480"/>
+        <Constant outputs="value:5620.value" type="cluster{int16.x,int16.y}" uid="5620" uid_parent="5480" value="[0,0]"/>
+        <Node _name="Bundle By Name" fields="x,y" inputs="x:5490.value,y:5610.16bit integer,input cluster:5620.value" outputs="output cluster:5630.output cluster" uid="5630" uid_parent="5480"/>
+        <Constant outputs="value:5640.value" type="cluster{int16.x,int16.y}" uid="5640" uid_parent="5480" value="[0,0]"/>
+        <Node _name="Bundle By Name" fields="x,y" inputs="x:5510.value,y:5610.16bit integer,input cluster:5640.value" outputs="output cluster:5650.output cluster" uid="5650" uid_parent="5480"/>
+        <Node _name="Build Array" inputs="element:5630.output cluster,element:5650.output cluster" outputs="appended array:5660.appended array" uid="5660" uid_parent="5480"/>
+        <Constant outputs="value:5670.value" type="uint32" uid="5670" uid_parent="5480" value="15592425"/>
+        <Call target="Draw Multiple Lines.vi" inputs="picture:5550.value,line endpoints:5660.appended array,color(black):5670.value" outputs="new picture:5680.new picture" uid="5680" uid_parent="5480"/>
+        <Node _name="Subtract" inputs="x:5540.value,y:5530.value" outputs="x-y:5690.x-y" uid="5690" uid_parent="5480"/>
+        <Constant outputs="value:5700.value" type="double" uid="5700" uid_parent="5480" value="4"/>
+        <Node _name="Divide" inputs="x:5480.value,y:5700.value" outputs="x/y:5710.x/y" uid="5710" uid_parent="5480"/>
+        <Node _name="Multiply" inputs="x:5690.x-y,y:5710.x/y" outputs="x*y:5720.x*y" uid="5720" uid_parent="5480"/>
+        <Node _name="Subtract" inputs="x:5540.value,y:5720.x*y" outputs="x-y:5730.x-y" uid="5730" uid_parent="5480"/>
+        <Constant outputs="value:5740.value" type="int32" uid="5740" uid_parent="5480" value="2"/>
+        <Node _name="Number To Fractional String" inputs="number:5730.x-y,precision (6):5740.value" outputs="F-format string:5750.F-format string" uid="5750" uid_parent="5480"/>
+        <Constant outputs="value:5760.value" type="int16" uid="5760" uid_parent="5480" value="8"/>
+        <Node _name="Subtract" inputs="x:5490.value,y:5760.value" outputs="x-y:5770.x-y" uid="5770" uid_parent="5480"/>
+        <Node _name="To Word Integer" inputs="number:5770.x-y" outputs="16bit integer:5780.16bit integer" uid="5780" uid_parent="5480"/>
+        <Constant outputs="value:5790.value" type="int16" uid="5790" uid_parent="5480" value="11"/>
+        <Constant outputs="value:5800.value" type="bool" uid="5800" uid_parent="5480" value="false"/>
+        <Constant outputs="value:5810.value" type="uint32" uid="5810" uid_parent="5480" value="6315612"/>
+        <Constant outputs="value:5820.value" type="cluster{int16.x,int16.y}" uid="5820" uid_parent="5480" value="[0,0]"/>
+        <Node _name="Bundle By Name" fields="x,y" inputs="x:5780.16bit integer,y:5610.16bit integer,input cluster:5820.value" outputs="output cluster:5830.output cluster" uid="5830" uid_parent="5480"/>
+        <Constant outputs="value:5840.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="5840" uid_parent="5480" value="[2,1]"/>
+        <Constant outputs="value:5850.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="5850" uid_parent="5480" value="0"/>
+        <Constant outputs="value:5860.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="5860" uid_parent="5480" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+        <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:5790.value,Bold?:5800.value,input cluster:5860.value" outputs="output cluster:5870.output cluster" uid="5870" uid_parent="5480"/>
+        <Call target="Draw Text at Point.vi" inputs="picture:5680.new picture,text:5750.F-format string,text color(black):5810.value,origin:5830.output cluster,alignment(left\2C top):5840.value,desired font(Application):5850.value,[user-specified font]:5870.output cluster" outputs="text rect:5880.text rect,new picture:5880.new picture" uid="5880" uid_parent="5480"/>
+        <ShiftReg uid="5890" uid_parent="5480">
+          <Left inputs="value:5460.new picture" outputs="value:5550.value" uid="5550" uid_parent="5890"/>
+          <Right inputs="value:5880.new picture" outputs="value:5900.value" uid="5900" uid_parent="5890"/>
+        </ShiftReg>
+      </Structure>
+      <FreeLabel comment="°¡·Î ´«±Ý 5°³ + Y °ª" uid="5910" uid_parent="5150"/>
+      <Constant _name="Palette" outputs="value:5920.value" type="array{uint32}" uid="5920" uid_parent="5150" value="[30932,14170881,1080336,6040977,15208739,33394,11796638,16759040,47043,8873144]"/>
+      <Structure _name="For Loop" count="5930.value" maxin="" maxout="" uid="5930" uid_parent="5150">
+        <Tunnel _id="In1" inputs="value:5170.value" outputs="value:5940.value" uid="5940" uid_parent="5930"/>
+        <Tunnel _id="In2" inputs="value:5440.x-y" outputs="value:5950.value" uid="5950" uid_parent="5930"/>
+        <Tunnel _id="In3" inputs="value:5430.x+y" outputs="value:5960.value" uid="5960" uid_parent="5930"/>
+        <Tunnel _id="In4" inputs="value:5920.value" outputs="value:5970.value" uid="5970" uid_parent="5930"/>
+        <Tunnel _id="In5" inputs="value:5220.right" outputs="value:5980.value" uid="5980" uid_parent="5930"/>
+        <Tunnel _id="In6" inputs="value:5220.top" outputs="value:5990.value" uid="5990" uid_parent="5930"/>
+        <Tunnel _id="In7" inputs="value:5280.value" mode="index" outputs="value:6000.value" uid="6000" uid_parent="5930"/>
+        <Tunnel _id="In8" inputs="value:5290.value" mode="index" outputs="value:6010.value" uid="6010" uid_parent="5930"/>
+        <Constant outputs="value:6030.value" type="int32" uid="6030" uid_parent="5930" value="10"/>
+        <Node _name="Quotient &amp; Remainder" inputs="x:5930.value,y:6030.value" outputs="x-y*floor(x/y):6040.x-y*floor(x/y),floor(x/y):6040.floor(x/y)" uid="6040" uid_parent="5930"/>
+        <Node _name="Index Array" inputs="array:5970.value,index:6040.x-y*floor(x/y)" outputs="element:6050.element" uid="6050" uid_parent="5930"/>
+        <Constant outputs="value:6060.value" type="cluster{bool.status,int32.code,string.source}" uid="6060" uid_parent="5930" value="[false,0,]"/>
+        <Call target="UI_Graph_Series.vi" inputs="Picture:6020.value,Samples:6000.value,Color:6050.element,Plot Rect:5940.value,Y Min:5950.value,Y Max:5960.value,error in:6060.value" outputs="New Picture:6070.New Picture,error out:6070.error out" uid="6070" uid_parent="5930"/>
+        <Constant outputs="value:6080.value" type="int32" uid="6080" uid_parent="5930" value="18"/>
+        <Node _name="Multiply" inputs="x:5930.value,y:6080.value" outputs="x*y:6090.x*y" uid="6090" uid_parent="5930"/>
+        <Constant outputs="value:6100.value" type="int32" uid="6100" uid_parent="5930" value="8"/>
+        <Node _name="Add" inputs="x:6090.x*y,y:6100.value" outputs="x+y:6110.x+y" uid="6110" uid_parent="5930"/>
+        <Node _name="Add" inputs="x:5990.value,y:6110.x+y" outputs="x+y:6120.x+y" uid="6120" uid_parent="5930"/>
+        <Constant outputs="value:6130.value" type="string" uid="6130" uid_parent="5930" value="¡á "/>
+        <Node _name="Concatenate Strings" inputs="string:6130.value,string:6010.value" outputs="concatenated string:6140.concatenated string" uid="6140" uid_parent="5930"/>
+        <Constant outputs="value:6150.value" type="int16" uid="6150" uid_parent="5930" value="20"/>
+        <Node _name="Add" inputs="x:5980.value,y:6150.value" outputs="x+y:6160.x+y" uid="6160" uid_parent="5930"/>
+        <Node _name="To Word Integer" inputs="number:6160.x+y" outputs="16bit integer:6170.16bit integer" uid="6170" uid_parent="5930"/>
+        <Node _name="To Word Integer" inputs="number:6120.x+y" outputs="16bit integer:6180.16bit integer" uid="6180" uid_parent="5930"/>
+        <Constant outputs="value:6190.value" type="int16" uid="6190" uid_parent="5930" value="12"/>
+        <Constant outputs="value:6200.value" type="bool" uid="6200" uid_parent="5930" value="true"/>
+        <Constant outputs="value:6210.value" type="cluster{int16.x,int16.y}" uid="6210" uid_parent="5930" value="[0,0]"/>
+        <Node _name="Bundle By Name" fields="x,y" inputs="x:6170.16bit integer,y:6180.16bit integer,input cluster:6210.value" outputs="output cluster:6220.output cluster" uid="6220" uid_parent="5930"/>
+        <Constant outputs="value:6230.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6230" uid_parent="5930" value="[0,1]"/>
+        <Constant outputs="value:6240.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6240" uid_parent="5930" value="0"/>
+        <Constant outputs="value:6250.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6250" uid_parent="5930" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+        <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6190.value,Bold?:6200.value,input cluster:6250.value" outputs="output cluster:6260.output cluster" uid="6260" uid_parent="5930"/>
+        <Call target="Draw Text at Point.vi" inputs="picture:6070.New Picture,text:6140.concatenated string,text color(black):6050.element,origin:6220.output cluster,alignment(left\2C top):6230.value,desired font(Application):6240.value,[user-specified font]:6260.output cluster" outputs="text rect:6270.text rect,new picture:6270.new picture" uid="6270" uid_parent="5930"/>
+        <ShiftReg uid="6280" uid_parent="5930">
+          <Left inputs="value:5900.value" outputs="value:6020.value" uid="6020" uid_parent="6280"/>
+          <Right inputs="value:6270.new picture" outputs="value:6290.value" uid="6290" uid_parent="6280"/>
+        </ShiftReg>
+      </Structure>
+      <Node _name="Array Size" inputs="array:5180.value" outputs="size(s):6300.size(s)" uid="6300" uid_parent="5150"/>
+      <Constant outputs="value:6310.value" type="int32" uid="6310" uid_parent="5150" value="1"/>
+      <Node _name="Index Array" inputs="array:6300.size(s),index:6310.value" outputs="element:6320.element" uid="6320" uid_parent="5150"/>
+      <Node _name="Multiply" inputs="x:6320.element,y:5200.value" outputs="x*y:6330.x*y" uid="6330" uid_parent="5150"/>
+      <Constant outputs="value:6340.value" type="int32" uid="6340" uid_parent="5150" value="3"/>
+      <Node _name="Number To Fractional String" inputs="number:6330.x*y,precision (6):6340.value" outputs="F-format string:6350.F-format string" uid="6350" uid_parent="5150"/>
+      <Constant outputs="value:6360.value" type="string" uid="6360" uid_parent="5150" value=" s"/>
+      <Node _name="Concatenate Strings" inputs="string:6350.F-format string,string:6360.value" outputs="concatenated string:6370.concatenated string" uid="6370" uid_parent="5150"/>
+      <Constant outputs="value:6380.value" type="string" uid="6380" uid_parent="5150" value="0 s"/>
+      <Constant outputs="value:6390.value" type="int16" uid="6390" uid_parent="5150" value="14"/>
+      <Node _name="Add" inputs="x:5220.bottom,y:6390.value" outputs="x+y:6400.x+y" uid="6400" uid_parent="5150"/>
+      <Node _name="To Word Integer" inputs="number:6400.x+y" outputs="16bit integer:6410.16bit integer" uid="6410" uid_parent="5150"/>
+      <Constant outputs="value:6420.value" type="int16" uid="6420" uid_parent="5150" value="11"/>
+      <Constant outputs="value:6430.value" type="bool" uid="6430" uid_parent="5150" value="false"/>
+      <Constant outputs="value:6440.value" type="uint32" uid="6440" uid_parent="5150" value="6315612"/>
+      <Constant outputs="value:6450.value" type="cluster{int16.x,int16.y}" uid="6450" uid_parent="5150" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:5220.left,y:6410.16bit integer,input cluster:6450.value" outputs="output cluster:6460.output cluster" uid="6460" uid_parent="5150"/>
+      <Constant outputs="value:6470.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6470" uid_parent="5150" value="[0,1]"/>
+      <Constant outputs="value:6480.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6480" uid_parent="5150" value="0"/>
+      <Constant outputs="value:6490.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6490" uid_parent="5150" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6420.value,Bold?:6430.value,input cluster:6490.value" outputs="output cluster:6500.output cluster" uid="6500" uid_parent="5150"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:6290.value,text:6380.value,text color(black):6440.value,origin:6460.output cluster,alignment(left\2C top):6470.value,desired font(Application):6480.value,[user-specified font]:6500.output cluster" outputs="text rect:6510.text rect,new picture:6510.new picture" uid="6510" uid_parent="5150"/>
+      <Constant outputs="value:6520.value" type="int16" uid="6520" uid_parent="5150" value="14"/>
+      <Node _name="Add" inputs="x:5220.bottom,y:6520.value" outputs="x+y:6530.x+y" uid="6530" uid_parent="5150"/>
+      <Node _name="To Word Integer" inputs="number:6530.x+y" outputs="16bit integer:6540.16bit integer" uid="6540" uid_parent="5150"/>
+      <Constant outputs="value:6550.value" type="int16" uid="6550" uid_parent="5150" value="11"/>
+      <Constant outputs="value:6560.value" type="bool" uid="6560" uid_parent="5150" value="false"/>
+      <Constant outputs="value:6570.value" type="uint32" uid="6570" uid_parent="5150" value="6315612"/>
+      <Constant outputs="value:6580.value" type="cluster{int16.x,int16.y}" uid="6580" uid_parent="5150" value="[0,0]"/>
+      <Node _name="Bundle By Name" fields="x,y" inputs="x:5220.right,y:6540.16bit integer,input cluster:6580.value" outputs="output cluster:6590.output cluster" uid="6590" uid_parent="5150"/>
+      <Constant outputs="value:6600.value" type="cluster{uint16{left,center,right}.horizontal,uint16{top,center,bottom}.vertical}" uid="6600" uid_parent="5150" value="[2,1]"/>
+      <Constant outputs="value:6610.value" type="uint16{User-specified Font,Application Font,System Font,Dialog Font}" uid="6610" uid_parent="5150" value="0"/>
+      <Constant outputs="value:6620.value" type="cluster{string.Font Name\3A,int16.Size,bool.Strikeout?,bool.Italic?,bool.Underline?,bool.Outline?,bool.Shadow?,bool.Bold?}" uid="6620" uid_parent="5150" value="[Malgun Gothic,16,false,false,false,false,false,false]"/>
+      <Node _name="Bundle By Name" fields="Size,Bold?" inputs="Size:6550.value,Bold?:6560.value,input cluster:6620.value" outputs="output cluster:6630.output cluster" uid="6630" uid_parent="5150"/>
+      <Call target="Draw Text at Point.vi" inputs="picture:6510.new picture,text:6370.concatenated string,text color(black):6570.value,origin:6590.output cluster,alignment(left\2C top):6600.value,desired font(Application):6610.value,[user-specified font]:6630.output cluster" outputs="text rect:6640.text rect,new picture:6640.new picture" uid="6640" uid_parent="5150"/>
+      <Tunnel _id="Out1" inputs="value:6640.new picture" uid="6650" uid_parent="5150"/>
+      <Tunnel _id="Out2" inputs="value:5210.value" uid="6660" uid_parent="5150"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="6670" uid_parent="5080">
+      <Tunnel _id="In1" outputs="value:6680.value" uid="6680" uid_parent="6670"/>
+      <Tunnel _id="In2" outputs="value:6690.value" uid="6690" uid_parent="6670"/>
+      <Tunnel _id="In3" outputs="value:6700.value" uid="6700" uid_parent="6670"/>
+      <Tunnel _id="In4" outputs="value:6710.value" uid="6710" uid_parent="6670"/>
+      <Tunnel _id="In5" outputs="value:6720.value" uid="6720" uid_parent="6670"/>
+      <Tunnel _id="In6" outputs="value:6730.value" uid="6730" uid_parent="6670"/>
+      <Constant outputs="value:6740.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="6740" uid_parent="6670" value="[0,0,0,0]"/>
+      <Call target="Draw Rectangle.vi" inputs="rect:6740.value" outputs="new picture:6750.new picture" uid="6750" uid_parent="6670"/>
+      <Tunnel _id="Out1" inputs="value:6750.new picture" uid="6760" uid_parent="6670"/>
+      <Tunnel _id="Out2" inputs="value:6730.value" uid="6770" uid_parent="6670"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:6780.value" uid="6780" uid_parent="5080"/>
+    <Tunnel _id="Out2" outputs="value:6790.value" uid="6790" uid_parent="5080"/>
+  </Structure>
+  <Indicator _name="New Picture" conIdx="4" connection="recommended" inputs="value:6780.value" type="picture" uid="6800" uid_parent="root" value=""/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:6790.value" type="cluster{bool.status,int32.code,string.source}" uid="6810" uid_parent="root" value="[false,0,]"/>
+</VI>

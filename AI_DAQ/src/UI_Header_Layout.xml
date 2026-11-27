@@ -1,0 +1,24 @@
+<VI _name="UI_Header_Layout.vi" description="»ó´Ü ¹öÆ°: 0 ¼³Á¤, 1 ÃøÁ¤ ½ÃÀÛ, 2 ÃøÁ¤ Á¤Áö, 3 µ¥ÀÌÅÍ ÀúÀå(ÀúÀå ÁßÀÌ¸é »¡°­), 4 ±×·¡ÇÁ Ã¢, 5 Á¾·á.">
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5010.value" type="cluster{bool.status,int32.code,string.source}" uid="5010" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5010.value" outputs="status:5020.status" uid="5020" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5020.status" uid="5030" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5040" uid_parent="5030"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5050" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5060.value" uid="5060" uid_parent="5050"/>
+      <FreeLabel comment="»ó´Ü ¹öÆ° ¹èÄ¡Ç¥ (Group 0~5)" uid="5070" uid_parent="5050"/>
+      <Constant _name="Header Buttons" outputs="value:5080.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5080" uid_parent="5050" value="[[[800,12,910,52],16777215,15208739,16777215,16777215,¼³Á¤,12860956,16777215,15,true,0,0,8],[[918,12,1058,52],16777215,15208739,16777215,16777215,¢º ÃøÁ¤ ½ÃÀÛ,12860956,16777215,15,true,1,0,8],[[1066,12,1206,52],16777215,15208739,16777215,16777215,¡á ÃøÁ¤ Á¤Áö,12860956,16777215,15,true,2,0,8],[[1214,12,1364,52],16777215,15208739,16777215,16777215,¡Ü µ¥ÀÌÅÍ ÀúÀå,12860956,16777215,15,true,3,0,8],[[1372,12,1482,52],16777215,15208739,16777215,16777215,±×·¡ÇÁ Ã¢,12860956,16777215,15,true,4,0,8],[[1490,12,1580,52],16777215,15208739,16777215,16777215,Á¾·á,12860956,16777215,15,true,5,0,8]]"/>
+      <Tunnel _id="Out1" inputs="value:5080.value" uid="5090" uid_parent="5050"/>
+      <Tunnel _id="Out2" inputs="value:5060.value" uid="5100" uid_parent="5050"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5110" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5120.value" uid="5120" uid_parent="5110"/>
+      <Constant outputs="value:5130.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5130" uid_parent="5110" value="[]"/>
+      <Tunnel _id="Out1" inputs="value:5130.value" uid="5140" uid_parent="5110"/>
+      <Tunnel _id="Out2" inputs="value:5120.value" uid="5150" uid_parent="5110"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5160.value" uid="5160" uid_parent="5030"/>
+    <Tunnel _id="Out2" outputs="value:5170.value" uid="5170" uid_parent="5030"/>
+  </Structure>
+  <Indicator _name="Specs" conIdx="4" connection="recommended" inputs="value:5160.value" type="array{cluster{cluster{int16.left,int16.top,int16.right,int16.bottom}.Rect,uint32.Fill,uint32.Fill Sel,uint32.Border,uint32.Border Sel,string.Text,uint32.Text Color,uint32.Text Sel,int16.Size,bool.Bold,int32.Group,int32.Value,int16.Radius}}" uid="5180" uid_parent="root" value="[]"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5170.value" type="cluster{bool.status,int32.code,string.source}" uid="5190" uid_parent="root" value="[false,0,]"/>
+</VI>

@@ -1,0 +1,109 @@
+<VI _name="Test_Engine.vi" description="DAQ_Engine Å×½ºÆ®: Start, Log On, Log Off(ÀÌ¶§ ÃÖ½Å µ¥ÀÌÅÍ È®ÀÎ), Stop, Exit.">
+  <FreeLabel comment="Å×½ºÆ®\3A ¿£ÁøÀ» º´·Ä ½ÇÇàÇÏ°í ¸í·É ¼ø¼­´ë·Î Àü¼Û" uid="5010" uid_parent="root"/>
+  <Constant outputs="value:5020.value" type="cluster{bool.status,int32.code,string.source}" uid="5020" uid_parent="root" value="[false,0,]"/>
+  <Call target="DAQ_Engine.vi" inputs="error in:5020.value" outputs="error out:5030.error out" uid="5030" uid_parent="root"/>
+  <Constant outputs="value:5040.value" type="string" uid="5040" uid_parent="root" value="AIDAQ_CMD"/>
+  <Constant outputs="value:5050.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="5050" uid_parent="root" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+  <Constant outputs="value:5060.value" type="cluster{bool.status,int32.code,string.source}" uid="5060" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Obtain Queue" inputs="name (unnamed):5040.value,element data type:5050.value,error in (no error):5060.value" outputs="queue out:5070.queue out,created new?:5070.created new?,error out:5070.error out" uid="5070" uid_parent="root"/>
+  <Constant outputs="value:5080.value" type="string" uid="5080" uid_parent="root" value="AIDAQ_LIVE"/>
+  <Constant outputs="value:5090.value" type="cluster{array.2{double}.Data,array{double}.Values,double.dt,bool.Running,bool.Logging,string.Message,path.Log File}" uid="5090" uid_parent="root" value="[[],[],0.001,false,false,,]"/>
+  <Constant outputs="value:5100.value" type="int32" uid="5100" uid_parent="root" value="1"/>
+  <Node _name="Obtain Queue" inputs="name (unnamed):5080.value,element data type:5090.value,max queue size (-1\2C unlimited):5100.value,error in (no error):5070.error out" outputs="queue out:5110.queue out,created new?:5110.created new?,error out:5110.error out" uid="5110" uid_parent="root"/>
+  <Call target="Ch_Defaults.vi" inputs="error in:5110.error out" outputs="Channels:5120.Channels,error out:5120.error out" uid="5120" uid_parent="root"/>
+  <Constant outputs="value:5130.value" type="cluster{uint16{Start,Stop,Config,Log On,Log Off,Exit}.Cmd,cluster{double.Sample Rate (Hz),int32.Samples per Channel,string.Chassis 1 Channels,string.Chassis 2 Channels,path.Save Folder}.Settings,array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}.Channels}" uid="5130" uid_parent="root" value="[0,[1000,100,cDAQ1Mod1/ai0:7\2CcDAQ1Mod2/ai0:7\2CcDAQ1Mod3/ai0:7\2CcDAQ1Mod4/ai0:7\2CcDAQ1Mod5/ai0:7\2CcDAQ1Mod6/ai0:7\2CcDAQ1Mod7/ai0:7\2CcDAQ1Mod8/ai0:7,cDAQ2Mod1/ai0:7\2CcDAQ2Mod2/ai0:7\2CcDAQ2Mod3/ai0:7\2CcDAQ2Mod4/ai0:7\2CcDAQ2Mod5/ai0:7\2CcDAQ2Mod6/ai0:7\2CcDAQ2Mod7/ai0:7\2CcDAQ2Mod8/ai0:7,C\3A\5CLV_Test\5CAI DAQ md test\5CData],[]]"/>
+  <Constant outputs="value:5140.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="5140" uid_parent="root" value="0"/>
+  <Node _name="Bundle By Name" fields="Cmd,Channels" inputs="Cmd:5140.value,Channels:5120.Channels,input cluster:5130.value" outputs="output cluster:5150.output cluster" uid="5150" uid_parent="root"/>
+  <Node _name="Enqueue Element" inputs="queue:5070.queue out,element:5150.output cluster,error in (no error):5120.error out" outputs="queue out:5160.queue out,timed out?:5160.timed out?,error out:5160.error out" uid="5160" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5160.error out" outputs="status:5170.status" uid="5170" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5170.status" uid="5180" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5160.error out" uid="5190" uid_parent="5180"/>
+    <CaseFrame selector="False" selectout="" label="´ë±â" uid="5200" uid_parent="5180">
+      <Tunnel _id="In1" outputs="value:5210.value" uid="5210" uid_parent="5200"/>
+      <Constant outputs="value:5220.value" type="int32" uid="5220" uid_parent="5200" value="1500"/>
+      <Node _name="Wait (ms)" inputs="milliseconds to wait:5220.value" outputs="millisecond timer value:5230.millisecond timer value" uid="5230" uid_parent="5200"/>
+      <Tunnel _id="Out1" inputs="value:5210.value" uid="5240" uid_parent="5200"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" uid="5250" uid_parent="5180">
+      <Tunnel _id="In1" outputs="value:5260.value" uid="5260" uid_parent="5250"/>
+      <Tunnel _id="Out1" inputs="value:5260.value" uid="5270" uid_parent="5250"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5280.value" uid="5280" uid_parent="5180"/>
+  </Structure>
+  <Constant outputs="value:5290.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="5290" uid_parent="root" value="3"/>
+  <Node _name="Bundle By Name" fields="Cmd,Channels" inputs="Cmd:5290.value,Channels:5120.Channels,input cluster:5130.value" outputs="output cluster:5300.output cluster" uid="5300" uid_parent="root"/>
+  <Node _name="Enqueue Element" inputs="queue:5070.queue out,element:5300.output cluster,error in (no error):5280.value" outputs="queue out:5310.queue out,timed out?:5310.timed out?,error out:5310.error out" uid="5310" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5310.error out" outputs="status:5320.status" uid="5320" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5320.status" uid="5330" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5310.error out" uid="5340" uid_parent="5330"/>
+    <CaseFrame selector="False" selectout="" label="´ë±â" uid="5350" uid_parent="5330">
+      <Tunnel _id="In1" outputs="value:5360.value" uid="5360" uid_parent="5350"/>
+      <Constant outputs="value:5370.value" type="int32" uid="5370" uid_parent="5350" value="1000"/>
+      <Node _name="Wait (ms)" inputs="milliseconds to wait:5370.value" outputs="millisecond timer value:5380.millisecond timer value" uid="5380" uid_parent="5350"/>
+      <Tunnel _id="Out1" inputs="value:5360.value" uid="5390" uid_parent="5350"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" uid="5400" uid_parent="5330">
+      <Tunnel _id="In1" outputs="value:5410.value" uid="5410" uid_parent="5400"/>
+      <Tunnel _id="Out1" inputs="value:5410.value" uid="5420" uid_parent="5400"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5430.value" uid="5430" uid_parent="5330"/>
+  </Structure>
+  <Constant outputs="value:5440.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="5440" uid_parent="root" value="4"/>
+  <Node _name="Bundle By Name" fields="Cmd,Channels" inputs="Cmd:5440.value,Channels:5120.Channels,input cluster:5130.value" outputs="output cluster:5450.output cluster" uid="5450" uid_parent="root"/>
+  <Node _name="Enqueue Element" inputs="queue:5070.queue out,element:5450.output cluster,error in (no error):5430.value" outputs="queue out:5460.queue out,timed out?:5460.timed out?,error out:5460.error out" uid="5460" uid_parent="root"/>
+  <Constant outputs="value:5470.value" type="int32" uid="5470" uid_parent="root" value="2000"/>
+  <Node _name="Dequeue Element" inputs="queue:5110.queue out,timeout in ms (-1):5470.value,error in (no error):5460.error out" outputs="queue out:5480.queue out,element:5480.element,timed out?:5480.timed out?,error out:5480.error out" uid="5480" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5480.error out" outputs="status:5490.status" uid="5490" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5490.status" uid="5500" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5480.error out" uid="5510" uid_parent="5500"/>
+    <CaseFrame selector="False" selectout="" label="´ë±â" uid="5520" uid_parent="5500">
+      <Tunnel _id="In1" outputs="value:5530.value" uid="5530" uid_parent="5520"/>
+      <Constant outputs="value:5540.value" type="int32" uid="5540" uid_parent="5520" value="300"/>
+      <Node _name="Wait (ms)" inputs="milliseconds to wait:5540.value" outputs="millisecond timer value:5550.millisecond timer value" uid="5550" uid_parent="5520"/>
+      <Tunnel _id="Out1" inputs="value:5530.value" uid="5560" uid_parent="5520"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" uid="5570" uid_parent="5500">
+      <Tunnel _id="In1" outputs="value:5580.value" uid="5580" uid_parent="5570"/>
+      <Tunnel _id="Out1" inputs="value:5580.value" uid="5590" uid_parent="5570"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5600.value" uid="5600" uid_parent="5500"/>
+  </Structure>
+  <Constant outputs="value:5610.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="5610" uid_parent="root" value="1"/>
+  <Node _name="Bundle By Name" fields="Cmd,Channels" inputs="Cmd:5610.value,Channels:5120.Channels,input cluster:5130.value" outputs="output cluster:5620.output cluster" uid="5620" uid_parent="root"/>
+  <Node _name="Enqueue Element" inputs="queue:5070.queue out,element:5620.output cluster,error in (no error):5600.value" outputs="queue out:5630.queue out,timed out?:5630.timed out?,error out:5630.error out" uid="5630" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5630.error out" outputs="status:5640.status" uid="5640" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5640.status" uid="5650" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5630.error out" uid="5660" uid_parent="5650"/>
+    <CaseFrame selector="False" selectout="" label="´ë±â" uid="5670" uid_parent="5650">
+      <Tunnel _id="In1" outputs="value:5680.value" uid="5680" uid_parent="5670"/>
+      <Constant outputs="value:5690.value" type="int32" uid="5690" uid_parent="5670" value="800"/>
+      <Node _name="Wait (ms)" inputs="milliseconds to wait:5690.value" outputs="millisecond timer value:5700.millisecond timer value" uid="5700" uid_parent="5670"/>
+      <Tunnel _id="Out1" inputs="value:5680.value" uid="5710" uid_parent="5670"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" uid="5720" uid_parent="5650">
+      <Tunnel _id="In1" outputs="value:5730.value" uid="5730" uid_parent="5720"/>
+      <Tunnel _id="Out1" inputs="value:5730.value" uid="5740" uid_parent="5720"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5750.value" uid="5750" uid_parent="5650"/>
+  </Structure>
+  <Constant outputs="value:5760.value" type="uint16{Start,Stop,Config,Log On,Log Off,Exit}" uid="5760" uid_parent="root" value="5"/>
+  <Node _name="Bundle By Name" fields="Cmd,Channels" inputs="Cmd:5760.value,Channels:5120.Channels,input cluster:5130.value" outputs="output cluster:5770.output cluster" uid="5770" uid_parent="root"/>
+  <Node _name="Enqueue Element" inputs="queue:5070.queue out,element:5770.output cluster,error in (no error):5750.value" outputs="queue out:5780.queue out,timed out?:5780.timed out?,error out:5780.error out" uid="5780" uid_parent="root"/>
+  <Constant outputs="value:5790.value" type="int32" uid="5790" uid_parent="root" value="2000"/>
+  <Node _name="Dequeue Element" inputs="queue:5110.queue out,timeout in ms (-1):5790.value,error in (no error):5780.error out" outputs="queue out:5800.queue out,element:5800.element,timed out?:5800.timed out?,error out:5800.error out" uid="5800" uid_parent="root"/>
+  <Node _name="Unbundle By Name" fields="Data,Values,dt,Running,Logging,Message,Log File" inputs="input cluster:5480.element" outputs="Data:5810.Data,Values:5810.Values,dt:5810.dt,Running:5810.Running,Logging:5810.Logging,Message:5810.Message,Log File:5810.Log File" uid="5810" uid_parent="root"/>
+  <Indicator _name="Values" inputs="value:5810.Values" type="array{double}" uid="5820" uid_parent="root" value="[]"/>
+  <Node _name="Array Size" inputs="array:5810.Data" outputs="size(s):5830.size(s)" uid="5830" uid_parent="root"/>
+  <Constant outputs="value:5840.value" type="int32" uid="5840" uid_parent="root" value="0"/>
+  <Node _name="Index Array" inputs="array:5830.size(s),index:5840.value" outputs="element:5850.element" uid="5850" uid_parent="root"/>
+  <Indicator _name="Rows" inputs="value:5850.element" type="int32" uid="5860" uid_parent="root" value="0"/>
+  <Indicator _name="dt" inputs="value:5810.dt" type="double" uid="5870" uid_parent="root" value="0"/>
+  <Indicator _name="Running" inputs="value:5810.Running" type="bool" uid="5880" uid_parent="root" value="false"/>
+  <Indicator _name="Logging" inputs="value:5810.Logging" type="bool" uid="5890" uid_parent="root" value="false"/>
+  <Indicator _name="Log File" inputs="value:5810.Log File" type="path" uid="5900" uid_parent="root" value=""/>
+  <Node _name="Unbundle By Name" fields="Message" inputs="input cluster:5800.element" outputs="Message:5910.Message" uid="5910" uid_parent="root"/>
+  <Indicator _name="Final Message" inputs="value:5910.Message" type="string" uid="5920" uid_parent="root" value=""/>
+  <Indicator _name="Mid Message" inputs="value:5810.Message" type="string" uid="5930" uid_parent="root" value=""/>
+  <Indicator _name="error out" inputs="value:5800.error out" type="cluster{bool.status,int32.code,string.source}" uid="5940" uid_parent="root" value="[false,0,]"/>
+  <Indicator _name="engine error" inputs="value:5030.error out" type="cluster{bool.status,int32.code,string.source}" uid="5950" uid_parent="root" value="[false,0,]"/>
+</VI>

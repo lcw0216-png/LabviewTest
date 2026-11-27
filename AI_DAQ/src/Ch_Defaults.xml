@@ -1,0 +1,45 @@
+<VI _name="Ch_Defaults.vi" description="128Ã¤³Î ±âº» Channel ¹è¿­(ÀÌ¸§ CH001~CH128, ½ºÄÉÀÏ 0~100 %, »óÇÑ 80/ÇÏÇÑ 20, ÀúÀå ON, ±×·¡ÇÁ CH001~CH008).">
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5010.value" type="cluster{bool.status,int32.code,string.source}" uid="5010" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5010.value" outputs="status:5020.status" uid="5020" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5020.status" uid="5030" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5040" uid_parent="5030"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5050" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5060.value" uid="5060" uid_parent="5050"/>
+      <FreeLabel comment="CH001~CH128 ±âº» ¼³Á¤ (0~100 %\2C »óÇÑ 80\2C ÇÏÇÑ 20)" uid="5070" uid_parent="5050"/>
+      <Constant outputs="value:5080.value" type="int32" uid="5080" uid_parent="5050" value="128"/>
+      <Structure _name="For Loop" count="5090.value" maxin="5080.value" maxout="" uid="5090" uid_parent="5050">
+        <Node _name="Increment" inputs="x:5090.value" outputs="x+1:5100.x+1" uid="5100" uid_parent="5090"/>
+        <Node _name="Number To Decimal String" inputs="number:5100.x+1" outputs="decimal integer string:5110.decimal integer string" uid="5110" uid_parent="5090"/>
+        <Constant outputs="value:5120.value" type="int32" uid="5120" uid_parent="5090" value="10"/>
+        <Node _name="Less?" inputs="x:5100.x+1,y:5120.value" outputs="x &lt; y?:5130.x &lt; y?" uid="5130" uid_parent="5090"/>
+        <Constant outputs="value:5140.value" type="string" uid="5140" uid_parent="5090" value="00"/>
+        <Constant outputs="value:5150.value" type="int32" uid="5150" uid_parent="5090" value="100"/>
+        <Node _name="Less?" inputs="x:5100.x+1,y:5150.value" outputs="x &lt; y?:5160.x &lt; y?" uid="5160" uid_parent="5090"/>
+        <Constant outputs="value:5170.value" type="string" uid="5170" uid_parent="5090" value="0"/>
+        <Constant outputs="value:5180.value" type="string" uid="5180" uid_parent="5090" value=""/>
+        <Node _name="Select" inputs="t:5170.value,s:5160.x &lt; y?,f:5180.value" outputs="s? t\3Af:5190.s? t\3Af" uid="5190" uid_parent="5090"/>
+        <Node _name="Select" inputs="t:5140.value,s:5130.x &lt; y?,f:5190.s? t\3Af" outputs="s? t\3Af:5200.s? t\3Af" uid="5200" uid_parent="5090"/>
+        <Constant outputs="value:5210.value" type="string" uid="5210" uid_parent="5090" value="CH"/>
+        <Node _name="Concatenate Strings" inputs="string:5210.value,string:5200.s? t\3Af,string:5110.decimal integer string" outputs="concatenated string:5220.concatenated string" uid="5220" uid_parent="5090"/>
+        <Constant outputs="value:5230.value" type="int32" uid="5230" uid_parent="5090" value="8"/>
+        <Node _name="Less?" inputs="x:5090.value,y:5230.value" outputs="x &lt; y?:5240.x &lt; y?" uid="5240" uid_parent="5090"/>
+        <Constant outputs="value:5250.value" type="cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}" uid="5250" uid_parent="5090" value="[CH000,0,80,20,true,false,0,100,%]"/>
+        <Node _name="Bundle By Name" fields="Name,Graph" inputs="Name:5220.concatenated string,Graph:5240.x &lt; y?,input cluster:5250.value" outputs="output cluster:5260.output cluster" uid="5260" uid_parent="5090"/>
+        <Tunnel _id="Out1" inputs="value:5260.output cluster" mode="index" outputs="value:5270.value" uid="5270" uid_parent="5090"/>
+      </Structure>
+      <FreeLabel comment="±×·¡ÇÁ´Â Ã³À½ 8Ã¤³Î¸¸ ¼±ÅÃ" uid="5280" uid_parent="5050"/>
+      <Tunnel _id="Out1" inputs="value:5270.value" uid="5290" uid_parent="5050"/>
+      <Tunnel _id="Out2" inputs="value:5060.value" uid="5300" uid_parent="5050"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5310" uid_parent="5030">
+      <Tunnel _id="In1" outputs="value:5320.value" uid="5320" uid_parent="5310"/>
+      <Constant outputs="value:5330.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="5330" uid_parent="5310" value="[]"/>
+      <Tunnel _id="Out1" inputs="value:5330.value" uid="5340" uid_parent="5310"/>
+      <Tunnel _id="Out2" inputs="value:5320.value" uid="5350" uid_parent="5310"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5360.value" uid="5360" uid_parent="5030"/>
+    <Tunnel _id="Out2" outputs="value:5370.value" uid="5370" uid_parent="5030"/>
+  </Structure>
+  <Indicator _name="Channels" conIdx="4" connection="recommended" inputs="value:5360.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="5380" uid_parent="root" value="[]"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5370.value" type="cluster{bool.status,int32.code,string.source}" uid="5390" uid_parent="root" value="[false,0,]"/>
+</VI>

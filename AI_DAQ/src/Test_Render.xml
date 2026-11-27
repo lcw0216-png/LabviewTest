@@ -1,0 +1,41 @@
+<VI _name="Test_Render.vi" description="UI_Render_Main Å×½ºÆ® (PNG °æ·Î ÇÊ¼ö).">
+  <Control _name="Phase" outputs="value:5010.value" type="bool" uid="5010" uid_parent="root" value="true"/>
+  <Control _name="Running" outputs="value:5020.value" type="bool" uid="5020" uid_parent="root" value="true"/>
+  <Control _name="PNG Path" outputs="value:5030.value" type="path" uid="5030" uid_parent="root" value=""/>
+  <FreeLabel comment="Å×½ºÆ®\3A °¡Â¥ µ¥ÀÌÅÍ·Î ¸ÞÀÎ È­¸é ·»´õ -&gt; PNG" uid="5040" uid_parent="root"/>
+  <Constant outputs="value:5050.value" type="cluster{bool.status,int32.code,string.source}" uid="5050" uid_parent="root" value="[false,0,]"/>
+  <Call target="Ch_Defaults.vi" inputs="error in:5050.value" outputs="Channels:5060.Channels,error out:5060.error out" uid="5060" uid_parent="root"/>
+  <Structure _name="For Loop" count="5070.value" maxin="" maxout="" uid="5070" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5060.Channels" mode="index" outputs="value:5080.value" uid="5080" uid_parent="5070"/>
+    <Constant outputs="value:5090.value" type="int32" uid="5090" uid_parent="5070" value="200"/>
+    <Structure _name="For Loop" count="5100.value" maxin="5090.value" maxout="" uid="5100" uid_parent="5070">
+      <Tunnel _id="In1" inputs="value:5070.value" outputs="value:5110.value" uid="5110" uid_parent="5100"/>
+      <Constant outputs="value:5120.value" type="double" uid="5120" uid_parent="5100" value="0.0628"/>
+      <Node _name="Multiply" inputs="x:5100.value,y:5120.value" outputs="x*y:5130.x*y" uid="5130" uid_parent="5100"/>
+      <Constant outputs="value:5140.value" type="double" uid="5140" uid_parent="5100" value="0.4"/>
+      <Node _name="Multiply" inputs="x:5110.value,y:5140.value" outputs="x*y:5150.x*y" uid="5150" uid_parent="5100"/>
+      <Node _name="Add" inputs="x:5130.x*y,y:5150.x*y" outputs="x+y:5160.x+y" uid="5160" uid_parent="5100"/>
+      <Node _name="Sine" inputs="x:5160.x+y" outputs="sin(x):5170.sin(x)" uid="5170" uid_parent="5100"/>
+      <Constant outputs="value:5180.value" type="double" uid="5180" uid_parent="5100" value="30"/>
+      <Node _name="Multiply" inputs="x:5170.sin(x),y:5180.value" outputs="x*y:5190.x*y" uid="5190" uid_parent="5100"/>
+      <Constant outputs="value:5200.value" type="double" uid="5200" uid_parent="5100" value="50"/>
+      <Node _name="Add" inputs="x:5190.x*y,y:5200.value" outputs="x+y:5210.x+y" uid="5210" uid_parent="5100"/>
+      <Tunnel _id="Out1" inputs="value:5210.x+y" mode="index" outputs="value:5220.value" uid="5220" uid_parent="5100"/>
+    </Structure>
+    <Constant outputs="value:5230.value" type="double" uid="5230" uid_parent="5070" value="0.8"/>
+    <Node _name="Multiply" inputs="x:5070.value,y:5230.value" outputs="x*y:5240.x*y" uid="5240" uid_parent="5070"/>
+    <Node _name="Bundle By Name" fields="Value" inputs="Value:5240.x*y,input cluster:5080.value" outputs="output cluster:5250.output cluster" uid="5250" uid_parent="5070"/>
+    <Tunnel _id="Out1" inputs="value:5220.value" mode="index" outputs="value:5260.value" uid="5260" uid_parent="5070"/>
+    <Tunnel _id="Out2" inputs="value:5250.output cluster" mode="index" outputs="value:5270.value" uid="5270" uid_parent="5070"/>
+  </Structure>
+  <Constant outputs="value:5280.value" type="double" uid="5280" uid_parent="root" value="0.001"/>
+  <Constant outputs="value:5290.value" type="bool" uid="5290" uid_parent="root" value="true"/>
+  <Constant outputs="value:5300.value" type="int32" uid="5300" uid_parent="root" value="1"/>
+  <Constant outputs="value:5310.value" type="string" uid="5310" uid_parent="root" value="ÃøÁ¤ Áß ¡¤ 1000 Hz ¡¤ 100 »ùÇÃ/Ã¤³Î ¡¤ ÀúÀå Áß"/>
+  <Call target="UI_Render_Main.vi" inputs="Channels:5270.value,Data:5260.value,dt:5280.value,Running:5020.value,Logging:5290.value,Hover Button:5300.value,Phase:5010.value,Status:5310.value,error in:5060.error out" outputs="Picture:5320.Picture,error out:5320.error out" uid="5320" uid_parent="root"/>
+  <Constant outputs="value:5330.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5330" uid_parent="root" value="[0,0,1600,940]"/>
+  <Constant outputs="value:5340.value" type="int32" uid="5340" uid_parent="root" value="24"/>
+  <Call target="Picture to Pixmap.vi" inputs="picture:5320.Picture,rect:5330.value,depth:5340.value" outputs="new picture:5350.new picture,image data:5350.image data" uid="5350" uid_parent="root"/>
+  <Call target="Write PNG File.vi" inputs="error in (no error):5320.error out,path to PNG file:5030.value,image data:5350.image data" outputs="error out:5360.error out,path:5360.path" uid="5360" uid_parent="root"/>
+  <Indicator _name="error out" inputs="value:5360.error out" type="cluster{bool.status,int32.code,string.source}" uid="5370" uid_parent="root" value="[false,0,]"/>
+</VI>

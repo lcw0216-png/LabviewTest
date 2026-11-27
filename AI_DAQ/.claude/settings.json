@@ -1,0 +1,49 @@
+{
+  "env": {
+    "ENABLE_TOOL_SEARCH": "true",
+    "MAX_MCP_OUTPUT_TOKENS": "12000"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__SERVER_PREFIX__lvai_status",
+      "mcp__SERVER_PREFIX__pylv_status",
+      "mcp__SERVER_PREFIX__pylv_route",
+      "mcp__SERVER_PREFIX__lvai_describe_ctl",
+      "mcp__SERVER_PREFIX__lvai_describe_class",
+      "mcp__SERVER_PREFIX__lvai_vi_terminals",
+      "mcp__SERVER_PREFIX__lvai_check_aixml",
+      "mcp__SERVER_PREFIX__lvai_audit_files",
+      "mcp__SERVER_PREFIX__lvai_validate_aixml",
+      "mcp__SERVER_PREFIX__lvai_exec_state",
+      "mcp__SERVER_PREFIX__lvai_error_list",
+      "mcp__SERVER_PREFIX__lvai_coercion_dots",
+      "mcp__SERVER_PREFIX__lvai_vis_in_memory",
+      "mcp__SERVER_PREFIX__lvai_convert_vi_to_aixml",
+      "mcp__SERVER_PREFIX__lvai_palette_index",
+      "mcp__SERVER_PREFIX__lvai_example_index"
+    ],
+    "deny": [
+      "mcp__SERVER_PREFIX__lvai_apply_aixml_to_vi",
+      "mcp__SERVER_PREFIX__lvai_convert_vis_to_aixml",
+      "mcp__SERVER_PREFIX__lvai_describe_project",
+      "mcp__SERVER_PREFIX__lvai_describe_vi",
+      "mcp__SERVER_PREFIX__lvai_render_diagrams",
+      "mcp__SERVER_PREFIX__lvai_read_icons",
+      "mcp__SERVER_PREFIX__lvai_set_vi_icon",
+      "mcp__SERVER_PREFIX__lvai_set_owner_icon",
+      "mcp__SERVER_PREFIX__lvai_layout_diagrams",
+      "mcp__SERVER_PREFIX__lvai_dump_schema",
+      "mcp__SERVER_PREFIX__lvai_list_labview_installations",
+      "mcp__SERVER_PREFIX__lvai_get_application_configuration",
+      "mcp__SERVER_PREFIX__lvai_aixml_reference",
+      "mcp__SERVER_PREFIX__lvai_dqmh_reference",
+      "mcp__SERVER_PREFIX__lvai_lvproj_reference",
+      "mcp__SERVER_PREFIX__lvai_lvlib_reference",
+      "mcp__SERVER_PREFIX__lvai_vi_server_reference",
+      "mcp__SERVER_PREFIX__lvai_search_info_cache",
+      "mcp__SERVER_PREFIX__lvai_lookup_info_cache_items",
+      "mcp__SERVER_PREFIX__lvai_filter_palette_search_candidates",
+      "mcp__SERVER_PREFIX__lvai_filter_example_search_candidates"
+    ]
+  }
+}

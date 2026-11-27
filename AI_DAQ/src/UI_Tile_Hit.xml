@@ -1,0 +1,57 @@
+<VI _name="UI_Tile_Hit.vi" description="Å¬¸¯ ÁÂÇ¥ -&gt; Ã¤³Î ¹øÈ£(0~127), Å¸ÀÏ ¹ÛÀÌ¸é -1.">
+  <Control _name="X" conIdx="0" connection="required" outputs="value:5010.value" type="int32" uid="5010" uid_parent="root" value="0"/>
+  <Control _name="Y" conIdx="5" connection="required" outputs="value:5020.value" type="int32" uid="5020" uid_parent="root" value="0"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5030.value" type="cluster{bool.status,int32.code,string.source}" uid="5030" uid_parent="root" value="[false,0,]"/>
+  <Node _name="Unbundle By Name" fields="status" inputs="input cluster:5030.value" outputs="status:5040.status" uid="5040" uid_parent="root"/>
+  <Structure _name="Case Structure" selectin="5040.status" uid="5050" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5010.value" uid="5060" uid_parent="5050"/>
+    <Tunnel _id="In2" inputs="value:5020.value" uid="5070" uid_parent="5050"/>
+    <Tunnel _id="In3" inputs="value:5030.value" uid="5080" uid_parent="5050"/>
+    <CaseFrame selector="False" selectout="" label="No Error" uid="5090" uid_parent="5050">
+      <Tunnel _id="In1" outputs="value:5100.value" uid="5100" uid_parent="5090"/>
+      <Tunnel _id="In2" outputs="value:5110.value" uid="5110" uid_parent="5090"/>
+      <Tunnel _id="In3" outputs="value:5120.value" uid="5120" uid_parent="5090"/>
+      <Constant outputs="value:5130.value" type="int32" uid="5130" uid_parent="5090" value="24"/>
+      <Node _name="Subtract" inputs="x:5100.value,y:5130.value" outputs="x-y:5140.x-y" uid="5140" uid_parent="5090"/>
+      <Constant outputs="value:5150.value" type="int32" uid="5150" uid_parent="5090" value="120"/>
+      <Node _name="Subtract" inputs="x:5110.value,y:5150.value" outputs="x-y:5160.x-y" uid="5160" uid_parent="5090"/>
+      <Constant outputs="value:5170.value" type="int32" uid="5170" uid_parent="5090" value="97"/>
+      <Node _name="Quotient &amp; Remainder" inputs="x:5140.x-y,y:5170.value" outputs="x-y*floor(x/y):5180.x-y*floor(x/y),floor(x/y):5180.floor(x/y)" uid="5180" uid_parent="5090"/>
+      <Constant outputs="value:5190.value" type="int32" uid="5190" uid_parent="5090" value="60"/>
+      <Node _name="Quotient &amp; Remainder" inputs="x:5160.x-y,y:5190.value" outputs="x-y*floor(x/y):5200.x-y*floor(x/y),floor(x/y):5200.floor(x/y)" uid="5200" uid_parent="5090"/>
+      <Constant outputs="value:5210.value" type="int32" uid="5210" uid_parent="5090" value="0"/>
+      <Constant outputs="value:5220.value" type="int32" uid="5220" uid_parent="5090" value="15"/>
+      <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5220.value,x:5180.floor(x/y),lower limit:5210.value" outputs="coerced(x):5230.coerced(x),In Range?:5230.In Range?" uid="5230" uid_parent="5090"/>
+      <Constant outputs="value:5240.value" type="int32" uid="5240" uid_parent="5090" value="0"/>
+      <Constant outputs="value:5250.value" type="int32" uid="5250" uid_parent="5090" value="7"/>
+      <Node _name="In Range and Coerce" includeLow="true" includeHigh="true" inputs="upper limit:5250.value,x:5200.floor(x/y),lower limit:5240.value" outputs="coerced(x):5260.coerced(x),In Range?:5260.In Range?" uid="5260" uid_parent="5090"/>
+      <Node _name="And" inputs="x:5230.In Range?,y:5260.In Range?" outputs="x .and. y?:5270.x .and. y?" uid="5270" uid_parent="5090"/>
+      <Constant outputs="value:5280.value" type="int32" uid="5280" uid_parent="5090" value="91"/>
+      <Node _name="Less?" inputs="x:5180.x-y*floor(x/y),y:5280.value" outputs="x &lt; y?:5290.x &lt; y?" uid="5290" uid_parent="5090"/>
+      <Constant outputs="value:5300.value" type="int32" uid="5300" uid_parent="5090" value="54"/>
+      <Node _name="Less?" inputs="x:5200.x-y*floor(x/y),y:5300.value" outputs="x &lt; y?:5310.x &lt; y?" uid="5310" uid_parent="5090"/>
+      <Node _name="And" inputs="x:5290.x &lt; y?,y:5310.x &lt; y?" outputs="x .and. y?:5320.x .and. y?" uid="5320" uid_parent="5090"/>
+      <Node _name="And" inputs="x:5270.x .and. y?,y:5320.x .and. y?" outputs="x .and. y?:5330.x .and. y?" uid="5330" uid_parent="5090"/>
+      <FreeLabel comment="Å¸ÀÏ ¾ÈÀÌ¸é Ã¤³Î ¹øÈ£\2C ¾Æ´Ï¸é -1" uid="5340" uid_parent="5090"/>
+      <Constant outputs="value:5350.value" type="int32" uid="5350" uid_parent="5090" value="8"/>
+      <Node _name="Multiply" inputs="x:5180.floor(x/y),y:5350.value" outputs="x*y:5360.x*y" uid="5360" uid_parent="5090"/>
+      <Node _name="Add" inputs="x:5360.x*y,y:5200.floor(x/y)" outputs="x+y:5370.x+y" uid="5370" uid_parent="5090"/>
+      <Constant outputs="value:5380.value" type="int32" uid="5380" uid_parent="5090" value="-1"/>
+      <Node _name="Select" inputs="t:5370.x+y,s:5330.x .and. y?,f:5380.value" outputs="s? t\3Af:5390.s? t\3Af" uid="5390" uid_parent="5090"/>
+      <Tunnel _id="Out1" inputs="value:5390.s? t\3Af" uid="5400" uid_parent="5090"/>
+      <Tunnel _id="Out2" inputs="value:5120.value" uid="5410" uid_parent="5090"/>
+    </CaseFrame>
+    <CaseFrame selector="True" selectout="" label="Error" uid="5420" uid_parent="5050">
+      <Tunnel _id="In1" outputs="value:5430.value" uid="5430" uid_parent="5420"/>
+      <Tunnel _id="In2" outputs="value:5440.value" uid="5440" uid_parent="5420"/>
+      <Tunnel _id="In3" outputs="value:5450.value" uid="5450" uid_parent="5420"/>
+      <Constant outputs="value:5460.value" type="int32" uid="5460" uid_parent="5420" value="-1"/>
+      <Tunnel _id="Out1" inputs="value:5460.value" uid="5470" uid_parent="5420"/>
+      <Tunnel _id="Out2" inputs="value:5450.value" uid="5480" uid_parent="5420"/>
+    </CaseFrame>
+    <Tunnel _id="Out1" outputs="value:5490.value" uid="5490" uid_parent="5050"/>
+    <Tunnel _id="Out2" outputs="value:5500.value" uid="5500" uid_parent="5050"/>
+  </Structure>
+  <Indicator _name="Channel Index" conIdx="4" connection="recommended" inputs="value:5490.value" type="int32" uid="5510" uid_parent="root" value="-1"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5500.value" type="cluster{bool.status,int32.code,string.source}" uid="5520" uid_parent="root" value="[false,0,]"/>
+</VI>

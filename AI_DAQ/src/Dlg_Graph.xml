@@ -1,0 +1,88 @@
+<VI _name="Dlg_Graph.vi" description="±×·¡ÇÁ ÆË¾÷ Ã¢(1300x720): AIDAQ_GRAPH Å¥ÀÇ ÃÖ½Å µ¥ÀÌÅÍ¸¦ 100 ms¸¶´Ù ±×¸². ´Ý±â ¹öÆ°ÀÌ³ª Ã¢ ´Ý±â·Î Á¾·á.">
+  <Control _name="Channels" conIdx="0" connection="required" outputs="value:5010.value" type="array{cluster{string.Name,double.Value,double.High Limit,double.Low Limit,bool.Save,bool.Graph,double.Scale Min,double.Scale Max,string.Unit}}" uid="5010" uid_parent="root" value="[]"/>
+  <Control _name="error in" conIdx="11" connection="required" outputs="value:5020.value" type="cluster{bool.status,int32.code,string.source}" uid="5020" uid_parent="root" value="[false,0,]"/>
+  <FreeLabel comment="±×·¡ÇÁ ÆË¾÷\3A ±×·¡ÇÁ Å¥(ÃÖ½Å µ¥ÀÌÅÍ)¸¦ ¹Þ¾Æ Å« È­¸é¿¡ ±×¸²" uid="5030" uid_parent="root"/>
+  <Constant outputs="value:5040.value" type="bool" uid="5040" uid_parent="root" value="true"/>
+  <Constant outputs="value:5050.value" type="string" uid="5050" uid_parent="root" value="±×·¡ÇÁ - ¼±ÅÃ Ã¤³Î"/>
+  <Node _name="Property Node" fields="write+Front Panel Window\3AOpen,write+Front Panel Window\3ATitle" type="{LV.VI}" inputs="error in (no error):5020.value,Front Panel Window\3AOpen:5040.value,Front Panel Window\3ATitle:5050.value" outputs="error out:5060.error out" uid="5060" uid_parent="root"/>
+  <Constant outputs="value:5070.value" type="bool" uid="5070" uid_parent="root" value="false"/>
+  <Node _name="Property Node" fields="write+Visible" link="Channels" type="{LV.Control}" inputs="error in (no error):5060.error out,Visible:5070.value" outputs="error out:5080.error out" uid="5080" uid_parent="root"/>
+  <Constant outputs="value:5090.value" type="bool" uid="5090" uid_parent="root" value="false"/>
+  <Node _name="Property Node" fields="write+Visible" link="error in" type="{LV.Control}" inputs="error in (no error):5080.error out,Visible:5090.value" outputs="error out:5100.error out" uid="5100" uid_parent="root"/>
+  <Constant outputs="value:5110.value" type="bool" uid="5110" uid_parent="root" value="false"/>
+  <Node _name="Property Node" fields="write+Visible" link="error out" type="{LV.Control}" inputs="error in (no error):5100.error out,Visible:5110.value" outputs="error out:5120.error out" uid="5120" uid_parent="root"/>
+  <Constant outputs="value:5130.value" type="bool" uid="5130" uid_parent="root" value="false"/>
+  <Constant outputs="value:5140.value" type="int32" uid="5140" uid_parent="root" value="0"/>
+  <Constant outputs="value:5150.value" type="int32" uid="5150" uid_parent="root" value="0"/>
+  <Constant outputs="value:5160.value" type="cluster{int32.Width,int32.Height}" uid="5160" uid_parent="root" value="[1300,720]"/>
+  <Node _name="Property Node" fields="write+Label.Visible,write+Position\3ALeft,write+Position\3ATop,write+Draw Area Size" link="Graph" type="{LV.Picture}" inputs="error in (no error):5120.error out,Label.Visible:5130.value,Position\3ALeft:5140.value,Position\3ATop:5150.value,Draw Area Size:5160.value" outputs="error out:5170.error out" uid="5170" uid_parent="root"/>
+  <Constant outputs="value:5180.value" type="cluster{int32.Left,int32.Top,int32.Right,int32.Bottom}" uid="5180" uid_parent="root" value="[120,120,1420,840]"/>
+  <Node _name="Property Node" fields="write+Front Panel Window\3APanel Bounds" type="{LV.VI}" inputs="error in (no error):5170.error out,Front Panel Window\3APanel Bounds:5180.value" outputs="error out:5190.error out" uid="5190" uid_parent="root"/>
+  <Constant outputs="value:5200.value" type="string" uid="5200" uid_parent="root" value="AIDAQ_GRAPH"/>
+  <Constant outputs="value:5210.value" type="cluster{array.2{double}.Data,array{double}.Values,double.dt,bool.Running,bool.Logging,string.Message,path.Log File}" uid="5210" uid_parent="root" value="[[],[],0.001,false,false,,]"/>
+  <Constant outputs="value:5220.value" type="int32" uid="5220" uid_parent="root" value="1"/>
+  <Node _name="Obtain Queue" inputs="name (unnamed):5200.value,element data type:5210.value,max queue size (-1\2C unlimited):5220.value,error in (no error):5190.error out" outputs="queue out:5230.queue out,created new?:5230.created new?,error out:5230.error out" uid="5230" uid_parent="root"/>
+  <Structure _name="While Loop" count="5240.value" label="±×·¡ÇÁ °»½Å (100 ms)" uid="5240" uid_parent="root">
+    <Tunnel _id="In1" inputs="value:5230.queue out" outputs="value:5250.value" uid="5250" uid_parent="5240"/>
+    <Tunnel _id="In2" inputs="value:5010.value" outputs="value:5260.value" uid="5260" uid_parent="5240"/>
+    <Constant outputs="value:5280.value" type="int32" uid="5280" uid_parent="5240" value="100"/>
+    <Structure _name="Event Structure" timeoutin="5280.value" uid="5290" uid_parent="5240">
+      <Tunnel _id="In1" inputs="value:5250.value" uid="5300" uid_parent="5290"/>
+      <Tunnel _id="In2" inputs="value:5260.value" uid="5310" uid_parent="5290"/>
+      <CaseFrame selector=" Timeout " selectout="" uid="5320" uid_parent="5290">
+        <Tunnel _id="In1" outputs="value:5330.value" uid="5330" uid_parent="5320"/>
+        <Tunnel _id="In2" outputs="value:5340.value" uid="5340" uid_parent="5320"/>
+        <Constant outputs="value:5350.value" type="int32" uid="5350" uid_parent="5320" value="0"/>
+        <Constant outputs="value:5360.value" type="cluster{bool.status,int32.code,string.source}" uid="5360" uid_parent="5320" value="[false,0,]"/>
+        <Node _name="Dequeue Element" inputs="queue:5330.value,timeout in ms (-1):5350.value,error in (no error):5360.value" outputs="queue out:5370.queue out,element:5370.element,timed out?:5370.timed out?,error out:5370.error out" uid="5370" uid_parent="5320"/>
+        <Structure _name="Case Structure" selectin="5370.timed out?" uid="5380" uid_parent="5320">
+          <Tunnel _id="In1" inputs="value:5370.element" uid="5390" uid_parent="5380"/>
+          <Tunnel _id="In2" inputs="value:5340.value" uid="5400" uid_parent="5380"/>
+          <CaseFrame selector="False" selectout="" label="»õ µ¥ÀÌÅÍ ±×¸®±â" uid="5410" uid_parent="5380">
+            <Tunnel _id="In1" outputs="value:5420.value" uid="5420" uid_parent="5410"/>
+            <Tunnel _id="In2" outputs="value:5430.value" uid="5430" uid_parent="5410"/>
+            <Node _name="Unbundle By Name" fields="Data,dt" inputs="input cluster:5420.value" outputs="Data:5440.Data,dt:5440.dt" uid="5440" uid_parent="5410"/>
+            <Constant outputs="value:5450.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5450" uid_parent="5410" value="[0,0,1300,720]"/>
+            <Constant outputs="value:5460.value" type="bool" uid="5460" uid_parent="5410" value="true"/>
+            <Constant outputs="value:5470.value" type="uint32" uid="5470" uid_parent="5410" value="16777215"/>
+            <Call target="Draw Rectangle.vi" inputs="rect:5450.value,fill?(F):5460.value,color(black):5470.value" outputs="new picture:5480.new picture" uid="5480" uid_parent="5410"/>
+            <Constant outputs="value:5490.value" type="cluster{int16.left,int16.top,int16.right,int16.bottom}" uid="5490" uid_parent="5410" value="[80,30,1130,680]"/>
+            <Constant outputs="value:5500.value" type="cluster{bool.status,int32.code,string.source}" uid="5500" uid_parent="5410" value="[false,0,]"/>
+            <Call target="UI_Draw_Graph.vi" inputs="Picture:5480.new picture,Plot Rect:5490.value,Data:5440.Data,Channels:5430.value,dt:5440.dt,error in:5500.value" outputs="New Picture:5510.New Picture,error out:5510.error out" uid="5510" uid_parent="5410"/>
+            <Indicator _name="Graph" inputs="value:5510.New Picture" type="picture" uid="5520" uid_parent="5410" value=""/>
+          </CaseFrame>
+          <CaseFrame selector="True" selectout="" label="µ¥ÀÌÅÍ ¾øÀ½" uid="5530" uid_parent="5380">
+            <Tunnel _id="In1" outputs="value:5540.value" uid="5540" uid_parent="5530"/>
+            <Tunnel _id="In2" outputs="value:5550.value" uid="5550" uid_parent="5530"/>
+          </CaseFrame>
+        </Structure>
+        <Constant outputs="value:5560.value" type="bool" uid="5560" uid_parent="5320" value="false"/>
+        <Tunnel _id="Out1" inputs="value:5560.value" uid="5570" uid_parent="5320"/>
+      </CaseFrame>
+      <CaseFrame selector=' "´Ý±â"\3A Value Change ' selectout="" uid="5580" uid_parent="5290">
+        <Tunnel _id="In1" outputs="value:5590.value" uid="5590" uid_parent="5580"/>
+        <Tunnel _id="In2" outputs="value:5600.value" uid="5600" uid_parent="5580"/>
+        <Control _name="´Ý±â" style="latched" outputs="value:5610.value" type="bool" uid="5610" uid_parent="5580" value="false"/>
+        <Constant outputs="value:5620.value" type="bool" uid="5620" uid_parent="5580" value="true"/>
+        <Tunnel _id="Out1" inputs="value:5620.value" uid="5630" uid_parent="5580"/>
+      </CaseFrame>
+      <CaseFrame selector=" Panel Close? " selectout="" uid="5640" uid_parent="5290">
+        <Tunnel _id="In1" outputs="value:5650.value" uid="5650" uid_parent="5640"/>
+        <Tunnel _id="In2" outputs="value:5660.value" uid="5660" uid_parent="5640"/>
+        <Constant outputs="value:5670.value" type="bool" uid="5670" uid_parent="5640" value="true"/>
+        <Tunnel _id="Out1" inputs="value:5670.value" uid="5680" uid_parent="5640"/>
+      </CaseFrame>
+      <Tunnel _id="Out1" outputs="value:5690.value" uid="5690" uid_parent="5290"/>
+    </Structure>
+    <ShiftReg uid="5700" uid_parent="5240">
+      <Left inputs="value:5230.error out" outputs="value:5270.value" uid="5270" uid_parent="5700"/>
+      <Right inputs="value:5270.value" outputs="value:5710.value" uid="5710" uid_parent="5700"/>
+    </ShiftReg>
+    <Condition inputs="value:5690.value" uid="5720" uid_parent="5240" value="stop"/>
+  </Structure>
+  <FreeLabel comment="¿¡·¯¼±À» ·çÇÁ ½ÃÇÁÆ® ·¹Áö½ºÅÍ·Î Åë°ú\3A ·çÇÁ Á¾·á ÈÄ Å¥ ÇØÁ¦ ¹× Ã¢ ´Ý±â" uid="5730" uid_parent="root"/>
+  <Node _name="Release Queue" inputs="queue:5230.queue out,error in (no error):5710.value" outputs="queue name:5740.queue name,remaining elements:5740.remaining elements,error out:5740.error out" uid="5740" uid_parent="root"/>
+  <Constant outputs="value:5750.value" type="bool" uid="5750" uid_parent="root" value="false"/>
+  <Node _name="Property Node" fields="write+Front Panel Window\3AOpen" type="{LV.VI}" inputs="error in (no error):5740.error out,Front Panel Window\3AOpen:5750.value" outputs="error out:5760.error out" uid="5760" uid_parent="root"/>
+  <Indicator _name="error out" conIdx="15" connection="recommended" inputs="value:5760.error out" type="cluster{bool.status,int32.code,string.source}" uid="5770" uid_parent="root" value="[false,0,]"/>
+</VI>
